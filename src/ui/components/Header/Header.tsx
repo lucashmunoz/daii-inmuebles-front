@@ -1,7 +1,25 @@
 import { ReactElement } from "react";
+import styled from "styled-components";
+
+const Wrapper = styled.div`
+  height: 60px;
+  background-color: "#f0f0f0";
+  border-bottom: 1px solid gray;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+`;
+
+const Logo = styled.img`
+  height: 52px;
+`;
 
 const Header = (): ReactElement => {
-  return <div>Header</div>;
+  return (
+    <Wrapper>
+      <Logo src="src/assets/logo.png" />
+    </Wrapper>
+  );
 };
 
 export default Header;

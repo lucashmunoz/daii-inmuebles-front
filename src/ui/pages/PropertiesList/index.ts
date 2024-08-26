@@ -1,3 +1,3 @@
-import PropertiesList from './PropertiesList';
+import PropertiesList from "./PropertiesList";
 
 export default PropertiesList;

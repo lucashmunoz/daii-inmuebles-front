@@ -1,3 +1,3 @@
-import PropertyDetails from './PropertyDetails';
+import PropertyDetails from "./PropertyDetails";
 
 export default PropertyDetails;

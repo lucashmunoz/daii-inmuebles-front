@@ -27,7 +27,11 @@ export default tseslint.config(
       "comma-dangle": ["error", "never"],
       "semi": [2, "always"],
       quotes: ["error", "double"],
-      "eol-last": ["error", "always"]
+      "eol-last": 1,
+      "no-multiple-empty-lines": ["error", { "max": 1 }],
+      "object-curly-spacing": ["error", "always"],
+      "array-bracket-spacing": ["error", "never"],
+      "comma-spacing": ["error", { "before": false, "after": true }]
     }
   }
 );

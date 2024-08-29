@@ -15,7 +15,6 @@ import componentsOverride from "./overrides";
 
 export default function ThemeCustomization({ children }) {
   const theme = Palette("light", "default");
-
    
   const themeTypography = Typography("'Public Sans', sans-serif");
   const themeCustomShadows = useMemo(() => CustomShadows(theme), [theme]);

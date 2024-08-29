@@ -1,7 +1,7 @@
 import { ReactElement } from "react";
 import styled from "styled-components";
 
-const Wrapper = styled.div`
+const Wrapper = styled.header`
   height: 60px;
   background-color: "#f0f0f0";
   border-bottom: 1px solid gray;

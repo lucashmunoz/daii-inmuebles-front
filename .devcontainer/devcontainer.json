@@ -1,0 +1,35 @@
+{
+	"name": "Node.js & React.js",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"nodeGypDependencies": true,
+			"installYarnUsingApt": true,
+			"version": "lts",
+			"pnpmVersion": "latest",
+			"nvmVersion": "latest"
+		}
+	},
+
+	// Forward ports to make them available locally.
+	"forwardPorts": [3000],
+
+	// Run these commands after the container is created.
+	"postCreateCommand": "yarn install",
+
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"dsznajder.es7-react-js-snippets",
+				"formulahendry.auto-rename-tag",
+				"formulahendry.auto-close-tag",
+				"styled-components.vscode-styled-components",
+				"mgmcdermott.vscode-language-babel"
+			]
+		}
+	},
+
+	"remoteUser": "node"
+}

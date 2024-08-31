@@ -5,7 +5,9 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  {
+    ignores: ["dist"] 
+  },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ["**/*.{ts,tsx,js,jsx}"],
@@ -21,17 +23,28 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       "react-refresh/only-export-components": [
         "warn",
-        { allowConstantExport: true }
+        {
+          allowConstantExport: true 
+        }
       ],
       indent: ["error", 2],
       "comma-dangle": ["error", "never"],
       "semi": [2, "always"],
       quotes: ["error", "double"],
       "eol-last": 1,
-      "no-multiple-empty-lines": ["error", { "max": 1 }],
+      "no-multiple-empty-lines": ["error", {
+        "max": 1 
+      }],
       "object-curly-spacing": ["error", "always"],
       "array-bracket-spacing": ["error", "never"],
-      "comma-spacing": ["error", { "before": false, "after": true }]
+      "comma-spacing": ["error", {
+        "before": false, "after": true 
+      }],
+      "object-curly-newline": ["error", {
+        "ObjectExpression": {
+          "multiline": true, "minProperties": 1 
+        } 
+      }]
     }
   }
 );

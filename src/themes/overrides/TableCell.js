@@ -31,7 +31,7 @@ export default function TableCell(theme) {
               margin: "0 0 0 auto"
             },
             "& .MuiOutlinedInput-input": {
-              textAlign: "right"
+              textAlign: "right" 
             }
           },
           "&.cell-center": {
@@ -44,7 +44,7 @@ export default function TableCell(theme) {
           }
         },
         sizeSmall: {
-          padding: 8
+          padding: 8 
         },
         head: {
           fontSize: "0.75rem",

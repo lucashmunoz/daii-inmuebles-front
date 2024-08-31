@@ -9,7 +9,7 @@ export default function LinearProgress() {
           borderRadius: 100
         },
         bar: {
-          borderRadius: 100
+          borderRadius: 100 
         }
       }
     }

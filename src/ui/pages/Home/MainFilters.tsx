@@ -69,7 +69,11 @@ const MainFilters = () => {
             select
             value={tipoInmueble}
             onChange={(e) => seTtipoInmueble(e.target.value)}
-            sx={{ "& .MuiInputBase-input": { py: 0.75, fontSize: "0.875rem" } }}
+            sx={{
+              "& .MuiInputBase-input": {
+                py: 0.75, fontSize: "0.875rem" 
+              } 
+            }}
           >
             {tipoInmuebles.map((tipoInmueble) => (
               <MenuItem key={tipoInmueble.value} value={tipoInmueble.value}>
@@ -84,10 +88,16 @@ const MainFilters = () => {
             value={textSearch}
             placeholder="Ingresá un barrio o ubicación"
             onChange={(e) => setTextSearch(e.target.value)}
-            sx={{ "& .MuiInputBase-input": { py: 0.75, fontSize: "0.875rem" } }}
+            sx={{
+              "& .MuiInputBase-input": {
+                py: 0.75, fontSize: "0.875rem" 
+              } 
+            }}
           />
 
-          <Button size="small" variant="contained" sx={{ textTransform: "capitalize" }}>
+          <Button size="small" variant="contained" sx={{
+            textTransform: "capitalize" 
+          }}>
             Buscar
           </Button>
         </Grid2>

@@ -18,7 +18,7 @@ function getColorStyle({ color, theme }) {
     "&:hover": {
       backgroundColor: lighter,
       "& .icon": {
-        borderColor: main
+        borderColor: main 
       }
     },
     "&.Mui-focusVisible": {
@@ -31,12 +31,18 @@ function getColorStyle({ color, theme }) {
 function getSizeStyle(size) {
   switch (size) {
   case "small":
-    return { fontSize: 1.15 };
+    return {
+      fontSize: 1.15 
+    };
   case "large":
-    return { fontSize: 1.6 };
+    return {
+      fontSize: 1.6 
+    };
   case "medium":
   default:
-    return { fontSize: 1.35 };
+    return {
+      fontSize: 1.35 
+    };
   }
 }
 
@@ -47,8 +53,8 @@ function checkboxStyle(size) {
 
   return {
     "& .icon": {
-      fontSize: `${sizes.fontSize}rem`
-    }
+      fontSize: `${sizes.fontSize}rem` 
+    } 
   };
 }
 
@@ -70,24 +76,38 @@ export default function Checkbox(theme) {
           borderRadius: 0,
           color: palette.secondary[300],
           "&.size-small": {
-            ...checkboxStyle("small")
+            ...checkboxStyle("small") 
           },
           "&.size-medium": {
-            ...checkboxStyle("medium")
+            ...checkboxStyle("medium") 
           },
           "&.size-large": {
-            ...checkboxStyle("large")
+            ...checkboxStyle("large") 
           }
         },
-        colorPrimary: getColorStyle({ color: "primary", theme }),
-        colorSecondary: getColorStyle({ color: "secondary", theme }),
-        colorSuccess: getColorStyle({ color: "success", theme }),
-        colorWarning: getColorStyle({ color: "warning", theme }),
-        colorInfo: getColorStyle({ color: "info", theme }),
-        colorError: getColorStyle({ color: "error", theme })
+        colorPrimary: getColorStyle({
+          color: "primary", theme 
+        }),
+        colorSecondary: getColorStyle({
+          color: "secondary", theme 
+        }),
+        colorSuccess: getColorStyle({
+          color: "success", theme 
+        }),
+        colorWarning: getColorStyle({
+          color: "warning", theme 
+        }),
+        colorInfo: getColorStyle({
+          color: "info", theme 
+        }),
+        colorError: getColorStyle({
+          color: "error", theme 
+        })
       }
     }
   };
 }
 
-getColorStyle.propTypes = { color: PropTypes.any, theme: PropTypes.any };
+getColorStyle.propTypes = {
+  color: PropTypes.any, theme: PropTypes.any 
+};

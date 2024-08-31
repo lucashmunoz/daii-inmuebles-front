@@ -59,5 +59,5 @@ export default function ThemeCustomization({ children }) {
 }
 
 ThemeCustomization.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node 
 };

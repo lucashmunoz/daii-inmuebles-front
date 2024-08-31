@@ -85,19 +85,27 @@ const inmuebles = [
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
-    breakpoint: { max: 4000, min: 3000 },
+    breakpoint: {
+      max: 4000, min: 3000 
+    },
     items: 5
   },
   desktop: {
-    breakpoint: { max: 3000, min: 1024 },
+    breakpoint: {
+      max: 3000, min: 1024 
+    },
     items: 3
   },
   tablet: {
-    breakpoint: { max: 1024, min: 464 },
+    breakpoint: {
+      max: 1024, min: 464 
+    },
     items: 2
   },
   mobile: {
-    breakpoint: { max: 464, min: 0 },
+    breakpoint: {
+      max: 464, min: 0 
+    },
     items: 1
   }
 };
@@ -114,7 +122,9 @@ const InmueblesRecientes = () => {
             const { id, image, price, description } = inmueble;
 
             return (
-              <Card key={id} sx={{ maxWidth: 200, height: 280 }}>
+              <Card key={id} sx={{
+                maxWidth: 200, height: 280 
+              }}>
                 <CardActionArea>
                   <CardMedia
                     component="img"
@@ -126,7 +136,9 @@ const InmueblesRecientes = () => {
                     <Typography gutterBottom variant="h5" component="div">
                         ${price}
                     </Typography>
-                    <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    <Typography variant="body2" sx={{
+                      color: "text.secondary" 
+                    }}>
                       {description}
                     </Typography>
                   </CardContent>

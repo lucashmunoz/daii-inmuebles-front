@@ -16,7 +16,9 @@ function getColorStyle({ color, theme }) {
 // ==============================|| OVERRIDES - BADGE ||============================== //
 
 export default function Badge(theme) {
-  const defaultLightBadge = getColorStyle({ color: "primary", theme });
+  const defaultLightBadge = getColorStyle({
+    color: "primary", theme 
+  });
 
   return {
     MuiBadge: {
@@ -28,12 +30,24 @@ export default function Badge(theme) {
         },
         light: {
           ...defaultLightBadge,
-          "&.MuiBadge-colorPrimary": getColorStyle({ color: "primary", theme }),
-          "&.MuiBadge-colorSecondary": getColorStyle({ color: "secondary", theme }),
-          "&.MuiBadge-colorError": getColorStyle({ color: "error", theme }),
-          "&.MuiBadge-colorInfo": getColorStyle({ color: "info", theme }),
-          "&.MuiBadge-colorSuccess": getColorStyle({ color: "success", theme }),
-          "&.MuiBadge-colorWarning": getColorStyle({ color: "warning", theme })
+          "&.MuiBadge-colorPrimary": getColorStyle({
+            color: "primary", theme 
+          }),
+          "&.MuiBadge-colorSecondary": getColorStyle({
+            color: "secondary", theme 
+          }),
+          "&.MuiBadge-colorError": getColorStyle({
+            color: "error", theme 
+          }),
+          "&.MuiBadge-colorInfo": getColorStyle({
+            color: "info", theme 
+          }),
+          "&.MuiBadge-colorSuccess": getColorStyle({
+            color: "success", theme 
+          }),
+          "&.MuiBadge-colorWarning": getColorStyle({
+            color: "warning", theme 
+          })
         }
       }
     }

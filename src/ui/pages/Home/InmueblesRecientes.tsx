@@ -6,6 +6,9 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Typography from "@mui/material/Typography";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useAppSelector } from "../../../store/hooks";
+import { selectProperties, selectLoadingProperties } from "../../../store/properties/propertiesSlice";
+import LoadingSkeleton from "../../components/LoadingSkeleton";
 
 const Wrapper = styled.section`
   display: flex;
@@ -25,66 +28,8 @@ const CarouselContainer = styled.div`
   width: 100%;
 `;
 
-const inmuebles = [
-  {
-    id: 1,
-    image: "src/assets/background-mudanza.jpg",
-    price: 1300,
-    description: "Exelente departamento"
-  },
-  {
-    id: 2,
-    image: "src/assets/background-mudanza.jpg",
-    price: 100,
-    description: "Departamento"
-  },
-  {
-    id: 3,
-    image: "src/assets/background-mudanza.jpg",
-    price: 500,
-    description: "PH luminoso"
-  },
-  {
-    id: 4,
-    image: "src/assets/background-mudanza.jpg",
-    price: 1300,
-    description: "Exelente departamento"
-  },
-  {
-    id: 5,
-    image: "src/assets/background-mudanza.jpg",
-    price: 100,
-    description: "Departamento"
-  },
-  {
-    id: 6,
-    image: "src/assets/background-mudanza.jpg",
-    price: 500,
-    description: "PH luminoso"
-  },
-  {
-    id: 7,
-    image: "src/assets/background-mudanza.jpg",
-    price: 1300,
-    description: "Exelente departamento"
-  },
-  {
-    id: 8,
-    image: "src/assets/background-mudanza.jpg",
-    price: 100,
-    description: "Departamento"
-  },
-  {
-    id: 9,
-    image: "src/assets/background-mudanza.jpg",
-    price: 500,
-    description: "PH luminoso"
-  }
-];
-
 const responsive = {
   superLargeDesktop: {
-    // the naming can be any, depends on you.
     breakpoint: {
       max: 4000, min: 3000 
     },
@@ -111,6 +56,16 @@ const responsive = {
 };
 
 const InmueblesRecientes = () => {
+  const properties = useAppSelector(selectProperties);
+  const loadingProperties = useAppSelector(selectLoadingProperties);
+
+  if (loadingProperties) {
+    return (
+      <Wrapper>
+        <LoadingSkeleton />
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
@@ -118,8 +73,9 @@ const InmueblesRecientes = () => {
 
       <CarouselContainer>
         <Carousel responsive={responsive}>
-          {inmuebles.map(inmueble => {
-            const { id, image, price, description } = inmueble;
+          {properties.map(property => {
+            const { id, images, price, description } = property;
+            const image = images[0];
 
             return (
               <Card key={id} sx={{

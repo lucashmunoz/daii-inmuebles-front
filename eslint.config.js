@@ -44,7 +44,16 @@ export default tseslint.config(
         "ObjectExpression": {
           "multiline": true, "minProperties": 1 
         } 
-      }]
+      }],
+      "padded-blocks": ["error", "never"],
+      "space-before-blocks": ["error", "always"],
+      "key-spacing": ["error", {
+        "beforeColon": false,
+        "afterColon": true
+      }],
+      "space-infix-ops": "error",
+      "space-unary-ops": "error",
+      "no-multi-spaces": "error"
     }
   }
 );

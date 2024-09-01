@@ -1,4 +1,4 @@
-import { ReactElement, FunctionComponent  } from "react";
+import { ReactElement, FunctionComponent } from "react";
 
 interface Props {
   children: ReactElement

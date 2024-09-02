@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./ui/pages/Home";
 import PropertiesList from "./ui/pages/PropertiesList";
 import PropertyDetails from "./ui/pages/PropertyDetails";
+import SearchMap from "./ui/pages/SearchMap";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import ThemeCustomization from "./themes";
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/property",
     element: <PropertyDetails />
+  },
+  {
+    path: "/search",
+    element: <SearchMap />
   }
 ]);
 

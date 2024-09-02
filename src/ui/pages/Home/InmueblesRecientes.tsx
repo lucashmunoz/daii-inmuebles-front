@@ -6,9 +6,10 @@ import CardActionArea from "@mui/material/CardActionArea";
 import Typography from "@mui/material/Typography";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import { useAppSelector } from "../../../store/hooks";
-import { selectProperties, selectLoadingProperties } from "../../../store/properties/propertiesSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { selectProperties, selectLoadingProperties, fetchProperties } from "../../../store/properties/propertiesSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
+import { useEffect } from "react";
 
 const Wrapper = styled.section`
   display: flex;
@@ -56,8 +57,15 @@ const responsive = {
 };
 
 const InmueblesRecientes = () => {
+  const dispatch = useAppDispatch();
   const properties = useAppSelector(selectProperties);
   const loadingProperties = useAppSelector(selectLoadingProperties);
+
+  useEffect(() => {
+    dispatch(fetchProperties({
+      sortBy: "RECENT" 
+    })); 
+  }, [dispatch]);
 
   if (loadingProperties) {
     return (

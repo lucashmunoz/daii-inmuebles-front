@@ -1,38 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import axios from "axios";
 import { endpoints } from "../../api/endpoints";
-import { API_HOST, ErrorResponse } from "../../api/api";
-
-export type SortBy = "PRICE_ASC" | "PRICE_DESC" | "RECENT"
-export type PropertyType = "HOUSE" | "APARTMENT" | "SEMIFLOOR" | "FLOOR" | "DUPLEX" | "TRIPLEX" | "PENTHOUSE"
-
-interface Property {
-  id: number,
-  beds: number,
-  bathrooms: number,
-  country: string,
-  city: string,
-  state: string,
-  rooms: number,
-  title: string,
-  description: string,
-  latitude: number,
-  longitude: number,
-  images: [
-    string
-  ],
-  address: string,
-  storeys: number,
-  price: number,
-  garages: number,
-  type: PropertyType,
-  active: true,
-  surface_covered: number,
-  surface_total: number,
-  user_id: number,
-  created_at: Date
-}
+import api, { API_HOST, ErrorResponse } from "../../api/api";
+import { Property, PropertyType, SortBy } from "../../models/property";
 
 interface PropertyState {
   loadingProperties: boolean
@@ -49,13 +19,14 @@ const initialState: PropertyState = {
 export const fetchProperties = createAsyncThunk(
   "users/fetchProperties",
   async ({ sortBy, propertyType } : { sortBy?: SortBy, propertyType?: PropertyType }, { rejectWithValue }) => {
-    const sortByQuery = sortBy ? `sortBy:${sortBy}` : "";
-    const propertyTypeQuery = sortBy ? `propertyType:${propertyType}` : "";
-    const fetchPropertiesUrl = API_HOST + endpoints.properties + sortByQuery + propertyTypeQuery;
+    const sortByQuery = sortBy ? `sortBy=${sortBy}` : "";
+    const propertyTypeQuery = propertyType ? `propertyType=${propertyType}` : "";
+
+    const fetchPropertiesUrl = `${API_HOST}${endpoints.properties}?${sortByQuery}${propertyTypeQuery}`;
 
     try{
-      const response = await axios.get(fetchPropertiesUrl);
-      return response.data as Property[];
+      const response = await api.get(fetchPropertiesUrl);
+      return response.data.content as Property[];
     }catch(error) {
       return rejectWithValue(error);
     }

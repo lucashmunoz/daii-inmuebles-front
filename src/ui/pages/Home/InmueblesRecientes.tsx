@@ -7,9 +7,11 @@ import Typography from "@mui/material/Typography";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectProperties, selectLoadingProperties, fetchProperties } from "../../../store/properties/propertiesSlice";
+import { selectProperties, selectLoadingProperties, fetchProperties, selectIsPropertiesError } from "../../../store/properties/propertiesSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import { useEffect } from "react";
+import { Alert } from "@mui/material";
+import { formatNumberToCurrency } from "../../../helpers";
 
 const Wrapper = styled.section`
   display: flex;
@@ -56,17 +58,22 @@ const responsive = {
   }
 };
 
+;
+
 const InmueblesRecientes = () => {
   const dispatch = useAppDispatch();
   const properties = useAppSelector(selectProperties);
   const loadingProperties = useAppSelector(selectLoadingProperties);
+  const isPropertiesError = useAppSelector(selectIsPropertiesError);
+
+  console.log(isPropertiesError);
 
   useEffect(() => {
     dispatch(fetchProperties({
       sortBy: "RECENT" 
     })); 
   }, [dispatch]);
-
+  
   if (loadingProperties) {
     return (
       <Wrapper>
@@ -74,7 +81,17 @@ const InmueblesRecientes = () => {
       </Wrapper>
     );
   }
-
+  
+  if (isPropertiesError) {
+    return (
+      <Wrapper>
+        <Alert severity="error">
+          Ocurrio un error al mostrar los inmuebles recientes.
+        </Alert>
+      </Wrapper>
+    );
+  }
+  
   return (
     <Wrapper>
       <Title>Inmuebles Publicados Recientemente</Title>
@@ -84,6 +101,9 @@ const InmueblesRecientes = () => {
           {properties.map(property => {
             const { id, images, price, description } = property;
             const image = images[0];
+            const formattedPrice = formatNumberToCurrency({
+              number: price 
+            });
 
             return (
               <Card key={id} sx={{
@@ -98,7 +118,7 @@ const InmueblesRecientes = () => {
                   />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
-                        ${price}
+                      ${formattedPrice}
                     </Typography>
                     <Typography variant="body2" sx={{
                       color: "text.secondary" 

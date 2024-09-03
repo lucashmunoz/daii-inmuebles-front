@@ -2,7 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import { Button, Grid2 } from "@mui/material";
+import { Button } from "@mui/material";
 
 const Wrapper = styled.section`
   display: flex;
@@ -12,13 +12,20 @@ const Wrapper = styled.section`
 
 const FiltersContainer = styled.div`
   display: flex;
+  align-items: center;
   justify-content: center;
+  flex-direction: column;
+  gap: 16px;
   height: 100%;
   width: 100%;
   background-image: url("src/assets/background-mudanza.jpg");
-  background-size: contain;
+  background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
+  @media only screen and (min-width: 600px) {
+    flex-direction: row;
+  }
 `;
 
 const Select = styled(TextField)`
@@ -28,6 +35,7 @@ const Select = styled(TextField)`
 `;
 
 const InputText = styled(TextField)`
+  min-width: 220px; 
   & .MuiInputBase-root {
     background-color: #fefefe;
   }
@@ -55,52 +63,43 @@ const MainFilters = () => {
   return (
     <Wrapper>
       <FiltersContainer>
-        <Grid2 
-          container
-          spacing={0}
-          direction="row"
-          alignItems="center"
-          justifyContent="center"
-          gap="1em"
+        <Select
+          id="select-tipo-inmueble"
+          size="small"
+          select
+          value={tipoInmueble}
+          onChange={(e) => seTtipoInmueble(e.target.value)}
+          sx={{
+            "& .MuiInputBase-input": {
+              py: 0.75, fontSize: "0.875rem" 
+            } 
+          }}
         >
-          <Select
-            id="select-tipo-inmueble"
-            size="small"
-            select
-            value={tipoInmueble}
-            onChange={(e) => seTtipoInmueble(e.target.value)}
-            sx={{
-              "& .MuiInputBase-input": {
-                py: 0.75, fontSize: "0.875rem" 
-              } 
-            }}
-          >
-            {tipoInmuebles.map((tipoInmueble) => (
-              <MenuItem key={tipoInmueble.value} value={tipoInmueble.value}>
-                {tipoInmueble.label}
-              </MenuItem>
-            ))}
-          </Select>
+          {tipoInmuebles.map((tipoInmueble) => (
+            <MenuItem key={tipoInmueble.value} value={tipoInmueble.value}>
+              {tipoInmueble.label}
+            </MenuItem>
+          ))}
+        </Select>
 
-          <InputText
-            id="input-text"
-            size="small"
-            value={textSearch}
-            placeholder="Ingresá un barrio o ubicación"
-            onChange={(e) => setTextSearch(e.target.value)}
-            sx={{
-              "& .MuiInputBase-input": {
-                py: 0.75, fontSize: "0.875rem" 
-              } 
-            }}
-          />
+        <InputText
+          id="input-text"
+          size="small"
+          value={textSearch}
+          placeholder="Ingresá un barrio o ubicación"
+          onChange={(e) => setTextSearch(e.target.value)}
+          sx={{
+            "& .MuiInputBase-input": {
+              py: 0.75, fontSize: "0.875rem" 
+            } 
+          }}
+        />
 
-          <Button size="small" variant="contained" sx={{
-            textTransform: "capitalize" 
-          }}>
+        <Button size="small" variant="contained" sx={{
+          textTransform: "capitalize" 
+        }}>
             Buscar
-          </Button>
-        </Grid2>
+        </Button>
       </FiltersContainer>
     </Wrapper>
   );

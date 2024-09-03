@@ -8,6 +8,8 @@ const PageWrapper = styled.div`
   width: 100%;
   height: 100vh;
   background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
 `;
 
 const EncontraTuHogarContainer = styled.div`
@@ -25,21 +27,33 @@ const EncontraTuHogarText = styled.h1`
   text-align: center;
 `;
 
+const Main = styled.main`
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  @media only screen and (min-width: 600px) {
+    max-width: 1280px;
+    padding: 0 20px;
+  }
+`;
+
 const Home = (): ReactElement => {
   return (
     <PageWrapper>
       <Header />
-      
+        
       <EncontraTuHogarContainer>
         <EncontraTuHogarText>
           Entontrá tu próximo hogar en Smart Move
         </EncontraTuHogarText>
       </EncontraTuHogarContainer>
 
-      <main>
+      <Main>
         <MainFilters />
         <InmueblesRecientes />
-      </main>
+      </Main>
     </PageWrapper>
   );
 };

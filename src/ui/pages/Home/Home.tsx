@@ -19,7 +19,6 @@ const PageWrapper = styled.div`
 
 const EncontraTuHogarContainer = styled.div`
   background-color: #8174a2;
-  min-height: 40px;
   padding: 8px;
   display: flex;
   justify-content: center;

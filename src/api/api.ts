@@ -3,7 +3,7 @@ import axios from "axios";
 export const API_HOST = "http://3.217.122.117:8080";
 
 export interface ErrorResponse {
-  message: string 
+  message: string
   status: number
   error: string
 }

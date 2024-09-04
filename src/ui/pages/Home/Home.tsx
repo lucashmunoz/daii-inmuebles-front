@@ -10,6 +10,11 @@ const PageWrapper = styled.div`
   background-color: #f0f0f0;
   display: flex;
   flex-direction: column;
+
+  background-image: url("src/assets/background.jpg");
+  background-size: contain;
+  background-repeat: repeat;
+  background-blend-mode: lighten;
 `;
 
 const EncontraTuHogarContainer = styled.div`
@@ -43,7 +48,7 @@ const Home = (): ReactElement => {
   return (
     <PageWrapper>
       <Header />
-        
+
       <EncontraTuHogarContainer>
         <EncontraTuHogarText>
           Entontrá tu próximo hogar en Smart Move

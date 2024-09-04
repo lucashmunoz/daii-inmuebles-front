@@ -17,7 +17,7 @@ function getColorStyle({ color, theme }) {
 
 export default function Badge(theme) {
   const defaultLightBadge = getColorStyle({
-    color: "primary", theme 
+    color: "primary", theme
   });
 
   return {
@@ -31,22 +31,22 @@ export default function Badge(theme) {
         light: {
           ...defaultLightBadge,
           "&.MuiBadge-colorPrimary": getColorStyle({
-            color: "primary", theme 
+            color: "primary", theme
           }),
           "&.MuiBadge-colorSecondary": getColorStyle({
-            color: "secondary", theme 
+            color: "secondary", theme
           }),
           "&.MuiBadge-colorError": getColorStyle({
-            color: "error", theme 
+            color: "error", theme
           }),
           "&.MuiBadge-colorInfo": getColorStyle({
-            color: "info", theme 
+            color: "info", theme
           }),
           "&.MuiBadge-colorSuccess": getColorStyle({
-            color: "success", theme 
+            color: "success", theme
           }),
           "&.MuiBadge-colorWarning": getColorStyle({
-            color: "warning", theme 
+            color: "warning", theme
           })
         }
       }

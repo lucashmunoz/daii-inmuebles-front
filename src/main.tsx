@@ -12,18 +12,19 @@ import "@fontsource/roboto/300.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
+import { paths } from "./navigation/paths";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: paths.home,
     element: <Home />
   },
   {
-    path: "/properties",
+    path: paths.properties,
     element: <PropertiesList />
   },
   {
-    path: "/property",
+    path: paths.propertyDetails,
     element: <PropertyDetails />
   }
 ]);

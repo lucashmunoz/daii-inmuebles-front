@@ -7,7 +7,7 @@ import LoadingSkeleton from "../../components/LoadingSkeleton";
 import { useEffect } from "react";
 import { Alert } from "@mui/material";
 import { formatNumberToCurrency } from "../../../helpers";
-import { PropertyCard } from "./PropertyCard";
+import { PropertyCard } from "../../components/PropertyCard";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Wrapper = styled.section`

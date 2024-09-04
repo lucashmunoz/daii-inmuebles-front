@@ -1,5 +1,7 @@
 import { ReactElement } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { paths } from "../../../navigation/paths";
 
 const Wrapper = styled.header`
   height: 60px;
@@ -17,7 +19,9 @@ const Logo = styled.img`
 const Header = (): ReactElement => {
   return (
     <Wrapper>
-      <Logo src="src/assets/logo.png" />
+      <Link to={paths.home}>
+        <Logo src="src/assets/logo.png" />
+      </Link>
     </Wrapper>
   );
 };

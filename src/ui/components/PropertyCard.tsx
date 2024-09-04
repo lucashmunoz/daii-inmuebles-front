@@ -3,8 +3,10 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { getPropertyTypeNameByType } from "../../../helpers";
-import { PropertyType } from "../../../models/property";
+import { getPropertyTypeNameByType } from "../../helpers";
+import { PropertyType } from "../../models/property";
+import { Link } from "react-router-dom";
+import { paths } from "../../navigation/paths";
 
 interface PropertyCardProps {
   orientation: "vertical" | "horizontal"
@@ -29,10 +31,13 @@ export const PropertyCard = ({ orientation, id, district, image, price, rooms, b
   const isHorizontal = orientation === "horizontal";
 
   return (
-    <Card key={id} sx={{
-      maxWidth: isHorizontal ? "100%" : 220, height: 280
-    }}>
-      <CardActionArea>
+    <Card
+      key={id}
+      sx={{
+        width: isHorizontal ? "100%" : 220, height: 280
+      }}
+    >
+      <CardActionArea component={Link} to={paths.propertyDetails}>
         <CardMedia
           component="img"
           height="120"

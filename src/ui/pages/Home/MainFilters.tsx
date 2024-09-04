@@ -3,6 +3,8 @@ import styled from "styled-components";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../../navigation/paths";
 
 const Wrapper = styled.section`
   display: flex;
@@ -60,6 +62,12 @@ const MainFilters = () => {
   const [tipoInmueble, seTtipoInmueble] = useState(tipoInmuebles[0].value);
   const [textSearch, setTextSearch] = useState("");
 
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    navigate(paths.properties);
+  };
+
   return (
     <Wrapper>
       <FiltersContainer>
@@ -95,9 +103,14 @@ const MainFilters = () => {
           }}
         />
 
-        <Button size="small" variant="contained" sx={{
-          textTransform: "capitalize"
-        }}>
+        <Button
+          size="small"
+          variant="contained"
+          sx={{
+            textTransform: "capitalize"
+          }}
+          onClick={handleSearch}
+        >
             Buscar
         </Button>
       </FiltersContainer>

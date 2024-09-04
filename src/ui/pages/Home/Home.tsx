@@ -3,19 +3,7 @@ import Header from "../../components/Header";
 import styled from "styled-components";
 import MainFilters from "./MainFilters";
 import InmueblesRecientes from "./InmueblesRecientes";
-
-const PageWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  background-color: #f0f0f0;
-  display: flex;
-  flex-direction: column;
-
-  background-image: url("src/assets/background.jpg");
-  background-size: contain;
-  background-repeat: repeat;
-  background-blend-mode: lighten;
-`;
+import PageWrapper from "../../components/PageWrapper";
 
 const EncontraTuHogarContainer = styled.div`
   background-color: #8174a2;

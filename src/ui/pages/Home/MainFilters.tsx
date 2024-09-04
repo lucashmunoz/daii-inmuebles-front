@@ -59,7 +59,7 @@ const tipoInmuebles = [
 const MainFilters = () => {
   const [tipoInmueble, seTtipoInmueble] = useState(tipoInmuebles[0].value);
   const [textSearch, setTextSearch] = useState("");
-  
+
   return (
     <Wrapper>
       <FiltersContainer>
@@ -71,8 +71,8 @@ const MainFilters = () => {
           onChange={(e) => seTtipoInmueble(e.target.value)}
           sx={{
             "& .MuiInputBase-input": {
-              py: 0.75, fontSize: "0.875rem" 
-            } 
+              py: 0.75, fontSize: "0.875rem"
+            }
           }}
         >
           {tipoInmuebles.map((tipoInmueble) => (
@@ -90,13 +90,13 @@ const MainFilters = () => {
           onChange={(e) => setTextSearch(e.target.value)}
           sx={{
             "& .MuiInputBase-input": {
-              py: 0.75, fontSize: "0.875rem" 
-            } 
+              py: 0.75, fontSize: "0.875rem"
+            }
           }}
         />
 
         <Button size="small" variant="contained" sx={{
-          textTransform: "capitalize" 
+          textTransform: "capitalize"
         }}>
             Buscar
         </Button>

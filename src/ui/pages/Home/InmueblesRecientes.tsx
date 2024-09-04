@@ -1,9 +1,4 @@
 import styled from "styled-components";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import CardActionArea from "@mui/material/CardActionArea";
-import Typography from "@mui/material/Typography";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
@@ -12,6 +7,7 @@ import LoadingSkeleton from "../../components/LoadingSkeleton";
 import { useEffect } from "react";
 import { Alert } from "@mui/material";
 import { formatNumberToCurrency } from "../../../helpers";
+import { PropertyCard } from "./PropertyCard";
 
 const Wrapper = styled.section`
   display: flex;
@@ -34,31 +30,29 @@ const CarouselContainer = styled.div`
 const responsive = {
   superLargeDesktop: {
     breakpoint: {
-      max: 4000, min: 3000 
+      max: 4000, min: 3000
     },
     items: 5
   },
   desktop: {
     breakpoint: {
-      max: 3000, min: 1024 
+      max: 3000, min: 1024
     },
     items: 3
   },
   tablet: {
     breakpoint: {
-      max: 1024, min: 464 
+      max: 1024, min: 464
     },
     items: 2
   },
   mobile: {
     breakpoint: {
-      max: 464, min: 0 
+      max: 464, min: 0
     },
     items: 1
   }
 };
-
-;
 
 const InmueblesRecientes = () => {
   const dispatch = useAppDispatch();
@@ -66,14 +60,12 @@ const InmueblesRecientes = () => {
   const loadingProperties = useAppSelector(selectLoadingProperties);
   const isPropertiesError = useAppSelector(selectIsPropertiesError);
 
-  console.log(isPropertiesError);
-
   useEffect(() => {
     dispatch(fetchProperties({
-      sortBy: "RECENT" 
-    })); 
+      sortBy: "RECENT"
+    }));
   }, [dispatch]);
-  
+
   if (loadingProperties) {
     return (
       <Wrapper>
@@ -81,7 +73,7 @@ const InmueblesRecientes = () => {
       </Wrapper>
     );
   }
-  
+
   if (isPropertiesError) {
     return (
       <Wrapper>
@@ -91,7 +83,7 @@ const InmueblesRecientes = () => {
       </Wrapper>
     );
   }
-  
+
   return (
     <Wrapper>
       <Title>Inmuebles Publicados Recientemente</Title>
@@ -99,40 +91,29 @@ const InmueblesRecientes = () => {
       <CarouselContainer>
         <Carousel responsive={responsive}>
           {properties.map(property => {
-            const { id, images, price, description } = property;
+            const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
             const image = images[0];
             const formattedPrice = formatNumberToCurrency({
-              number: price 
+              number: price
             });
 
             return (
-              <Card key={id} sx={{
-                maxWidth: 200, height: 280 
-              }}>
-                <CardActionArea>
-                  <CardMedia
-                    component="img"
-                    height="120"
-                    image={image}
-                    alt="inmueble publicado recientemente"
-                  />
-                  <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                      ${formattedPrice}
-                    </Typography>
-                    <Typography variant="body2" sx={{
-                      color: "text.secondary" 
-                    }}>
-                      {description}
-                    </Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card> 
+              <PropertyCard
+                id={id}
+                image={image}
+                district={district}
+                price={formattedPrice}
+                rooms={rooms}
+                beds={beds}
+                bathrooms={bathrooms}
+                surfaceTotal={surface_total}
+                type={type}
+              />
             );
           })}
         </Carousel>
       </CarouselContainer>
-    
+
     </Wrapper>
   );
 };

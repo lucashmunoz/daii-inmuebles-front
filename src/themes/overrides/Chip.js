@@ -26,7 +26,7 @@ function getColorStyle({ color, theme }) {
     "& .MuiChip-deleteIcon": {
       color: main,
       "&:hover": {
-        color: light 
+        color: light
       }
     }
   };
@@ -36,7 +36,7 @@ function getColorStyle({ color, theme }) {
 
 export default function Chip(theme) {
   const defaultLightChip = getColorStyle({
-    color: "secondary", theme 
+    color: "secondary", theme
   });
   return {
     MuiChip: {
@@ -44,25 +44,25 @@ export default function Chip(theme) {
         root: {
           borderRadius: 4,
           "&:active": {
-            boxShadow: "none" 
+            boxShadow: "none"
           },
           "&.MuiChip-colorPrimary": getColor({
-            color: "primary", theme 
+            color: "primary", theme
           }),
           "&.MuiChip-colorSecondary": getColor({
-            color: "secondary", theme 
+            color: "secondary", theme
           }),
           "&.MuiChip-colorError": getColor({
-            color: "error", theme 
+            color: "error", theme
           }),
           "&.MuiChip-colorInfo": getColor({
-            color: "info", theme 
+            color: "info", theme
           }),
           "&.MuiChip-colorSuccess": getColor({
-            color: "success", theme 
+            color: "success", theme
           }),
           "&.MuiChip-colorWarning": getColor({
-            color: "warning", theme 
+            color: "warning", theme
           })
         },
         sizeLarge: {
@@ -72,44 +72,44 @@ export default function Chip(theme) {
         light: {
           ...defaultLightChip,
           "&.MuiChip-lightPrimary": getColorStyle({
-            color: "primary", theme 
+            color: "primary", theme
           }),
           "&.MuiChip-lightSecondary": getColorStyle({
-            color: "secondary", theme 
+            color: "secondary", theme
           }),
           "&.MuiChip-lightError": getColorStyle({
-            color: "error", theme 
+            color: "error", theme
           }),
           "&.MuiChip-lightInfo": getColorStyle({
-            color: "info", theme 
+            color: "info", theme
           }),
           "&.MuiChip-lightSuccess": getColorStyle({
-            color: "success", theme 
+            color: "success", theme
           }),
           "&.MuiChip-lightWarning": getColorStyle({
-            color: "warning", theme 
+            color: "warning", theme
           })
         },
         combined: {
           border: "1px solid",
           ...defaultLightChip,
           "&.MuiChip-combinedPrimary": getColorStyle({
-            color: "primary", theme 
+            color: "primary", theme
           }),
           "&.MuiChip-combinedSecondary": getColorStyle({
-            color: "secondary", theme 
+            color: "secondary", theme
           }),
           "&.MuiChip-combinedError": getColorStyle({
-            color: "error", theme 
+            color: "error", theme
           }),
           "&.MuiChip-combinedInfo": getColorStyle({
-            color: "info", theme 
+            color: "info", theme
           }),
           "&.MuiChip-combinedSuccess": getColorStyle({
-            color: "success", theme 
+            color: "success", theme
           }),
           "&.MuiChip-combinedWarning": getColorStyle({
-            color: "warning", theme 
+            color: "warning", theme
           })
         }
       }

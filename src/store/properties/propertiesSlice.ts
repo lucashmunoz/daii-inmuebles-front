@@ -9,13 +9,13 @@ interface PropertyState {
   properties: Property[],
   isPropertiesError: boolean
 }
-  
+
 const initialState: PropertyState = {
   loadingProperties: true,
   properties: [],
   isPropertiesError: false
 };
-  
+
 export const fetchProperties = createAsyncThunk(
   "users/fetchProperties",
   async ({ sortBy, propertyType } : { sortBy?: SortBy, propertyType?: PropertyType }, { rejectWithValue }) => {
@@ -55,9 +55,9 @@ export const propertiesSlice = createSlice({
     });
   }
 });
-    
+
 export const selectProperties = (state: RootState) => state.properties.properties;
 export const selectLoadingProperties = (state: RootState) => state.properties.loadingProperties;
 export const selectIsPropertiesError = (state: RootState) => state.properties.isPropertiesError;
-  
+
 export default propertiesSlice.reducer;

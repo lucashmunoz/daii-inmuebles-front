@@ -1,7 +1,9 @@
+import { PropertyType } from "./models/property";
+
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
   const strNumber = number.toString();
   const dotIndex = strNumber.indexOf(".");
-  
+
   let formattedNumber = parseFloat(strNumber).toString();
   if (dotIndex !== -1 && truncateDecimals) {
     formattedNumber = strNumber.substring(0, dotIndex);
@@ -10,4 +12,23 @@ export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {num
   return new Intl.NumberFormat("es-AR").format(
     Number(formattedNumber)
   );
+};
+
+export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
+  switch(propertyType) {
+    case "HOUSE":
+      return "Casa";
+    case "APARTMENT":
+      return "Departamento";
+    case "SEMIFLOOR":
+      return "Semipiso";
+    case "FLOOR":
+      return "Piso";
+    case "DUPLEX":
+      return "Duplex";
+    case "TRIPLEX":
+      return "Triplex";
+    case "PENTHOUSE":
+      return "Penthouse";
+  }
 };

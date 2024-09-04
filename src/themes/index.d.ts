@@ -5,5 +5,5 @@ interface Props {
 }
 
 const ThemeCustomization: FunctionComponent<Props>;
- 
+
 export default ThemeCustomization;

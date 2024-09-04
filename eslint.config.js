@@ -6,7 +6,7 @@ import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
-    ignores: ["dist"] 
+    ignores: ["dist"]
   },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
@@ -24,26 +24,28 @@ export default tseslint.config(
       "react-refresh/only-export-components": [
         "warn",
         {
-          allowConstantExport: true 
+          allowConstantExport: true
         }
       ],
-      indent: ["error", 2],
+      indent: ["error", 2, {
+        "SwitchCase": 1
+      }],
       "comma-dangle": ["error", "never"],
       "semi": [2, "always"],
       quotes: ["error", "double"],
       "eol-last": 1,
       "no-multiple-empty-lines": ["error", {
-        "max": 1 
+        "max": 1
       }],
       "object-curly-spacing": ["error", "always"],
       "array-bracket-spacing": ["error", "never"],
       "comma-spacing": ["error", {
-        "before": false, "after": true 
+        "before": false, "after": true
       }],
       "object-curly-newline": ["error", {
         "ObjectExpression": {
-          "multiline": true, "minProperties": 1 
-        } 
+          "multiline": true, "minProperties": 1
+        }
       }],
       "padded-blocks": ["error", "never"],
       "space-before-blocks": ["error", "always"],
@@ -53,7 +55,8 @@ export default tseslint.config(
       }],
       "space-infix-ops": "error",
       "space-unary-ops": "error",
-      "no-multi-spaces": "error"
+      "no-multi-spaces": "error",
+      "no-trailing-spaces": ["error"]
     }
   }
 );

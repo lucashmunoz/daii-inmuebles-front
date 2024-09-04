@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { Alert } from "@mui/material";
 import { formatNumberToCurrency } from "../../../helpers";
 import { PropertyCard } from "./PropertyCard";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Wrapper = styled.section`
   display: flex;
@@ -19,11 +20,16 @@ const Wrapper = styled.section`
 
 const Title = styled.h2`
   text-align: center;
+  padding-bottom: 16px;
+`;
+
+const HorizontalCardContainer = styled.div`
+  padding: 16px 0;
 `;
 
 const CarouselContainer = styled.div`
   align-self: center;
-  max-width: 800px;
+  max-width: 1024px;
   width: 100%;
 `;
 
@@ -38,7 +44,7 @@ const responsive = {
     breakpoint: {
       max: 3000, min: 1024
     },
-    items: 3
+    items: 4
   },
   tablet: {
     breakpoint: {
@@ -59,6 +65,8 @@ const InmueblesRecientes = () => {
   const properties = useAppSelector(selectProperties);
   const loadingProperties = useAppSelector(selectLoadingProperties);
   const isPropertiesError = useAppSelector(selectIsPropertiesError);
+
+  const isDesktop = useMediaQuery("(min-width:600px)");
 
   useEffect(() => {
     dispatch(fetchProperties({
@@ -88,9 +96,36 @@ const InmueblesRecientes = () => {
     <Wrapper>
       <Title>Inmuebles Publicados Recientemente</Title>
 
-      <CarouselContainer>
-        <Carousel responsive={responsive}>
-          {properties.map(property => {
+      {
+        isDesktop ?
+          <CarouselContainer>
+            <Carousel responsive={responsive}>
+              {properties.map(property => {
+                const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
+                const image = images[0];
+                const formattedPrice = formatNumberToCurrency({
+                  number: price
+                });
+
+                return (
+                  <PropertyCard
+                    orientation="vertical"
+                    key={id}
+                    id={id}
+                    image={image}
+                    district={district}
+                    price={formattedPrice}
+                    rooms={rooms}
+                    beds={beds}
+                    bathrooms={bathrooms}
+                    surfaceTotal={surface_total}
+                    type={type}
+                  />
+                );
+              })}
+            </Carousel>
+          </CarouselContainer>
+          : properties.map(property => {
             const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
             const image = images[0];
             const formattedPrice = formatNumberToCurrency({
@@ -98,21 +133,23 @@ const InmueblesRecientes = () => {
             });
 
             return (
-              <PropertyCard
-                id={id}
-                image={image}
-                district={district}
-                price={formattedPrice}
-                rooms={rooms}
-                beds={beds}
-                bathrooms={bathrooms}
-                surfaceTotal={surface_total}
-                type={type}
-              />
+              <HorizontalCardContainer key={id}>
+                <PropertyCard
+                  orientation="horizontal"
+                  id={id}
+                  image={image}
+                  district={district}
+                  price={formattedPrice}
+                  rooms={rooms}
+                  beds={beds}
+                  bathrooms={bathrooms}
+                  surfaceTotal={surface_total}
+                  type={type}
+                />
+              </HorizontalCardContainer>
             );
-          })}
-        </Carousel>
-      </CarouselContainer>
+          })
+      }
 
     </Wrapper>
   );

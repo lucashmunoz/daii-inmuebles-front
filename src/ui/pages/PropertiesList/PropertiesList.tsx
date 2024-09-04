@@ -1,19 +1,38 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
 import Header from "../../components/Header";
+import PageWrapper from "../../components/PageWrapper";
+import { useAppDispatch } from "../../../store/hooks";
+import { fetchProperties } from "../../../store/properties/propertiesSlice";
+import Properties from "./Properties";
 import styled from "styled-components";
+import Filters from "./Filters";
 
-const PageWrapper = styled.div`
+const Main = styled.main`
+  display: flex;
+  align-self: center;
+  flex-direction: column;
   width: 100%;
-  height: 100vh;
-  background-color: #f0f0f0;
+  padding: 0 16px;
+  @media only screen and (min-width: 600px) {
+    max-width: 1280px;
+    padding: 0 20px;
+  }
 `;
 
 const PropertiesList = (): ReactElement => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProperties({}));
+  }, [dispatch]);
+
   return (
     <PageWrapper>
       <Header />
-      <main>
-      </main>
+      <Main>
+        <Filters />
+        <Properties />
+      </Main>
     </PageWrapper>
   );
 };

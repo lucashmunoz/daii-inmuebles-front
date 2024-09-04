@@ -7,6 +7,7 @@ import { getPropertyTypeNameByType } from "../../../helpers";
 import { PropertyType } from "../../../models/property";
 
 interface PropertyCardProps {
+  orientation: "vertical" | "horizontal"
   id: string | number
   district: string
   image: string
@@ -18,16 +19,18 @@ interface PropertyCardProps {
   type: PropertyType
 }
 
-export const PropertyCard = ({ id, district, image, price, rooms, beds, bathrooms, surfaceTotal, type }: PropertyCardProps) => {
+export const PropertyCard = ({ orientation, id, district, image, price, rooms, beds, bathrooms, surfaceTotal, type }: PropertyCardProps) => {
   const roomsText = `${rooms} ${rooms > 1 ? "ambs." : "amb."}`;
   const bedsText = `${beds} dorm.`;
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
   const surfaceTotalText = `${surfaceTotal} m² tot.`;
   const propertype = getPropertyTypeNameByType(type).toUpperCase();
 
+  const isHorizontal = orientation === "horizontal";
+
   return (
     <Card key={id} sx={{
-      maxWidth: 220, height: 280
+      maxWidth: isHorizontal ? "100%" : 220, height: 280
     }}>
       <CardActionArea>
         <CardMedia
@@ -45,7 +48,7 @@ export const PropertyCard = ({ id, district, image, price, rooms, beds, bathroom
             {propertype} EN ALQUILER
           </Typography>
           <Typography gutterBottom variant="h4" component="div">
-            ${price}
+              ${price}
           </Typography>
           <Typography variant="body1" sx={{
             color: "text.secondary"

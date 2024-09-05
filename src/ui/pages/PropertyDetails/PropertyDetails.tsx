@@ -2,20 +2,12 @@ import { ReactElement } from "react";
 import Header from "../../components/Header";
 import styled from "styled-components";
 import Carousel from "./Carrousel";
+import PageWrapper from "../../components/PageWrapper";
+import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
+import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
+import { Button } from "@mui/material";
 
-const PageWrapper = styled.div`
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-
-  background-image: url("src/assets/background.jpg");
-  background-size: contain;
-  background-repeat: repeat;
-  background-blend-mode: lighten;
-`;
-
-const MainWrapper = styled.div`
+const MainWrapper = styled.main`
   display: flex;
   width: 1200px;
   margin: 0 auto;
@@ -91,11 +83,6 @@ const PropertyMetersContainer = styled.div`
   gap: 5px;
 `;
 
-const PropertyMetersIcon = styled.img`
-  width: 25px;
-  height: 25px;
-`;
-
 const PropertyMetersText = styled.text`
   font-size: 18px;
   color: #000;
@@ -106,24 +93,15 @@ const PropertyBathroomsContainer = styled.div`
   gap: 5px;
 `;
 
-const PropertyBathroomsIcon = styled.img`
-  width: 25px;
-  height: 25px;
-`;
-
 const PropertyBathroomsText = styled.text`
   font-size: 18px;
   color: #000;
 `;
 
-const AlquilarButton = styled.button`
+const AlquilarButton = styled(Button)`
   background-color: #8174a2;
   color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
-  font-size: 20px;
   font-weight: bold;
 `;
 
@@ -147,11 +125,11 @@ const PropertyDetails = (): ReactElement => {
           </PriceWrapper>
           <PropertyMainDetailsContainer>
             <PropertyMetersContainer>
-              <PropertyMetersIcon src="src/assets/scale-up-icon.png" />
+              <HouseSidingOutlinedIcon />
               <PropertyMetersText>100 m2 totales</PropertyMetersText>
             </PropertyMetersContainer>
             <PropertyBathroomsContainer>
-              <PropertyBathroomsIcon src="src/assets/bathroom-icon.png" />
+              <BathtubOutlinedIcon />
               <PropertyBathroomsText>2 Baños</PropertyBathroomsText>
             </PropertyBathroomsContainer>
           </PropertyMainDetailsContainer>

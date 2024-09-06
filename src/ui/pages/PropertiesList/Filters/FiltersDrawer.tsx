@@ -1,140 +1,75 @@
-import { Box, Drawer, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { Button, Drawer } from "@mui/material";
 import styled from "styled-components";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { PropertyType } from "../../../../models/property";
+import FiltersContent from "./FiltersContent";
 
-const FilterContainer = styled.div`
-  padding: 8px 0; 
-`;
-
-const FilterTitle = styled.h3`
-  font-weight: bold; 
-  padding: 8px 0; 
-`;
-
-const TwoInputsContainer = styled.div`
+const DrawerContentContainer = styled.div`
+  width: 280px;
+  padding: 10px;
   display: flex;
-  flex-direction: row;
-  gap: 8px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
-const InputText = styled(TextField)`
-  flex: 1; 
-  & .MuiInputBase-root {
-    background-color: #fefefe;
-  }
+const CloseButtonHeader = styled.div`
+   display: flex;
+   width: 100%;
+   justify-content: flex-end;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+`;
+
+const DrawerFooter = styled.div`
+   position: fixed;
+   bottom: 0px;
+   padding: 10px;
+   display: flex;
+   width: 280px;
+   justify-content: center;
+`;
+
+const FullWidthButton = styled(Button)`
+  width: 100%;
 `;
 
 interface FiltersDrawerProps {
   isFiltersDrawerOpen: boolean
   closeCallback: () => void
+  selectedPropertyType: PropertyType,
+  setSelectedPropertyType: (propertyType: PropertyType) => void
 }
 
-const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback }: FiltersDrawerProps) => {
+const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback, selectedPropertyType, setSelectedPropertyType }: FiltersDrawerProps) => {
   return (
     <Drawer
       open={isFiltersDrawerOpen}
       onClose={closeCallback}
     >
-      <Box
-        sx={{
-          width: 280, padding: "16px"
-        }}
-        role="presentation"
-      >
-        <FilterContainer>
-          <FilterTitle>Precio</FilterTitle>
-          <TwoInputsContainer>
-            <InputText
-              id="input-price-from"
-              size="small"
-              placeholder="Desde"
-            />
-            <InputText
-              id="input-price-to"
-              size="small"
-              placeholder="hasta"
-            />
-          </TwoInputsContainer>
-        </FilterContainer>
+      <DrawerContentContainer>
+        <CloseButtonHeader onClick={closeCallback}>
+          <CloseButton>
+            <CloseOutlinedIcon />
+          </CloseButton>
+        </CloseButtonHeader>
 
-        <FilterContainer>
-          <FilterTitle>Superficie</FilterTitle>
-          <FormLabel
-            id="radio-surface-type"
-            sx={{
-              display: "none"
-            }}
+        <FiltersContent selectedPropertyType={selectedPropertyType} setSelectedPropertyType={setSelectedPropertyType} />
+
+        <DrawerFooter>
+          <FullWidthButton
+            variant="contained"
+            size="large"
+            onClick={closeCallback}
           >
-          Superficie
-          </FormLabel>
-          <RadioGroup
-            aria-labelledby="radio-surface-type"
-            row
-            defaultValue="covered"
-            name="radio-buttons-group"
-          >
-            <FormControlLabel value="covered" control={<Radio />} label="Cubierta" />
-            <FormControlLabel value="total" control={<Radio />} label="Total" />
-          </RadioGroup>
-          <TwoInputsContainer>
-            <InputText
-              id="input-surface-from"
-              size="small"
-              placeholder="Desde"
-            />
-            <InputText
-              id="input-surface-to"
-              size="small"
-              placeholder="hasta"
-            />
-          </TwoInputsContainer>
-        </FilterContainer>
-
-        <FilterContainer>
-          <FilterTitle>Ambientes</FilterTitle>
-          <TwoInputsContainer>
-            <InputText
-              id="input-rooms-from"
-              size="small"
-              placeholder="Desde"
-            />
-            <InputText
-              id="input-rooms-to"
-              size="small"
-              placeholder="hasta"
-            />
-          </TwoInputsContainer>
-        </FilterContainer>
-
-        <FilterContainer>
-          <FilterTitle>Baños</FilterTitle>
-          <TwoInputsContainer>
-            <InputText
-              id="input-bathrooms-from"
-              size="small"
-              placeholder="Desde"
-            />
-            <InputText
-              id="input-bathrooms-to"
-              size="small"
-              placeholder="hasta"
-            />
-          </TwoInputsContainer>
-        </FilterContainer>
-      </Box>
+            Aplicar Filtros
+          </FullWidthButton>
+        </DrawerFooter>
+      </DrawerContentContainer>
     </Drawer>
   );};
 
 export default FiltersDrawer;
-
-/*
-  <List>
-    {["Inbox", "Starred", "Send email", "Drafts"].map((text) => (
-      <ListItem key={text} disablePadding>
-        <ListItemButton>
-          <ListItemText primary={text} />
-        </ListItemButton>
-      </ListItem>
-    ))}
-  </List>
-*/

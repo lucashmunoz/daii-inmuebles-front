@@ -6,7 +6,7 @@ const PageWrapper = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-image: url("src/assets/background.jpg");
+  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("src/assets/background.jpg");
   background-size: contain;
   background-repeat: repeat;
   background-blend-mode: lighten;

@@ -8,6 +8,7 @@ import PropertyDetails from "./ui/pages/PropertyDetails";
 import MyProperties from "./ui/pages/MyProperties";
 import MyContracts from "./ui/pages/MyContracts";
 import CreateProperty from "./ui/pages/CreateProperty";
+import Bookmarks from "./ui/pages/Bookmarks";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import ThemeCustomization from "./themes";
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: paths.createProperty,
     element: <CreateProperty />
+  },
+  {
+    path: paths.bookmarks,
+    element: <Bookmarks />
   }
 ]);
 

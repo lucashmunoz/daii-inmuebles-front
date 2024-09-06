@@ -33,6 +33,7 @@ const Actions = styled.nav<{ $showActions: boolean; }>`
   display: ${props => props.$showActions ? "flex" : "none"};
   flex-direction: column;
   background: #fefefe;
+  border: 1px solid #cccccc;
 `;
 
 const ActionButton = styled(Button)`
@@ -67,6 +68,10 @@ const Header = (): ReactElement => {
         <Divider />
         <ActionButton variant="text" onClick={() => navigate(paths.createProperty)}>
           Publicar Inmueble
+        </ActionButton>
+        <Divider />
+        <ActionButton variant="text" onClick={() => navigate(paths.bookmarks)}>
+          Mis favoritos
         </ActionButton>
       </Actions>
     </Wrapper>

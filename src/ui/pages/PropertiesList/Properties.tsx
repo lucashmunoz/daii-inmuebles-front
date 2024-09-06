@@ -4,7 +4,7 @@ import { useAppSelector } from "../../../store/hooks";
 import { selectIsPropertiesError, selectLoadingProperties, selectProperties } from "../../../store/properties/propertiesSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import Alert from "@mui/material/Alert";
-import { formatNumberToCurrency } from "../../../helpers";
+import { formatNumberToCurrency, isMobileMediaQuery } from "../../../helpers";
 import { PropertyCard } from "../../components/PropertyCard";
 import { useMediaQuery } from "@mui/material";
 
@@ -21,7 +21,7 @@ const Properties = () => {
   const loadingProperties = useAppSelector(selectLoadingProperties);
   const isPropertiesError = useAppSelector(selectIsPropertiesError);
 
-  const isDesktop = useMediaQuery("(min-width:600px)");
+  const isMobile = useMediaQuery(isMobileMediaQuery);
 
   if (loadingProperties) {
     return (
@@ -49,7 +49,7 @@ const Properties = () => {
 
           return (
             <PropertyCard
-              orientation={isDesktop ? "vertical" : "horizontal"}
+              orientation={isMobile ? "horizontal" : "vertical"}
               id={id}
               image={image}
               district={district}

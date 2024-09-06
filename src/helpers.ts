@@ -32,3 +32,5 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "Penthouse";
   }
 };
+
+export const isMobileMediaQuery = "(max-width:600px)";

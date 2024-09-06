@@ -11,6 +11,10 @@ const FiltersWrapper = styled.div`
   padding-top: 16px;
 `;
 
+const VerMapaButton = styled(Button)`
+  text-transform: capitalize;
+`;
+
 interface FilterActionsProps {
   handleFilterButtonClick: () => void
 }
@@ -20,16 +24,13 @@ const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
 
   return (
     <FiltersWrapper>
-      <Button
+      <VerMapaButton
         size="small"
         variant="text"
         startIcon={<LocationOnIcon />}
-        sx={{
-          textTransform: "capitalize"
-        }}
       >
-          Ver mapa
-      </Button>
+        Ver mapa
+      </VerMapaButton>
       {
         isMobile && <Button
           size="small"

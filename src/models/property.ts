@@ -1,5 +1,6 @@
 export type SortBy = "PRICE_ASC" | "PRICE_DESC" | "RECENT"
 export type PropertyType = "APARTMENT" | "HOUSE" | "SEMIFLOOR" | "FLOOR" | "DUPLEX" | "TRIPLEX" | "PENTHOUSE"
+export type PropertyContractStatus = "AL_DIA" | "VENCIDO"
 
 export interface Property {
   id: number,

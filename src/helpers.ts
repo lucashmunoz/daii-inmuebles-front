@@ -1,4 +1,4 @@
-import { PropertyType } from "./models/property";
+import { PropertyContractStatus, PropertyType } from "./models/property";
 
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
   const strNumber = number.toString();
@@ -30,6 +30,19 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "Triplex";
     case "PENTHOUSE":
       return "Penthouse";
+    default:
+      return "";
+  }
+};
+
+export const getContractStatusNameByType = (contractStatus: PropertyContractStatus) => {
+  switch(contractStatus) {
+    case "AL_DIA":
+      return "Al día";
+    case "VENCIDO":
+      return "Vencido";
+    default:
+      return "";
   }
 };
 

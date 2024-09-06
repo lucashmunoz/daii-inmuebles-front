@@ -1,8 +1,9 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { paths } from "../../../navigation/paths";
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const Wrapper = styled.header`
   height: 60px;
@@ -12,33 +13,62 @@ const Wrapper = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 `;
 
 const Logo = styled.img`
   height: 52px;
 `;
 
-const Action = styled.div`
-  display: flex;
-  gap: 16px;
+const MenuButton = styled.button`
+  border: none;
+  background: none;
+  cursor: pointer;
+`;
+
+const Actions = styled.nav<{ $showActions: boolean; }>`
+  position: absolute;
+  top: 60px;
+  right: 0;
+  display: ${props => props.$showActions ? "flex" : "none"};
+  flex-direction: column;
+  background: #fefefe;
+`;
+
+const ActionButton = styled(Button)`
+  padding: 12px;
 `;
 
 const Header = (): ReactElement => {
   const navigate = useNavigate();
+
+  const [showActions, setShowActions] = useState(false);
+
+  const handleShowActions = () => {
+    setShowActions(prev => !prev);
+  };
 
   return (
     <Wrapper>
       <Link to={paths.home}>
         <Logo src="src/assets/logo.png" />
       </Link>
-      <Action>
-        <Button variant="contained" onClick={() => navigate(paths.myContracts)}>
+      <MenuButton>
+        <MenuIcon fontSize="large" onClick={handleShowActions} />
+      </MenuButton>
+      <Actions $showActions={showActions}>
+        <ActionButton variant="text" onClick={() => navigate(paths.myContracts)}>
           Mis contratos
-        </Button>
-        <Button variant="contained" onClick={() => navigate(paths.myProperties)}>
+        </ActionButton>
+        <Divider />
+        <ActionButton variant="text" onClick={() => navigate(paths.myProperties)}>
           Mis publicaciones
-        </Button>
-      </Action>
+        </ActionButton>
+        <Divider />
+        <ActionButton variant="text" onClick={() => navigate(paths.createProperty)}>
+          Publicar Inmueble
+        </ActionButton>
+      </Actions>
     </Wrapper>
   );
 };

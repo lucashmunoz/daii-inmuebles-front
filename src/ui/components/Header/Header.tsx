@@ -27,6 +27,7 @@ const MenuButton = styled.button`
 `;
 
 const Actions = styled.nav<{ $showActions: boolean; }>`
+  z-index: 10;
   position: absolute;
   top: 60px;
   right: 0;

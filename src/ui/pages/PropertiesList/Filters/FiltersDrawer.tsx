@@ -2,8 +2,12 @@ import { Button, Drawer } from "@mui/material";
 import styled from "styled-components";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import FiltersContent from "./FiltersContent";
+import { FormEvent, useContext } from "react";
+import PropertiesFiltersContext from "../../../../context/PropertiesFiltersContext";
+import { useAppDispatch } from "../../../../store/hooks";
+import { fetchProperties } from "../../../../store/properties/propertiesSlice";
 
-const DrawerContentContainer = styled.div`
+const DrawerContentContainer = styled.form`
   width: 280px;
   padding: 10px;
   display: flex;
@@ -42,14 +46,25 @@ interface FiltersDrawerProps {
 }
 
 const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback }: FiltersDrawerProps) => {
+  const dispatch = useAppDispatch();
+  const { filters } = useContext(PropertiesFiltersContext);
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(fetchProperties({
+      filters
+    }));
+    closeCallback();
+  };
+
   return (
     <Drawer
       open={isFiltersDrawerOpen}
       onClose={closeCallback}
     >
-      <DrawerContentContainer>
-        <CloseButtonHeader onClick={closeCallback}>
-          <CloseButton>
+      <DrawerContentContainer onSubmit={handleSearch}>
+        <CloseButtonHeader >
+          <CloseButton onClick={closeCallback} type="button">
             <CloseOutlinedIcon />
           </CloseButton>
         </CloseButtonHeader>
@@ -60,7 +75,7 @@ const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback }: FiltersDrawerProp
           <FullWidthButton
             variant="contained"
             size="large"
-            onClick={closeCallback}
+            type="submit"
           >
             Aplicar Filtros
           </FullWidthButton>

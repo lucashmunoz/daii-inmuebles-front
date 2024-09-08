@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { FormEvent, ReactElement, useContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
 import { useAppDispatch } from "../../../store/hooks";
@@ -10,6 +10,7 @@ import FiltersContent from "./Filters/FiltersContent";
 import { isMobileMediaQuery } from "../../../helpers";
 import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
+import PropertiesFiltersContext from "../../../context/PropertiesFiltersContext";
 
 const Main = styled.main`
   display: flex;
@@ -24,7 +25,7 @@ const Main = styled.main`
   }
 `;
 
-const FiltersContentContainer = styled.div`
+const FiltersContentContainer = styled.form`
   width: 280px;
   padding: 10px;
   display: flex;
@@ -44,6 +45,14 @@ const FullWidthButton = styled(Button)`
 const PropertiesList = (): ReactElement => {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(isMobileMediaQuery);
+  const { filters } = useContext(PropertiesFiltersContext);
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(fetchProperties({
+      filters
+    }));
+  };
 
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
 
@@ -61,12 +70,13 @@ const PropertiesList = (): ReactElement => {
               isFiltersDrawerOpen={isFiltersDrawerOpen}
               closeCallback={() => setIsFiltersDrawerOpen(false)}
             />
-            : <FiltersContentContainer>
+            : <FiltersContentContainer onSubmit={handleSearch}>
               <FiltersContent />
 
               <FullWidthButton
                 variant="contained"
                 size="large"
+                type="submit"
               >
                 Aplicar Filtros
               </FullWidthButton>

@@ -2,7 +2,7 @@ import { FormEvent, useState } from "react";
 import styled from "styled-components";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
 import SelectPropertyType from "../../components/SelectPropertyType";
 import { PropertyType } from "../../../models/property";
@@ -39,20 +39,29 @@ const InputText = styled(TextField)`
 `;
 
 const MainFilters = () => {
-  const [tipoInmueble, seTtipoInmueble] = useState<PropertyType>("APARTMENT");
   const [textSearch, setTextSearch] = useState("");
+
+  const [propertyType, setPropertyType] = useState<PropertyType>("APARTMENT");
 
   const navigate = useNavigate();
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
-    navigate(paths.properties);
+    navigate({
+      pathname: paths.properties,
+      search: `?${createSearchParams({
+        type: propertyType
+      })}`
+    });
   };
 
   return (
     <Wrapper>
       <FiltersContainer onSubmit={handleSearch}>
-        <SelectPropertyType selectedPropertyType={tipoInmueble} setSelectedPropertyType={seTtipoInmueble}/>
+        <SelectPropertyType
+          selectedPropertyType={propertyType}
+          setSelectedPropertyType={setPropertyType}
+        />
 
         <InputText
           id="input-text"

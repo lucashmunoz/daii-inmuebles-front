@@ -2,8 +2,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 import { endpoints } from "../../api/endpoints";
 import api, { API_HOST } from "../../api/api";
-import { Property, SortBy } from "../../models/property";
-import { Filters } from "../../context/PropertiesFiltersContext";
+import { Property, PropertyType, SortBy, SurfaceType } from "../../models/property";
+
+interface Filters {
+  type: PropertyType
+  textSearch: string
+  minPrice: string
+  maxPrice: string
+  minSurface: string
+  maxSurface: string
+  surfaceType: SurfaceType
+  minBeds: string
+  maxBeds: string
+  minRooms: string
+  maxRooms: string
+  minBathrooms: string
+  maxBathrooms: string
+}
 
 interface PropertyState {
   loadingProperties: boolean

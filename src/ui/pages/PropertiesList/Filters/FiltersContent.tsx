@@ -2,10 +2,9 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 import SelectPropertyType from "../../../components/SelectPropertyType";
-import { useContext } from "react";
-import PropertiesFiltersContext from "../../../../context/PropertiesFiltersContext";
-import { SurfaceType } from "../../../../models/property";
+import { PropertyType } from "../../../../models/property";
 import { isNumber } from "../../../../helpers";
+import { useSearchParams } from "react-router-dom";
 
 const FilterContainer = styled.div`
   padding: 8px 0; 
@@ -34,32 +33,34 @@ const InputText = styled(TextField)`
 `;
 
 const FiltersContent = () => {
-  const { filters, setFilters } = useContext(PropertiesFiltersContext);
+  const [filtersParams, setFiltersParams] = useSearchParams();
 
-  const {
-    type,
-    minPrice,
-    maxPrice,
-    minSurface,
-    maxSurface,
-    surfaceType,
-    minBeds,
-    maxBeds,
-    minRooms,
-    maxRooms,
-    minBathrooms,
-    maxBathrooms
-  } = filters;
+  const type = filtersParams.get("type");
+  const minPrice = filtersParams.get("minPrice");
+  const maxPrice = filtersParams.get("maxPrice");
+  const minSurface = filtersParams.get("minSurface");
+  const maxSurface = filtersParams.get("maxSurface");
+  const surfaceType = filtersParams.get("surfaceType");
+  const minBeds = filtersParams.get("minBeds");
+  const maxBeds = filtersParams.get("maxBeds");
+  const minRooms = filtersParams.get("minRooms");
+  const maxRooms = filtersParams.get("maxRooms");
+  const minBathrooms = filtersParams.get("minBathrooms");
+  const maxBathrooms = filtersParams.get("maxBathrooms");
 
   return (
     <div>
       <FilterContainer>
         <FilterTitle>Tipo de inmueble</FilterTitle>
-        <SelectPropertyType selectedPropertyType={type} setSelectedPropertyType={(value) => {
-          setFilters({
-            ...filters, type: value
-          });
-        }}/>
+        <SelectPropertyType
+          selectedPropertyType={type as PropertyType}
+          setSelectedPropertyType={(value) => {
+            setFiltersParams((prev) => {
+              prev.set("type", value);
+              return prev;
+            });
+          }}
+        />
       </FilterContainer>
 
       <FilterContainer>
@@ -75,8 +76,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, minPrice: value
+              setFiltersParams((prev) => {
+                prev.set("minPrice", value);
+                return prev;
               });
             }}
           />
@@ -90,8 +92,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, maxPrice: value
+              setFiltersParams((prev) => {
+                prev.set("maxPrice", value);
+                return prev;
               });
             }}
           />
@@ -116,8 +119,9 @@ const FiltersContent = () => {
           value={surfaceType}
           onChange={(e) => {
             const { value } = e.target;
-            setFilters({
-              ...filters, surfaceType: value as SurfaceType
+            setFiltersParams((prev) => {
+              prev.set("surfaceType", value);
+              return prev;
             });
           }}
         >
@@ -135,8 +139,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, minSurface: value
+              setFiltersParams((prev) => {
+                prev.set("minSurface", value);
+                return prev;
               });
             }}
           />
@@ -150,8 +155,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, maxSurface: value
+              setFiltersParams((prev) => {
+                prev.set("maxSurface", value);
+                return prev;
               });
             }}
           />
@@ -171,8 +177,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, minBeds: value
+              setFiltersParams((prev) => {
+                prev.set("minBeds", value);
+                return prev;
               });
             }}
           />
@@ -186,8 +193,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, maxBeds: value
+              setFiltersParams((prev) => {
+                prev.set("maxBeds", value);
+                return prev;
               });
             }}
           />
@@ -207,8 +215,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, minRooms: value
+              setFiltersParams((prev) => {
+                prev.set("minRooms", value);
+                return prev;
               });
             }}
           />
@@ -222,8 +231,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, maxRooms: value
+              setFiltersParams((prev) => {
+                prev.set("maxRooms", value);
+                return prev;
               });
             }}
           />
@@ -243,8 +253,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, minBathrooms: value
+              setFiltersParams((prev) => {
+                prev.set("minBathrooms", value);
+                return prev;
               });
             }}
           />
@@ -258,8 +269,9 @@ const FiltersContent = () => {
               if(!isNumber(value)) {
                 return;
               }
-              setFilters({
-                ...filters, maxBathrooms: value
+              setFiltersParams((prev) => {
+                prev.set("maxBathrooms", value);
+                return prev;
               });
             }}
           />

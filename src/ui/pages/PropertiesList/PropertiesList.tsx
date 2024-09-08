@@ -1,4 +1,4 @@
-import { FormEvent, ReactElement, useContext, useEffect, useState } from "react";
+import { FormEvent, ReactElement, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
 import { useAppDispatch } from "../../../store/hooks";
@@ -10,7 +10,8 @@ import FiltersContent from "./Filters/FiltersContent";
 import { isMobileMediaQuery } from "../../../helpers";
 import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
-import PropertiesFiltersContext from "../../../context/PropertiesFiltersContext";
+import { useSearchParams } from "react-router-dom";
+import { PropertyType, SurfaceType } from "../../../models/property";
 
 const Main = styled.main`
   display: flex;
@@ -45,7 +46,23 @@ const FullWidthButton = styled(Button)`
 const PropertiesList = (): ReactElement => {
   const dispatch = useAppDispatch();
   const isMobile = useMediaQuery(isMobileMediaQuery);
-  const { filters } = useContext(PropertiesFiltersContext);
+
+  const [filtersParams] = useSearchParams();
+
+  const filters = {
+    type: (filtersParams.get("type") || "") as PropertyType,
+    minPrice: filtersParams.get("minPrice") || "",
+    maxPrice: filtersParams.get("maxPrice") || "",
+    minSurface: filtersParams.get("minSurface") || "",
+    maxSurface: filtersParams.get("maxSurface") || "",
+    surfaceType: (filtersParams.get("surfaceType") || "") as SurfaceType,
+    minBeds: filtersParams.get("minBeds") || "",
+    maxBeds: filtersParams.get("maxBeds") || "",
+    minRooms: filtersParams.get("minRooms") || "",
+    maxRooms: filtersParams.get("maxRooms") || "",
+    minBathrooms: filtersParams.get("minBathrooms") || "",
+    maxBathrooms: filtersParams.get("maxBathrooms") || ""
+  };
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
@@ -57,7 +74,10 @@ const PropertiesList = (): ReactElement => {
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProperties({}));
+    dispatch(fetchProperties({
+      filters
+    }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (

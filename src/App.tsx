@@ -11,20 +11,6 @@ import CreateProperty from "./ui/pages/CreateProperty";
 import Bookmarks from "./ui/pages/Bookmarks";
 import PropertiesList from "./ui/pages/PropertiesList";
 import Home from "./ui/pages/Home";
-import { useState } from "react";
-import PropertiesFiltersContext, { initialPropertiesFiltersState } from "./context/PropertiesFiltersContext";
-
-const PropertiesListModule = () => {
-  const [filters, setFilters] = useState(initialPropertiesFiltersState.filters);
-
-  return (
-    <PropertiesFiltersContext.Provider value={{
-      filters, setFilters
-    }}>
-      <PropertiesList />
-    </PropertiesFiltersContext.Provider>
-  );
-};
 
 const router = createBrowserRouter([
   {
@@ -33,7 +19,7 @@ const router = createBrowserRouter([
   },
   {
     path: paths.properties,
-    element: <PropertiesListModule />
+    element: <PropertiesList />
   },
   {
     path: paths.propertyDetails,

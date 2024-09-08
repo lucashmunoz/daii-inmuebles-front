@@ -7,7 +7,6 @@ import Properties from "./Properties";
 import styled from "styled-components";
 import FilterActions from "./Filters/FilterActions";
 import FiltersContent from "./Filters/FiltersContent";
-import { PropertyType } from "../../../models/property";
 import { isMobileMediaQuery } from "../../../helpers";
 import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
@@ -47,7 +46,6 @@ const PropertiesList = (): ReactElement => {
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
-  const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType>("APARTMENT");
 
   useEffect(() => {
     dispatch(fetchProperties({}));
@@ -60,16 +58,11 @@ const PropertiesList = (): ReactElement => {
         {
           isMobile
             ? <FiltersDrawer
-              selectedPropertyType={selectedPropertyType}
-              setSelectedPropertyType={setSelectedPropertyType}
               isFiltersDrawerOpen={isFiltersDrawerOpen}
               closeCallback={() => setIsFiltersDrawerOpen(false)}
             />
             : <FiltersContentContainer>
-              <FiltersContent
-                selectedPropertyType={selectedPropertyType}
-                setSelectedPropertyType={setSelectedPropertyType}
-              />
+              <FiltersContent />
 
               <FullWidthButton
                 variant="contained"

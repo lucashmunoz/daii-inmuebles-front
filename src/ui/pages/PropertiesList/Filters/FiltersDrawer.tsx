@@ -1,7 +1,6 @@
 import { Button, Drawer } from "@mui/material";
 import styled from "styled-components";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import { PropertyType } from "../../../../models/property";
 import FiltersContent from "./FiltersContent";
 
 const DrawerContentContainer = styled.div`
@@ -40,11 +39,9 @@ const FullWidthButton = styled(Button)`
 interface FiltersDrawerProps {
   isFiltersDrawerOpen: boolean
   closeCallback: () => void
-  selectedPropertyType: PropertyType,
-  setSelectedPropertyType: (propertyType: PropertyType) => void
 }
 
-const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback, selectedPropertyType, setSelectedPropertyType }: FiltersDrawerProps) => {
+const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback }: FiltersDrawerProps) => {
   return (
     <Drawer
       open={isFiltersDrawerOpen}
@@ -57,7 +54,7 @@ const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback, selectedPropertyTyp
           </CloseButton>
         </CloseButtonHeader>
 
-        <FiltersContent selectedPropertyType={selectedPropertyType} setSelectedPropertyType={setSelectedPropertyType} />
+        <FiltersContent />
 
         <DrawerFooter>
           <FullWidthButton

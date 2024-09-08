@@ -47,3 +47,8 @@ export const getContractStatusNameByType = (contractStatus: PropertyContractStat
 };
 
 export const isMobileMediaQuery = "(max-width:600px)";
+
+export const isNumber = (str: string) => {
+  const numberRegex = new RegExp("^[0-9]*$");
+  return numberRegex.test(str);
+};

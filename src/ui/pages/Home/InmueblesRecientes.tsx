@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectProperties, selectLoadingProperties, fetchProperties, selectIsPropertiesError } from "../../../store/properties/propertiesSlice";
+import { fetchRecentProperties, selectIsRecentPropertiesError, selectLoadingRecentProperties, selectRecentProperties } from "../../../store/properties/propertiesSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import { useEffect } from "react";
 import { Alert } from "@mui/material";
@@ -62,19 +62,17 @@ const responsive = {
 
 const InmueblesRecientes = () => {
   const dispatch = useAppDispatch();
-  const properties = useAppSelector(selectProperties);
-  const loadingProperties = useAppSelector(selectLoadingProperties);
-  const isPropertiesError = useAppSelector(selectIsPropertiesError);
+  const recentProperties = useAppSelector(selectRecentProperties);
+  const loadingRecentProperties = useAppSelector(selectLoadingRecentProperties);
+  const isRecentPropertiesError = useAppSelector(selectIsRecentPropertiesError);
 
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
   useEffect(() => {
-    dispatch(fetchProperties({
-      sortBy: "RECENT"
-    }));
+    dispatch(fetchRecentProperties());
   }, [dispatch]);
 
-  if (loadingProperties) {
+  if (loadingRecentProperties) {
     return (
       <Wrapper>
         <LoadingSkeleton />
@@ -82,7 +80,7 @@ const InmueblesRecientes = () => {
     );
   }
 
-  if (isPropertiesError) {
+  if (isRecentPropertiesError) {
     return (
       <Wrapper>
         <Alert severity="error">
@@ -97,7 +95,7 @@ const InmueblesRecientes = () => {
       <Title>Inmuebles Publicados Recientemente</Title>
 
       {
-        isMobile ? properties.map(property => {
+        isMobile ? recentProperties.map(property => {
           const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
           const image = images[0];
           const formattedPrice = formatNumberToCurrency({
@@ -123,7 +121,7 @@ const InmueblesRecientes = () => {
         })
           : <CarouselContainer>
             <Carousel responsive={responsive}>
-              {properties.map(property => {
+              {recentProperties.map(property => {
                 const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
                 const image = images[0];
                 const formattedPrice = formatNumberToCurrency({

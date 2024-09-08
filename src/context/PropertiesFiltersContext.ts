@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import { PropertyType, SurfaceType } from "../models/property";
 
-interface Filters {
+export interface Filters {
   type: PropertyType
   textSearch: string
   minPrice: string

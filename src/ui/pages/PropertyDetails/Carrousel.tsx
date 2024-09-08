@@ -9,11 +9,11 @@ const CarouselWrapper = styled.div`
   border-radius: 5px;
 `;
 
-const CarouselInner = styled.div<{ currentIndex: number }>`
+const CarouselInner = styled.div<{ $currentIndex: number }>`
   display: flex;
   height: 100%;
   transition: transform 0.5s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 100}%)`};
+  transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
 `;
 
 const CarouselItem = styled.div`
@@ -77,7 +77,7 @@ const Carousel = (): ReactElement => {
 
   return (
     <CarouselWrapper>
-      <CarouselInner currentIndex={currentIndex}>
+      <CarouselInner $currentIndex={currentIndex}>
         {images.map((image, index) => (
           <CarouselItem key={index}>
             <CarouselImage src={image.src} alt={`Slide ${index + 1}`} />

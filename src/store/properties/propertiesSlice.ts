@@ -6,7 +6,6 @@ import { Property, PropertyType, SortBy, SurfaceType } from "../../models/proper
 
 interface Filters {
   type: PropertyType
-  textSearch: string
   minPrice: string
   maxPrice: string
   minSurface: string
@@ -52,7 +51,6 @@ export const fetchProperties = createAsyncThunk(
 
     const {
       type,
-      textSearch,
       minPrice,
       maxPrice,
       minRooms,
@@ -67,7 +65,6 @@ export const fetchProperties = createAsyncThunk(
     } = filters;
 
     const propertyTypeQuery = type ? `propertyType=${type}` : "";
-    const textSearchQuery = textSearch ? `textSearch=${textSearch}` : "";
     const minPriceQuery = minPrice ? `minPrice=${minPrice}` : "";
     const maxPriceQuery = maxPrice ? `maxPrice=${maxPrice}` : "";
     const minRoomsQuery = minRooms ? `minRooms=${minRooms}` : "";
@@ -84,7 +81,6 @@ export const fetchProperties = createAsyncThunk(
     const queries = [
       sortByQuery,
       propertyTypeQuery,
-      textSearchQuery,
       minPriceQuery,
       maxPriceQuery,
       minRoomsQuery,

@@ -1,6 +1,5 @@
 import { FormEvent, useState } from "react";
 import styled from "styled-components";
-import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
@@ -31,16 +30,7 @@ const FiltersContainer = styled.form`
   }
 `;
 
-const InputText = styled(TextField)`
-  min-width: 220px; 
-  & .MuiInputBase-root {
-    background-color: #fefefe;
-  }
-`;
-
 const MainFilters = () => {
-  const [textSearch, setTextSearch] = useState("");
-
   const [propertyType, setPropertyType] = useState<PropertyType>("APARTMENT");
 
   const navigate = useNavigate();
@@ -61,19 +51,6 @@ const MainFilters = () => {
         <SelectPropertyType
           selectedPropertyType={propertyType}
           setSelectedPropertyType={setPropertyType}
-        />
-
-        <InputText
-          id="input-text"
-          size="small"
-          value={textSearch}
-          placeholder="Ingresá un barrio o ubicación"
-          onChange={(e) => setTextSearch(e.target.value)}
-          sx={{
-            "& .MuiInputBase-input": {
-              py: 0.75, fontSize: "0.875rem"
-            }
-          }}
         />
 
         <Button

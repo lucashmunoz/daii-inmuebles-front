@@ -1,3 +1,5 @@
+import { Card, CardContent, CardMedia, Typography } from "@mui/material";
+
 interface Property {
     id: number;
     price: string;
@@ -14,42 +16,34 @@ interface Props {
 
 function SearchPropertiesCards({ property, onClick }: Props) {
   return (
-    <div
-      style={{
-        marginBottom: "10px",
-        padding: "10px",
-        border: "1px solid #ddd",
+    <Card
+      sx={{
         cursor: "pointer",
-        borderRadius: "8px",
-        display: "flex",
-        alignItems: "center",
-        backgroundColor: "#fff",
-        boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)",
-        transition: "transform 0.2s, box-shadow 0.2s"
+        transition: "transform 0.2s, box-shadow 0.2s",
+        "&:hover": {
+          transform: "scale(1.02)",
+          boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.15)"
+        }
       }}
       onClick={() => onClick(property)}
-      onKeyDown={() => onClick(property)}
       role="button"
       tabIndex={0}
-      onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.02)"; e.currentTarget.style.boxShadow = "0px 6px 12px rgba(0, 0, 0, 0.15)"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)"; }}
     >
-      <img
-        src={property.image}
+      <CardMedia
+        component="img"
+        height="140"
+        image={property.image}
         alt={`Imagen de la propiedad en ${property.location}`}
-        style={{
-          width: "100px", height: "100px", marginRight: "15px", borderRadius: "4px", marginLeft: "4px" 
-        }}
       />
-      <div>
-        <h3 style={{
-          fontSize: "1.1em", margin: 0, color: "#333" 
-        }}>{property.price}</h3>
-        <p style={{
-          fontSize: "0.9em", margin: 0, color: "#666" 
-        }}>{property.location}</p>
-      </div>
-    </div>
+      <CardContent>
+        <Typography variant="h6" component="div">
+          {property.price}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {property.location}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 }
 

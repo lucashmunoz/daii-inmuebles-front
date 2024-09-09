@@ -7,15 +7,16 @@ import {
   InfoWindow
 } from "@vis.gl/react-google-maps";
 import SearchPropertiesCards from "./SearchPropertiesCards";
+import { Grid, Box, Typography } from "@mui/material";
 
 // Define una interfaz para las propiedades
 interface Property {
-  id: number;
-  price: string;
-  location: string;
-  lat: number;
-  lng: number;
-  image: string;
+    id: number;
+    price: string;
+    location: string;
+    lat: number;
+    lng: number;
+    image: string;
 }
 
 const properties: Property[] = [
@@ -63,7 +64,9 @@ const properties: Property[] = [
 
 function Intro() {
   const [open, setOpen] = useState(false);
-  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(
+    null
+  );
 
   const handleMarkerClick = (property: Property) => {
     setSelectedProperty(property);
@@ -72,91 +75,85 @@ function Intro() {
 
   return (
     <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
-      <div style={{
-        display: "flex", height: "90vh", padding: "20px", boxSizing: "border-box" 
+      <Box sx={{
+        display: "flex", height: "90vh", padding: "20px"
       }}>
-        <div
-          style={{
-            width: "30%",
-            overflowY: "scroll",
-            padding: "10px",
-            backgroundColor: "#f0f0f5",
-            borderRadius: "12px",
-            border: "1px solid #ccc",
-            display: "grid",
-            gridTemplateColumns: "1fr",
-            gap: "20px"
-          }}
-        >
-          <h2 style={{
-            textAlign: "center",
-            fontFamily: "Helvetica, sans-serif",
-            fontWeight: "bold",
-            fontSize: "1.8em",
-            color: "#333",
-            padding: "15px",
-            backgroundColor: "#eee",
-            borderRadius: "12px",
-            boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
-          }}
-          >
-              🏠 Departamentos en Venta
-          </h2>
+        <Grid container spacing={2} sx={{
+          width: "30%", overflowY: "scroll"
+        }}>
+          <Grid item xs={12}>
+            <Typography
+              variant="h4"
+              align="center"
+              gutterBottom
+              sx={{
+                fontWeight: "bold",
+                backgroundColor: "#eee",
+                padding: "15px",
+                borderRadius: "12px",
+                boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+                            🏠 Departamentos en Venta
+            </Typography>
+          </Grid>
           {properties.map((property) => (
-            <SearchPropertiesCards
-              key={property.id}
-              property={property}
-              onClick={handleMarkerClick}
-            />
+            <Grid item xs={12} key={property.id}>
+              <SearchPropertiesCards
+                property={property}
+                onClick={handleMarkerClick}
+              />
+            </Grid>
           ))}
-        </div>
+        </Grid>
 
-        <div style={{
-          width: "65%", position: "relative", marginLeft: "20px", borderRadius: "8px", overflow: "hidden", border: "1px solid #ccc" 
+        <Box sx={{
+          width: "65%", marginLeft: "20px", position: "relative"
         }}>
           <Map
             zoom={12}
-            center={selectedProperty
-              ? {
-                lat: selectedProperty.lat, lng: selectedProperty.lng 
-              }
-              : {
-                lat: -34.6037, lng: -58.3816 
-              }} // Centro en Buenos Aires
+            center={
+              selectedProperty
+                ? {
+                  lat: selectedProperty.lat,
+                  lng: selectedProperty.lng
+                }
+                : {
+                  lat: -34.6037,
+                  lng: -58.3816
+                }
+            }
             mapId={import.meta.env.VITE_MAP_ID}
             style={{
-              height: "100%", width: "100%" 
+              height: "100%", width: "100%"
             }}
           >
             {properties.map((property) => (
               <AdvancedMarker
                 key={property.id}
                 position={{
-                  lat: property.lat, lng: property.lng 
+                  lat: property.lat, lng: property.lng
                 }}
                 onClick={() => handleMarkerClick(property)}
               >
-                <Pin
-                  background="grey"
-                  borderColor="green"
-                  glyphColor="purple"
-                />
+                <Pin background="grey" borderColor="green" glyphColor="purple" />
               </AdvancedMarker>
             ))}
 
             {open && selectedProperty && (
               <InfoWindow
                 position={{
-                  lat: selectedProperty.lat, lng: selectedProperty.lng 
+                  lat: selectedProperty.lat,
+                  lng: selectedProperty.lng
                 }}
                 onCloseClick={() => setOpen(false)}
               >
-                <p>{selectedProperty.location}</p>
+                <Typography>{selectedProperty.location}</Typography>
               </InfoWindow>
             )}
           </Map>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </APIProvider>
   );
 }

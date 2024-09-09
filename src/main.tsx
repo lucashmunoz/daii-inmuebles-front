@@ -6,10 +6,6 @@ import Home from "./ui/pages/Home";
 import PropertiesList from "./ui/pages/PropertiesList";
 import PropertyDetails from "./ui/pages/PropertyDetails";
 import SearchMap from "./ui/pages/SearchMap";
-import MyProperties from "./ui/pages/MyProperties";
-import MyContracts from "./ui/pages/MyContracts";
-import CreateProperty from "./ui/pages/CreateProperty";
-import Bookmarks from "./ui/pages/Bookmarks";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import ThemeCustomization from "./themes";
@@ -36,21 +32,6 @@ const router = createBrowserRouter([
 
     path: "/search",
     element: <SearchMap />
-  },
-    path: paths.myProperties,
-    element: <MyProperties />
-  },
-  {
-    path: paths.myContracts,
-    element: <MyContracts />
-  },
-  {
-    path: paths.createProperty,
-    element: <CreateProperty />
-  },
-  {
-    path: paths.bookmarks,
-    element: <Bookmarks />
   }
 ]);
 

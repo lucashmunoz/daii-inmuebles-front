@@ -39,8 +39,6 @@ const Contracts = () => {
   const rentals = useAppSelector(selectRentals);
   const rentProcesses = useAppSelector(selectRentalProcesses);
 
-  console.log(rentProcesses);
-
   useEffect(() => {
     dispatch(fetchRentals({
       role: "TENANT"

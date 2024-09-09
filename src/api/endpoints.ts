@@ -1,4 +1,5 @@
 export const endpoints = {
   properties: "/properties",
-  rentals: "/rentals"
+  rentals: "/rentals",
+  districts: "/districts"
 } as const;

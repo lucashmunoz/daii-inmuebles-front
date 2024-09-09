@@ -3,8 +3,8 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { PropertyContractStatus, PropertyType } from "../../../models/property";
-import { getContractStatusNameByType, getPropertyTypeNameByType } from "../../../helpers";
+import { PropertyType } from "../../../models/property";
+import { getPropertyTypeNameByType } from "../../../helpers";
 import styled from "styled-components";
 
 const DesktopCardContentWrapper = styled.div`
@@ -42,12 +42,11 @@ interface PropertyCardProps {
   image: string
   price: string
   type: PropertyType
-  currentState: PropertyContractStatus
+  currentStatus: string
 }
 
-const ContractCard = ({ orientation, id, district, image, price, type, currentState }: PropertyCardProps) => {
+const ContractCard = ({ orientation, id, district, image, price, type, currentStatus }: PropertyCardProps) => {
   const propertyType = getPropertyTypeNameByType(type).toUpperCase();
-  const propertyStatus = getContractStatusNameByType(currentState).toUpperCase();
 
   const isHorizontal = orientation === "horizontal";
 
@@ -79,7 +78,7 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
                 <Typography variant="body2" sx={{
                   color: "text.secondary", textAlign: "left", paddingBottom: "8px"
                 }}>
-                  {propertyType} ALQUILADO
+                  {propertyType}
                 </Typography>
                 <Typography gutterBottom variant="h4" component="div">
               ${price}
@@ -92,10 +91,9 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
               </PropertyDetails>
 
               <Typography variant="body1" sx={{
-                fontWeight: "bold",
-                color: currentState === "AL_DIA" ? "blue" : "red"
+                fontWeight: "bold"
               }}>
-                {propertyStatus}
+                {currentStatus}
               </Typography>
             </CardDetailsContainer>
           </CardContent>
@@ -131,10 +129,9 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
           </Typography>
           <CardDataRow>
             <Typography variant="body1" sx={{
-              fontWeight: "bold",
-              color: currentState === "AL_DIA" ? "blue" : "red"
+              fontWeight: "bold"
             }}>
-              {propertyStatus}
+              {currentStatus}
             </Typography>
             <Typography variant="body2" sx={{
               color: "text.secondary"

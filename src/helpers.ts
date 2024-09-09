@@ -1,4 +1,5 @@
-import { PropertyContractStatus, PropertyType } from "./models/property";
+import { PropertyType } from "./models/property";
+import { RentProcessStatus, RentStatus } from "./models/rentals";
 
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
   const strNumber = number.toString();
@@ -35,12 +36,33 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
   }
 };
 
-export const getContractStatusNameByType = (contractStatus: PropertyContractStatus) => {
-  switch(contractStatus) {
-    case "AL_DIA":
-      return "Al día";
-    case "VENCIDO":
-      return "Vencido";
+export const getRentStatusNameByStatus = (rentStatus: RentStatus) => {
+  switch(rentStatus) {
+    case "PENDING_PAYMENT":
+      return "Pendiente de Pago";
+    case "ACTIVE":
+      return "Activo";
+    case "COMPLETED":
+      return "Completado";
+    case "CANCELLED":
+      return "Cancelado";
+    default:
+      return "";
+  }
+};
+
+export const getRentProcessStatusNameByStatus = (rentProcessStatus: RentProcessStatus) => {
+  switch(rentProcessStatus) {
+    case "PENDING_APPROVAL":
+      return "Pendiente de Aprobación";
+    case "ACCEPTED":
+      return "Aceptado";
+    case "PENDING_CONTRACT":
+      return "Contrato Pendiente";
+    case "CONTRACT_CREATED":
+      return "Contrato Creado";
+    case "SUCCESS":
+      return "Proceso Exitoso";
     default:
       return "";
   }

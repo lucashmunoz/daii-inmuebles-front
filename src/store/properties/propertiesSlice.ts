@@ -4,7 +4,7 @@ import { endpoints } from "../../api/endpoints";
 import api, { API_HOST } from "../../api/api";
 import { Property, PropertyType, SortBy, SurfaceType } from "../../models/property";
 
-interface Filters {
+export interface Filters {
   type: PropertyType
   minPrice: string
   maxPrice: string

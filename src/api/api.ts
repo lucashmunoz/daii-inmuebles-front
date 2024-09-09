@@ -12,7 +12,7 @@ axios.defaults.baseURL = API_HOST;
 axios.defaults.timeout = 600000;
 axios.defaults.headers.common = {
   Accept: "application/json",
-  "Content-Type": "application/json",
+  "Content-Type": "application/json"
 };
 
 export default axios;

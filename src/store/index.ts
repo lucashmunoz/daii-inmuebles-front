@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import propertiesReducer from "./properties/propertiesSlice";
 import rentalsReducer from "./properties/rentalsSlice";
+import districtsReducer from "./properties/districtsSlice";
 
 export const store = configureStore({
   reducer: {
     properties: propertiesReducer,
-    rentals: rentalsReducer
+    rentals: rentalsReducer,
+    districts: districtsReducer
   }
 });
 

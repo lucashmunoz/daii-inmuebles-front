@@ -2,9 +2,25 @@ import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 import SelectPropertyType from "../../../components/SelectPropertyType";
-import { PropertyType } from "../../../../models/property";
+import { PropertyType, SurfaceType } from "../../../../models/property";
 import { isNumber } from "../../../../helpers";
 import { useSearchParams } from "react-router-dom";
+import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
+import { useState } from "react";
+import { Filters } from "../../../../store/properties/propertiesSlice";
+
+const ResetButtonContainer = styled.div`
+  width: 100%;
+  display: flex; 
+  justify-content: flex-end;
+`;
+
+const ResetButton = styled.button`
+  border: none;
+  background: none;
+  padding: 8px 0 0 8px;
+  cursor: pointer;
+`;
 
 const FilterContainer = styled.div`
   padding: 8px 0; 
@@ -34,22 +50,73 @@ const InputText = styled(TextField)`
 
 const FiltersContent = () => {
   const [filtersParams, setFiltersParams] = useSearchParams();
+  const [filtersState, setFilstersState] = useState<Filters>({
+    type: filtersParams.get("type") as PropertyType,
+    minPrice: filtersParams.get("minPrice") || "",
+    maxPrice: filtersParams.get("maxPrice") || "",
+    minSurface: filtersParams.get("minSurface") || "",
+    maxSurface: filtersParams.get("maxSurface") || "",
+    surfaceType: filtersParams.get("surfaceType") as SurfaceType,
+    minBeds: filtersParams.get("minBeds") || "",
+    maxBeds: filtersParams.get("maxBeds") || "",
+    minRooms: filtersParams.get("minRooms") || "",
+    maxRooms: filtersParams.get("maxRooms") || "",
+    minBathrooms: filtersParams.get("minBathrooms") || "",
+    maxBathrooms: filtersParams.get("maxBathrooms") || ""
+  });
 
-  const type = filtersParams.get("type");
-  const minPrice = filtersParams.get("minPrice");
-  const maxPrice = filtersParams.get("maxPrice");
-  const minSurface = filtersParams.get("minSurface");
-  const maxSurface = filtersParams.get("maxSurface");
-  const surfaceType = filtersParams.get("surfaceType");
-  const minBeds = filtersParams.get("minBeds");
-  const maxBeds = filtersParams.get("maxBeds");
-  const minRooms = filtersParams.get("minRooms");
-  const maxRooms = filtersParams.get("maxRooms");
-  const minBathrooms = filtersParams.get("minBathrooms");
-  const maxBathrooms = filtersParams.get("maxBathrooms");
+  const {
+    type,
+    minPrice,
+    maxPrice,
+    minSurface,
+    maxSurface,
+    surfaceType,
+    minBeds,
+    maxBeds,
+    minRooms,
+    maxRooms,
+    minBathrooms,
+    maxBathrooms
+  } = filtersState;
+
+  const handleResetFilters = () => {
+    filtersParams.delete("minPrice");
+    filtersParams.delete("maxPrice");
+    filtersParams.delete("minSurface");
+    filtersParams.delete("maxSurface");
+    filtersParams.delete("surfaceType");
+    filtersParams.set("surfaceType", "COVERED");
+    filtersParams.delete("minBeds");
+    filtersParams.delete("maxBeds");
+    filtersParams.delete("minRooms");
+    filtersParams.delete("maxRooms");
+    filtersParams.delete("minBathrooms");
+    filtersParams.delete("maxBathrooms");
+    setFiltersParams(filtersParams);
+    setFilstersState({
+      type: "APARTMENT",
+      minPrice: "",
+      maxPrice: "",
+      minSurface: "",
+      maxSurface: "",
+      surfaceType: "COVERED",
+      minBeds: "",
+      maxBeds: "",
+      minRooms: "",
+      maxRooms: "",
+      minBathrooms: "",
+      maxBathrooms: ""
+    });
+  };
 
   return (
     <div>
+      <ResetButtonContainer>
+        <ResetButton aria-label="Reiniciar filtros" type="button" onClick={handleResetFilters}>
+          <RestartAltOutlinedIcon />
+        </ResetButton>
+      </ResetButtonContainer>
       <FilterContainer>
         <FilterTitle>Tipo de inmueble</FilterTitle>
         <SelectPropertyType
@@ -59,6 +126,10 @@ const FiltersContent = () => {
               prev.set("type", value);
               return prev;
             });
+            setFilstersState((prev) => ({
+              ...prev,
+              type: value
+            }));
           }}
         />
       </FilterContainer>
@@ -80,6 +151,10 @@ const FiltersContent = () => {
                 prev.set("minPrice", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                minPrice: value
+              }));
             }}
           />
           <InputText
@@ -96,6 +171,10 @@ const FiltersContent = () => {
                 prev.set("maxPrice", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                maxPrice: value
+              }));
             }}
           />
         </TwoInputsContainer>
@@ -123,6 +202,10 @@ const FiltersContent = () => {
               prev.set("surfaceType", value);
               return prev;
             });
+            setFilstersState((prev) => ({
+              ...prev,
+              surfaceType: value as SurfaceType
+            }));
           }}
         >
           <FormControlLabel value="COVERED" control={<Radio />} label="Cubierta" />
@@ -143,6 +226,10 @@ const FiltersContent = () => {
                 prev.set("minSurface", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                minSurface: value
+              }));
             }}
           />
           <InputText
@@ -159,6 +246,10 @@ const FiltersContent = () => {
                 prev.set("maxSurface", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                maxSurface: value
+              }));
             }}
           />
         </TwoInputsContainer>
@@ -181,6 +272,10 @@ const FiltersContent = () => {
                 prev.set("minBeds", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                minBeds: value
+              }));
             }}
           />
           <InputText
@@ -197,6 +292,10 @@ const FiltersContent = () => {
                 prev.set("maxBeds", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                maxBeds: value
+              }));
             }}
           />
         </TwoInputsContainer>
@@ -219,6 +318,10 @@ const FiltersContent = () => {
                 prev.set("minRooms", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                minRooms: value
+              }));
             }}
           />
           <InputText
@@ -235,6 +338,10 @@ const FiltersContent = () => {
                 prev.set("maxRooms", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                maxRooms: value
+              }));
             }}
           />
         </TwoInputsContainer>
@@ -257,6 +364,10 @@ const FiltersContent = () => {
                 prev.set("minBathrooms", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                minBathrooms: value
+              }));
             }}
           />
           <InputText
@@ -273,6 +384,10 @@ const FiltersContent = () => {
                 prev.set("maxBathrooms", value);
                 return prev;
               });
+              setFilstersState((prev) => ({
+                ...prev,
+                maxBathrooms: value
+              }));
             }}
           />
         </TwoInputsContainer>

@@ -51,12 +51,12 @@ const InputText = styled(TextField)`
 const FiltersContent = () => {
   const [filtersParams, setFiltersParams] = useSearchParams();
   const [filtersState, setFilstersState] = useState<Filters>({
-    type: filtersParams.get("type") as PropertyType,
+    type: filtersParams.get("type") as PropertyType || "APARTMENT",
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
     maxSurface: filtersParams.get("maxSurface") || "",
-    surfaceType: filtersParams.get("surfaceType") as SurfaceType,
+    surfaceType: filtersParams.get("surfaceType") as SurfaceType || "COVERED",
     minBeds: filtersParams.get("minBeds") || "",
     maxBeds: filtersParams.get("maxBeds") || "",
     minRooms: filtersParams.get("minRooms") || "",

@@ -45,17 +45,16 @@ const FullWidthButton = styled(Button)`
 
 const PropertiesList = (): ReactElement => {
   const dispatch = useAppDispatch();
+  const [filtersParams, setFiltersParams] = useSearchParams();
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
-  const [filtersParams] = useSearchParams();
-
   const filters = {
-    type: (filtersParams.get("type") || "") as PropertyType,
+    type: filtersParams.get("type") as PropertyType || "APARTMENT",
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
     maxSurface: filtersParams.get("maxSurface") || "",
-    surfaceType: (filtersParams.get("surfaceType") || "") as SurfaceType,
+    surfaceType: filtersParams.get("surfaceType") as SurfaceType || "COVERED",
     minBeds: filtersParams.get("minBeds") || "",
     maxBeds: filtersParams.get("maxBeds") || "",
     minRooms: filtersParams.get("minRooms") || "",
@@ -74,6 +73,19 @@ const PropertiesList = (): ReactElement => {
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
 
   useEffect(() => {
+    if(!filtersParams.get("type")) {
+      setFiltersParams((prev) => {
+        prev.set("type", "APARTMENT");
+        return prev;
+      });
+    }
+    if(!filtersParams.get("surfaceType")) {
+      setFiltersParams((prev) => {
+        prev.set("surfaceType", "COVERED");
+        return prev;
+      });
+    }
+
     dispatch(fetchProperties({
       filters
     }));

@@ -6,7 +6,7 @@ import { PropertyType, SurfaceType } from "../../../../models/property";
 import { isNumber } from "../../../../helpers";
 import { useSearchParams } from "react-router-dom";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Filters } from "../../../../store/properties/propertiesSlice";
 
 const ResetButtonContainer = styled.div`
@@ -110,6 +110,22 @@ const FiltersContent = () => {
     });
   };
 
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target as HTMLInputElement;
+
+    if(!isNumber(value)) {
+      return;
+    }
+    setFiltersParams((prev) => {
+      prev.set(name, value);
+      return prev;
+    });
+    setFilstersState((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   return (
     <div>
       <ResetButtonContainer>
@@ -139,43 +155,19 @@ const FiltersContent = () => {
         <TwoInputsContainer>
           <InputText
             id="input-price-from"
+            name="minPrice"
             size="small"
             placeholder="Desde"
             value={minPrice}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("minPrice", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                minPrice: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
           <InputText
             id="input-price-to"
+            name="maxPrice"
             size="small"
             placeholder="Hasta"
             value={maxPrice}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("maxPrice", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                maxPrice: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
         </TwoInputsContainer>
       </FilterContainer>
@@ -194,7 +186,7 @@ const FiltersContent = () => {
           aria-labelledby="radio-surface-type"
           row
           defaultValue="covered"
-          name="radio-buttons-group"
+          name="surfaceType"
           value={surfaceType}
           onChange={(e) => {
             const { value } = e.target;
@@ -214,43 +206,19 @@ const FiltersContent = () => {
         <TwoInputsContainer>
           <InputText
             id="input-surface-from"
+            name="minSurface"
             size="small"
             placeholder="Desde"
             value={minSurface}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("minSurface", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                minSurface: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
           <InputText
             id="input-surface-to"
+            name="maxSurface"
             size="small"
             placeholder="Hasta"
             value={maxSurface}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("maxSurface", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                maxSurface: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
         </TwoInputsContainer>
       </FilterContainer>
@@ -260,43 +228,19 @@ const FiltersContent = () => {
         <TwoInputsContainer>
           <InputText
             id="input-beds-from"
+            name="minBeds"
             size="small"
             placeholder="Desde"
             value={minBeds}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("minBeds", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                minBeds: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
           <InputText
             id="input-beds-to"
+            name="maxBeds"
             size="small"
             placeholder="Hasta"
             value={maxBeds}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("maxBeds", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                maxBeds: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
         </TwoInputsContainer>
       </FilterContainer>
@@ -306,43 +250,19 @@ const FiltersContent = () => {
         <TwoInputsContainer>
           <InputText
             id="input-rooms-from"
+            name="minRooms"
             size="small"
             placeholder="Desde"
             value={minRooms}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("minRooms", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                minRooms: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
           <InputText
             id="input-rooms-to"
+            name="maxRooms"
             size="small"
             placeholder="Hasta"
             value={maxRooms}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("maxRooms", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                maxRooms: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
         </TwoInputsContainer>
       </FilterContainer>
@@ -352,43 +272,19 @@ const FiltersContent = () => {
         <TwoInputsContainer>
           <InputText
             id="input-bathrooms-from"
+            name="minBathrooms"
             size="small"
             placeholder="Desde"
             value={minBathrooms}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("minBathrooms", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                minBathrooms: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
           <InputText
             id="input-bathrooms-to"
+            name="maxBathrooms"
             size="small"
             placeholder="Hasta"
             value={maxBathrooms}
-            onChange={(e) => {
-              const { value } = e.target;
-              if(!isNumber(value)) {
-                return;
-              }
-              setFiltersParams((prev) => {
-                prev.set("maxBathrooms", value);
-                return prev;
-              });
-              setFilstersState((prev) => ({
-                ...prev,
-                maxBathrooms: value
-              }));
-            }}
+            onChange={handleInputChange}
           />
         </TwoInputsContainer>
       </FilterContainer>

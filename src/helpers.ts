@@ -11,7 +11,7 @@ export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {num
   }
 
   return new Intl.NumberFormat("es-AR").format(
-      Number(formattedNumber)
+    Number(formattedNumber)
   );
 };
 

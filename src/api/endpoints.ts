@@ -1,3 +1,6 @@
 export const endpoints = {
-  properties: "/properties"
+  properties: "/properties",
+  propertyDetails: "/properties/{id}",
+  rentals: "/rentals",
+  districts: "/districts"
 } as const;

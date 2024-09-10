@@ -5,5 +5,6 @@ export const paths = {
   myProperties: "/myproperties",
   myContracts: "/mycontracts",
   createProperty: "/createProperty",
-  bookmarks: "/bookmarks"
+  bookmarks: "/bookmarks",
+  searchMap: "/searchMap"
 } as const;

@@ -1,4 +1,4 @@
-import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 import SelectPropertyType from "../../../components/SelectPropertyType";
@@ -6,8 +6,10 @@ import { PropertyType, SurfaceType } from "../../../../models/property";
 import { isNumber } from "../../../../helpers";
 import { useSearchParams } from "react-router-dom";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Filters } from "../../../../store/properties/propertiesSlice";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { fetchDistricts, selectDistricts } from "../../../../store/properties/districtsSlice";
 
 const ResetButtonContainer = styled.div`
   width: 100%;
@@ -48,7 +50,19 @@ const InputText = styled(TextField)`
   }
 `;
 
+const DistrictsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
+  overflow-y: scroll;
+  padding: 8px;
+`;
+
 const FiltersContent = () => {
+  const dispatch = useAppDispatch();
+
+  const allDistrictsArray = useAppSelector(selectDistricts);
+
   const [filtersParams, setFiltersParams] = useSearchParams();
   const [filtersState, setFilstersState] = useState<Filters>({
     type: filtersParams.get("type") as PropertyType || "APARTMENT",
@@ -62,7 +76,8 @@ const FiltersContent = () => {
     minRooms: filtersParams.get("minRooms") || "",
     maxRooms: filtersParams.get("maxRooms") || "",
     minBathrooms: filtersParams.get("minBathrooms") || "",
-    maxBathrooms: filtersParams.get("maxBathrooms") || ""
+    maxBathrooms: filtersParams.get("maxBathrooms") || "",
+    districts: filtersParams.get("districts") || ""
   });
 
   const {
@@ -77,7 +92,8 @@ const FiltersContent = () => {
     minRooms,
     maxRooms,
     minBathrooms,
-    maxBathrooms
+    maxBathrooms,
+    districts
   } = filtersState;
 
   const handleResetFilters = () => {
@@ -93,6 +109,7 @@ const FiltersContent = () => {
     filtersParams.delete("maxRooms");
     filtersParams.delete("minBathrooms");
     filtersParams.delete("maxBathrooms");
+    filtersParams.delete("districts");
     setFiltersParams(filtersParams);
     setFilstersState({
       type: "APARTMENT",
@@ -106,7 +123,8 @@ const FiltersContent = () => {
       minRooms: "",
       maxRooms: "",
       minBathrooms: "",
-      maxBathrooms: ""
+      maxBathrooms: "",
+      districts: ""
     });
   };
 
@@ -125,6 +143,28 @@ const FiltersContent = () => {
       [name]: value
     }));
   };
+
+  const onCheckboxChange = (e: SyntheticEvent, checked: boolean) => {
+    const { value } = e.target as HTMLInputElement;
+    let newCheckboxesStr = districts.length === 0 ? [] : districts.split(", ");
+    if(checked) {
+      newCheckboxesStr.push(value);
+    }else{
+      newCheckboxesStr = newCheckboxesStr.filter(checkboxValue => checkboxValue !== value );
+    }
+    const newCheckboxesStrArray = newCheckboxesStr.join(", ");
+    filtersParams.delete("districts");
+    filtersParams.set("districts", newCheckboxesStrArray);
+    setFiltersParams(filtersParams);
+    setFilstersState((prev) => ({
+      ...prev,
+      districts: newCheckboxesStrArray
+    }));
+  };
+
+  useEffect(() => {
+    dispatch(fetchDistricts());
+  }, [dispatch]);
 
   return (
     <div>
@@ -148,6 +188,25 @@ const FiltersContent = () => {
             }));
           }}
         />
+      </FilterContainer>
+      <FilterContainer>
+        <FilterTitle>Barrios</FilterTitle>
+        <DistrictsContainer>
+          <FormGroup>
+            {
+              allDistrictsArray.map(district => (
+                <FormControlLabel
+                  key={district}
+                  control={<Checkbox />}
+                  label={district}
+                  value={district}
+                  checked={districts.split(", ").includes(district)}
+                  onChange={onCheckboxChange}
+                />
+              ))
+            }
+          </FormGroup>
+        </DistrictsContainer>
       </FilterContainer>
 
       <FilterContainer>

@@ -13,6 +13,7 @@ import PropertiesList from "./ui/pages/PropertiesList";
 import Home from "./ui/pages/Home";
 import SearchMap from "./ui/pages/SearchMap";
 
+
 const router = createBrowserRouter([
   {
     path: paths.home,

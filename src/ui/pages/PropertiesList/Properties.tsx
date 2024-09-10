@@ -13,6 +13,7 @@ const PropertiesWrapper = styled.div`
   padding: 20px 0;
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 24px;
 `;
 
@@ -49,6 +50,7 @@ const Properties = () => {
 
           return (
             <PropertyCard
+              key={id}
               orientation={isMobile ? "horizontal" : "vertical"}
               id={id}
               image={image}

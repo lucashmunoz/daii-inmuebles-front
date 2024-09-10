@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from "react";
+import { FormEvent, ReactElement, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
 import { useAppDispatch } from "../../../store/hooks";
@@ -7,10 +7,11 @@ import Properties from "./Properties";
 import styled from "styled-components";
 import FilterActions from "./Filters/FilterActions";
 import FiltersContent from "./Filters/FiltersContent";
-import { PropertyType } from "../../../models/property";
 import { isMobileMediaQuery } from "../../../helpers";
 import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
+import { useSearchParams } from "react-router-dom";
+import { PropertyType, SurfaceType } from "../../../models/property";
 
 const Main = styled.main`
   display: flex;
@@ -25,7 +26,7 @@ const Main = styled.main`
   }
 `;
 
-const FiltersContentContainer = styled.div`
+const FiltersContentContainer = styled.form`
   width: 280px;
   padding: 10px;
   display: flex;
@@ -44,13 +45,51 @@ const FullWidthButton = styled(Button)`
 
 const PropertiesList = (): ReactElement => {
   const dispatch = useAppDispatch();
+  const [filtersParams, setFiltersParams] = useSearchParams();
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
+  const filters = {
+    type: filtersParams.get("type") as PropertyType || "APARTMENT",
+    minPrice: filtersParams.get("minPrice") || "",
+    maxPrice: filtersParams.get("maxPrice") || "",
+    minSurface: filtersParams.get("minSurface") || "",
+    maxSurface: filtersParams.get("maxSurface") || "",
+    surfaceType: filtersParams.get("surfaceType") as SurfaceType || "COVERED",
+    minBeds: filtersParams.get("minBeds") || "",
+    maxBeds: filtersParams.get("maxBeds") || "",
+    minRooms: filtersParams.get("minRooms") || "",
+    maxRooms: filtersParams.get("maxRooms") || "",
+    minBathrooms: filtersParams.get("minBathrooms") || "",
+    maxBathrooms: filtersParams.get("maxBathrooms") || ""
+  };
+
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+    dispatch(fetchProperties({
+      filters
+    }));
+  };
+
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
-  const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType>("APARTMENT");
 
   useEffect(() => {
-    dispatch(fetchProperties({}));
+    if(!filtersParams.get("type")) {
+      setFiltersParams((prev) => {
+        prev.set("type", "APARTMENT");
+        return prev;
+      });
+    }
+    if(!filtersParams.get("surfaceType")) {
+      setFiltersParams((prev) => {
+        prev.set("surfaceType", "COVERED");
+        return prev;
+      });
+    }
+
+    dispatch(fetchProperties({
+      filters
+    }));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   return (
@@ -60,20 +99,16 @@ const PropertiesList = (): ReactElement => {
         {
           isMobile
             ? <FiltersDrawer
-              selectedPropertyType={selectedPropertyType}
-              setSelectedPropertyType={setSelectedPropertyType}
               isFiltersDrawerOpen={isFiltersDrawerOpen}
               closeCallback={() => setIsFiltersDrawerOpen(false)}
             />
-            : <FiltersContentContainer>
-              <FiltersContent
-                selectedPropertyType={selectedPropertyType}
-                setSelectedPropertyType={setSelectedPropertyType}
-              />
+            : <FiltersContentContainer onSubmit={handleSearch}>
+              <FiltersContent />
 
               <FullWidthButton
                 variant="contained"
                 size="large"
+                type="submit"
               >
                 Aplicar Filtros
               </FullWidthButton>

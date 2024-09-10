@@ -1,8 +1,8 @@
 import { ReactElement, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { paths } from "../../../navigation/paths";
-import { Button, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const Wrapper = styled.header`
@@ -37,13 +37,14 @@ const Actions = styled.nav<{ $showActions: boolean; }>`
   border: 1px solid #cccccc;
 `;
 
-const ActionButton = styled(Button)`
+const LinkButton = styled(Link)`
   padding: 12px;
+  color: #0958d9;
+  decoration: none;
+  text-align: center;
 `;
 
 const Header = (): ReactElement => {
-  const navigate = useNavigate();
-
   const [showActions, setShowActions] = useState(false);
 
   const handleShowActions = () => {
@@ -53,27 +54,27 @@ const Header = (): ReactElement => {
   return (
     <Wrapper>
       <Link to={paths.home}>
-        <Logo src="src/assets/logo.png" />
+        <Logo src="src/assets/logo.png" alt="Smart Move logo" />
       </Link>
-      <MenuButton>
+      <MenuButton aria-label="Menu">
         <MenuIcon fontSize="large" onClick={handleShowActions} />
       </MenuButton>
       <Actions $showActions={showActions}>
-        <ActionButton variant="text" onClick={() => navigate(paths.myContracts)}>
+        <LinkButton to={paths.myContracts}>
           Mis contratos
-        </ActionButton>
+        </LinkButton>
         <Divider />
-        <ActionButton variant="text" onClick={() => navigate(paths.myProperties)}>
+        <LinkButton to={paths.myProperties}>
           Mis publicaciones
-        </ActionButton>
+        </LinkButton>
         <Divider />
-        <ActionButton variant="text" onClick={() => navigate(paths.createProperty)}>
+        <LinkButton to={paths.createProperty}>
           Publicar Inmueble
-        </ActionButton>
+        </LinkButton>
         <Divider />
-        <ActionButton variant="text" onClick={() => navigate(paths.bookmarks)}>
+        <LinkButton to={paths.bookmarks}>
           Mis favoritos
-        </ActionButton>
+        </LinkButton>
       </Actions>
     </Wrapper>
   );

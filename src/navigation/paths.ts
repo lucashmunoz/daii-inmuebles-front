@@ -1,7 +1,7 @@
 export const paths = {
   home: "/",
   properties: "/properties",
-  propertyDetails: "/property",
+  propertyDetails: "/properties/:id",
   myProperties: "/myproperties",
   myContracts: "/mycontracts",
   createProperty: "/createProperty",

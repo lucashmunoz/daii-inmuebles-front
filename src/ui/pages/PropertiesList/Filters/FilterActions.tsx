@@ -29,7 +29,7 @@ const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
         variant="text"
         startIcon={<LocationOnIcon />}
       >
-        Ver mapa
+        mapa
       </VerMapaButton>
       {
         isMobile && <Button

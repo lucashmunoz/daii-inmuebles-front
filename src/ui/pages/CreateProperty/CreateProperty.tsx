@@ -1,4 +1,4 @@
-import { TextField, Button, Typography, Card, Grid, InputAdornment, Divider, CardMedia, CardContent } from "@mui/material";
+import { TextField, Button, Typography, Card, Grid, InputAdornment, Divider, CardMedia, CardContent, IconButton } from "@mui/material";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
@@ -7,17 +7,18 @@ import { PropertyType, Property } from "../../../models/property";
 import ImageDescription from "../../../assets/property-create-image.svg";
 import { useState } from "react";
 import { useDropzone } from "react-dropzone";
+import DeleteIcon from "@mui/icons-material/Close";
 
 const StyledCard = styled(Card)`
   margin: 20px auto;
-  max-width: 900px;
+  max-width: 950px;
   overflow: hidden;  // Evita el overflow visible en la tarjeta
 `;
 
 const StyledCardContent = styled(CardContent)`
   padding: 20px;
   max-height: calc(100vh - 40px); // Ajusta según el diseño
-  overflow-y: auto; // Permite scroll vertical
+  overflow-y: auto; // Agrega scroll si es necesario
 `;
 
 const StyledTextField = styled(TextField)`
@@ -50,7 +51,6 @@ const TitleContainer = styled.div`
 
 const ButtonContainer = styled.div`
   text-align: center;
-  border: 2px solid purple;
 `;
 
 const StyledForm = styled.form`
@@ -65,8 +65,15 @@ const ImagePreview = styled.div`
 `;
 
 const PreviewCard = styled(Card)`
+  position: relative;
   max-width: 120px;
   max-height: 120px;
+`;
+
+const DeleteButton = styled(IconButton)`
+  position: absolute;
+  top: -5px;
+  right: -5px;
 `;
 
 const CreateProperty = () => {
@@ -115,6 +122,11 @@ const CreateProperty = () => {
     setImages([...images, ...uploadedImages]); // Mantenemos las imágenes anteriores y añadimos las nuevas
   };
 
+  const handleRemoveImage = (index: number) => {
+    const updatedImages = images.filter((_, imgIndex) => imgIndex !== index);
+    setImages(updatedImages);
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/*": []
@@ -158,7 +170,6 @@ const CreateProperty = () => {
           <StyledForm onSubmit={handleSubmit}>
             {/* Contenedor 3: Todos los textfields en 2 columnas */}
             <Grid container spacing={2}>
-
               <Grid item xs={12}>
                 <Typography variant="body1" gutterBottom style={{
                   marginBottom: "1px"
@@ -178,10 +189,11 @@ const CreateProperty = () => {
                   Dirección <span>*</span>
                 </Typography>
                 <StyledTextField
-                  name="title"
+                  name="address"
                   onChange={handleInputChange}
                   fullWidth
                   required
+                  placeholder="Ej.: Reconquista 123"
                 />
               </Grid>
 
@@ -192,7 +204,7 @@ const CreateProperty = () => {
                   Barrio <span>*</span>
                 </Typography>
                 <StyledTextField
-                  name="title"
+                  name="district"
                   onChange={handleInputChange}
                   fullWidth
                   required
@@ -245,6 +257,83 @@ const CreateProperty = () => {
                 <Typography variant="body1" gutterBottom style={{
                   marginBottom: "1px"
                 }}>
+                  Ambientes <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="rooms"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Dormitorios <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="beds"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Baños <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="bathrooms"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Cocheras <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="garages"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  placeholder="Si no tiene cocheras, indica 0."
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Bauleras <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="storages"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  placeholder="Si no tiene bauleras, indica 0."
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
                   Precio <span>*</span>
                 </Typography>
                 <StyledTextField
@@ -257,26 +346,27 @@ const CreateProperty = () => {
                     min: 0
                   }}
                   InputProps={{
-                    endAdornment: <InputAdornment position="end">$</InputAdornment>
+                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                    endAdornment: <InputAdornment position="end">por mes</InputAdornment>
                   }}
                 />
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <Typography variant="body1" gutterBottom style={{
                   marginBottom: "1px"
                 }}>
-                  Tipo de propiedad <span>*</span>
+                  Titulo
                 </Typography>
                 <StyledTextField
-                  name="type"
+                  name="description"
                   onChange={handleInputChange}
+                  multiline
                   fullWidth
-                  required
+                  placeholder="Ej.: Casa remolada con jardín, cercana al subte 9 de Julio"
                 />
               </Grid>
 
-              {/* Más campos aquí */}
               <Grid item xs={12}>
                 <Typography variant="body1" gutterBottom style={{
                   marginBottom: "1px"
@@ -289,42 +379,44 @@ const CreateProperty = () => {
                   multiline
                   rows={4}
                   fullWidth
+                  placeholder="Escribí mas detalles del inmueble."
                 />
               </Grid>
 
-              {/* Contenedor para imágenes subidas */}
-              <Grid item xs={12}>
-                <Typography variant="body1" gutterBottom style={{
-                  marginBottom: "1px"
-                }}>
-                  Imágenes
-                </Typography>
-                <div {...getRootProps()} style={{
-                  border: "2px dashed #ccc",
-                  padding: "20px",
-                  textAlign: "center"
-                }}>
-                  <input {...getInputProps()} />
-                  <p>Arrastra y suelta algunas imágenes aquí, o haz clic para seleccionarlas</p>
-                </div>
-                <ImagePreview>
-                  {images.map((image, index) => (
-                    <PreviewCard key={index}>
-                      <CardMedia
-                        component="img"
-                        image={image}
-                        alt={`preview-${index}`}
-                        style={{
-                          objectFit: "cover", height: "120px"
-                        }}
-                      />
-                    </PreviewCard>
-                  ))}
-                </ImagePreview>
-              </Grid>
             </Grid>
 
-            {/* Contenedor 4: Botón de envío */}
+            {/* Contenedor 4: Subir imágenes */}
+            <Typography variant="h6" gutterBottom style={{
+              marginTop: "20px"
+            }}>
+              Subir imágenes
+            </Typography>
+            <div {...getRootProps()}>
+              <input {...getInputProps()} />
+              <Button variant="contained" color="primary">
+                Seleccionar imágenes
+              </Button>
+            </div>
+
+            <ImagePreview>
+              {images.map((image, index) => (
+                <PreviewCard key={index}>
+                  <CardMedia
+                    component="img"
+                    image={image}
+                    title={`Imagen ${index + 1}`}
+                  />
+                  <DeleteButton
+                    aria-label="delete"
+                    onClick={() => handleRemoveImage(index)}
+                  >
+                    <DeleteIcon />
+                  </DeleteButton>
+                </PreviewCard>
+              ))}
+            </ImagePreview>
+
+            {/* Contenedor 5: Botón de enviar */}
             <ButtonContainer>
               <Button
                 type="submit"
@@ -334,7 +426,7 @@ const CreateProperty = () => {
                   marginTop: "20px"
                 }}
               >
-                Guardar Propiedad
+                Publicar propiedad
               </Button>
             </ButtonContainer>
           </StyledForm>

@@ -1,17 +1,84 @@
-import { useState } from "react";
+import { TextField, Button, Typography, Card, Grid, InputAdornment, Divider, CardMedia, CardContent } from "@mui/material";
+import styled from "styled-components";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
 import SelectPropertyType from "../../components/SelectPropertyType";
-import { TextField, Button, Grid, Card, CardContent, Typography } from "@mui/material";
+import { PropertyType, Property } from "../../../models/property";
+import ImageDescription from "../../../assets/property-create-image.svg";
+import { useState } from "react";
+import { useDropzone } from "react-dropzone";
+
+const StyledCard = styled(Card)`
+  margin: 20px auto;
+  max-width: 900px;
+  overflow: hidden;  // Evita el overflow visible en la tarjeta
+`;
+
+const StyledCardContent = styled(CardContent)`
+  padding: 20px;
+  max-height: calc(100vh - 40px); // Ajusta según el diseño
+  overflow-y: auto; // Permite scroll vertical
+`;
+
+const StyledTextField = styled(TextField)`
+  & .MuiInputBase-root {
+    background-color: #fefefe;
+  }
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 150px;
+  margin-bottom: 20px;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 450px;
+  height: 150px;
+`;
+
+const TitleContainer = styled.div`
+  flex: 1;
+  height: 150px;
+  width: 450px;
+  margin-top: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  text-align: center;
+  border: 2px solid purple;
+`;
+
+const StyledForm = styled.form`
+  border-color: red;
+`;
+
+const ImagePreview = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+`;
+
+const PreviewCard = styled(Card)`
+  max-width: 120px;
+  max-height: 120px;
+`;
 
 const CreateProperty = () => {
   const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType>("APARTMENT");
-
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Property>({
+    id: 0,
     beds: 1,
     bathrooms: 1,
+    country: "Argentina",
+    city: "Ciudad Autonoma de Buenos Aires",
+    state: "Buenos Aires",
     district: "",
-    city: "",
     rooms: 1,
     title: "",
     description: "",
@@ -19,12 +86,14 @@ const CreateProperty = () => {
     longitude: 0,
     images: [""],
     address: "",
+    storeys: 0,
     price: 0,
+    garages: 0,
     type: selectedPropertyType,
-    currency: "",
     surface_covered: 0,
     surface_total: 0
   });
+  const [images, setImages] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,141 +108,238 @@ const CreateProperty = () => {
     console.log(formData);
   };
 
+  const handleDrop = (acceptedFiles: File[]) => {
+    const uploadedImages = acceptedFiles.map((file) =>
+      URL.createObjectURL(file)
+    );
+    setImages([...images, ...uploadedImages]); // Mantenemos las imágenes anteriores y añadimos las nuevas
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/*": []
+    },
+    onDrop: handleDrop
+  });
+
   return (
     <PageWrapper>
       <Header />
-
-      <Grid container justifyContent="center" style={{
-        marginTop: "20px"
-      }}>
-        <Grid item xs={12} md={8}>
-          <Card>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Completar las características del inmueble
+      <StyledCard>
+        <StyledCardContent>
+          {/* Contenedor 1: Título y subtítulo */}
+          <FormContainer>
+            <TitleContainer>
+              <Typography variant="h5" gutterBottom fontSize={20} style={{
+                marginBottom: "1px"
+              }}>
+                Completá las características del inmueble
               </Typography>
+              <Typography variant="body1" color="textSecondary" fontSize={15}>
+                Tendrás mejor ubicación en los resultados de búsqueda y <br />
+                los interesados tendrán toda la información que <br />
+                necesitan.
+              </Typography>
+            </TitleContainer>
 
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                  {/* SelectPropertyType Component */}
-                  <Grid item xs={12}>
-                    <SelectPropertyType
-                      selectedPropertyType={selectedPropertyType}
-                      setSelectedPropertyType={setSelectedPropertyType}
-                    />
-                  </Grid>
+            {/* Contenedor 2: Imagen */}
+            <ImageContainer>
+              <img src={ImageDescription} alt="Icono" style={{
+                width: "200px", height: "200px"
+              }} />
+            </ImageContainer>
+          </FormContainer>
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Superficie total"
-                      name="surface_total"
-                      value={formData.surface_total}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+          {/* Línea divisoria gris */}
+          <Divider style={{
+            backgroundColor: "#e0e0e0", margin: "20px 0"
+          }} />
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Superficie cubierta"
-                      name="surface_covered"
-                      value={formData.surface_covered}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+          <StyledForm onSubmit={handleSubmit}>
+            {/* Contenedor 3: Todos los textfields en 2 columnas */}
+            <Grid container spacing={2}>
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Ambientes"
-                      name="rooms"
-                      value={formData.rooms}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={12}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Tipo de propiedad
+                </Typography>
+                <SelectPropertyType
+                  selectedPropertyType={selectedPropertyType}
+                  setSelectedPropertyType={setSelectedPropertyType}
+                />
+              </Grid>
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Dormitorios"
-                      name="beds"
-                      value={formData.beds}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Dirección <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="title"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Baños"
-                      name="bathrooms"
-                      value={formData.bathrooms}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Barrio <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="title"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
 
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Cocheras"
-                      name="garages"
-                      value={formData.garages}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Superficie total <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="surface_total"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  inputProps={{
+                    min: 0
+                  }}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">m²</InputAdornment>
+                  }}
+                />
+              </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Dirección"
-                      name="address"
-                      value={formData.address}
-                      onChange={handleInputChange}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Superficie cubierta <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="surface_covered"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  inputProps={{
+                    min: 0
+                  }}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">m²</InputAdornment>
+                  }}
+                />
+              </Grid>
 
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Descripción"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      multiline
-                      rows={4}
-                      fullWidth
-                      size="small"
-                      required
-                    />
-                  </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Precio <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="price"
+                  type="number"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                  inputProps={{
+                    min: 0
+                  }}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">$</InputAdornment>
+                  }}
+                />
+              </Grid>
 
-                  <Grid item xs={12} style={{
-                    textAlign: "center"
-                  }}>
-                    <Button type="submit" variant="contained" color="primary">
-                      Enviar
-                    </Button>
-                  </Grid>
-                </Grid>
-              </form>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+              <Grid item xs={6}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Tipo de propiedad <span>*</span>
+                </Typography>
+                <StyledTextField
+                  name="type"
+                  onChange={handleInputChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+
+              {/* Más campos aquí */}
+              <Grid item xs={12}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Descripción
+                </Typography>
+                <StyledTextField
+                  name="description"
+                  onChange={handleInputChange}
+                  multiline
+                  rows={4}
+                  fullWidth
+                />
+              </Grid>
+
+              {/* Contenedor para imágenes subidas */}
+              <Grid item xs={12}>
+                <Typography variant="body1" gutterBottom style={{
+                  marginBottom: "1px"
+                }}>
+                  Imágenes
+                </Typography>
+                <div {...getRootProps()} style={{
+                  border: "2px dashed #ccc",
+                  padding: "20px",
+                  textAlign: "center"
+                }}>
+                  <input {...getInputProps()} />
+                  <p>Arrastra y suelta algunas imágenes aquí, o haz clic para seleccionarlas</p>
+                </div>
+                <ImagePreview>
+                  {images.map((image, index) => (
+                    <PreviewCard key={index}>
+                      <CardMedia
+                        component="img"
+                        image={image}
+                        alt={`preview-${index}`}
+                        style={{
+                          objectFit: "cover", height: "120px"
+                        }}
+                      />
+                    </PreviewCard>
+                  ))}
+                </ImagePreview>
+              </Grid>
+            </Grid>
+
+            {/* Contenedor 4: Botón de envío */}
+            <ButtonContainer>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                style={{
+                  marginTop: "20px"
+                }}
+              >
+                Guardar Propiedad
+              </Button>
+            </ButtonContainer>
+          </StyledForm>
+        </StyledCardContent>
+      </StyledCard>
     </PageWrapper>
   );
 };

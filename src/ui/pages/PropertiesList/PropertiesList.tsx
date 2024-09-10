@@ -60,7 +60,8 @@ const PropertiesList = (): ReactElement => {
     minRooms: filtersParams.get("minRooms") || "",
     maxRooms: filtersParams.get("maxRooms") || "",
     minBathrooms: filtersParams.get("minBathrooms") || "",
-    maxBathrooms: filtersParams.get("maxBathrooms") || ""
+    maxBathrooms: filtersParams.get("maxBathrooms") || "",
+    districts: filtersParams.get("districts") || ""
   };
 
   const handleSearch = (e: FormEvent) => {

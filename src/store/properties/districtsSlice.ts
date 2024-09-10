@@ -37,7 +37,8 @@ export const districtsSlice = createSlice({
       })
       .addCase(fetchDistricts.fulfilled, (state, action) => {
         state.districtsStatus = "SUCCESS";
-        state.districts = action.payload;
+
+        state.districts = [...action.payload].sort();
       })
       .addCase(fetchDistricts.rejected, (state) => {
         state.districtsStatus = "ERROR";

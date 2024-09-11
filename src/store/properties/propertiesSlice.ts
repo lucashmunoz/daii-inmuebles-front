@@ -18,6 +18,10 @@ export interface Filters {
   minBathrooms: string
   maxBathrooms: string
   districts: string
+  minLat: string
+  maxLat: string
+  minLon: string
+  maxLon: string
 }
 
 interface PropertyState {
@@ -63,7 +67,11 @@ export const fetchProperties = createAsyncThunk(
       minSurface,
       maxSurface,
       surfaceType,
-      districts
+      districts,
+      minLat,
+      maxLat,
+      minLon,
+      maxLon
     } = filters;
 
     const propertyTypeQuery = type ? `propertyType=${type}` : "";
@@ -80,6 +88,10 @@ export const fetchProperties = createAsyncThunk(
     const minSurfaceTotalQuery = minSurface && surfaceType === "TOTAL" ? `minSurfaceTotal=${minSurface}` : "";
     const maxSurfaceTotalQuery = maxSurface && surfaceType === "TOTAL" ? `maxSurfaceTotal=${maxSurface}` : "";
     const districtsQuery = districts ? `districts=${districts}` : "";
+    const minLatQuery = minLat ? `minLat=${minLat}` : "";
+    const maxLatQuery = maxLat ? `maxLat=${maxLat}` : "";
+    const minLonQuery = minLon ? `minLon=${minLon}` : "";
+    const maxLonQuery = maxLon ? `maxLon=${maxLon}` : "";
 
     const queries = [
       sortByQuery,
@@ -96,7 +108,11 @@ export const fetchProperties = createAsyncThunk(
       maxSurfaceCoveredQuery,
       minSurfaceTotalQuery,
       maxSurfaceTotalQuery,
-      districtsQuery
+      districtsQuery,
+      minLatQuery,
+      maxLatQuery,
+      minLonQuery,
+      maxLonQuery
     ].filter(query => query !== "").join("&");
 
     const fetchPropertiesUrl = `${API_HOST}${endpoints.properties}?${queries}`;

@@ -356,7 +356,7 @@ const CreateProperty = () => {
                 <Typography variant="body1" gutterBottom style={{
                   marginBottom: "1px"
                 }}>
-                  Titulo
+                  Titulo <span>*</span>
                 </Typography>
                 <StyledTextField
                   name="description"

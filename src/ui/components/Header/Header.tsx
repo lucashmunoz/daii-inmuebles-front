@@ -60,6 +60,10 @@ const Header = (): ReactElement => {
         <MenuIcon fontSize="large" onClick={handleShowActions} />
       </MenuButton>
       <Actions $showActions={showActions}>
+        <LinkButton to={paths.properties}>
+          Buscar Propiedades
+        </LinkButton>
+        <Divider />
         <LinkButton to={paths.myContracts}>
           Mis contratos
         </LinkButton>

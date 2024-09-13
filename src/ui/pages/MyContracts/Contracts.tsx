@@ -57,7 +57,7 @@ const Contracts = () => {
     return (
       <ContractsContainer>
         <Alert severity="error">
-          Ocurrio un error al mostrar sus contratos.
+          Ocurrió un error al mostrar sus contratos.
         </Alert>
       </ContractsContainer>
     );

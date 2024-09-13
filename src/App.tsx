@@ -8,9 +8,9 @@ import PropertyDetails from "./ui/pages/PropertyDetails";
 import MyProperties from "./ui/pages/MyProperties";
 import MyContracts from "./ui/pages/MyContracts";
 import CreateProperty from "./ui/pages/CreateProperty";
-import Bookmarks from "./ui/pages/Bookmarks";
 import PropertiesList from "./ui/pages/PropertiesList";
 import Home from "./ui/pages/Home";
+import MyBookmarks from "./ui/pages/MyBookmarks";
 
 const router = createBrowserRouter([
   {
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: paths.bookmarks,
-    element: <Bookmarks />
+    element: <MyBookmarks />
   }
 ]);
 

@@ -33,7 +33,7 @@ const Properties = () => {
   if (isPropertiesError) {
     return (
       <Alert severity="error">
-          Ocurrio un error al mostrar los inmuebles.
+          Ocurrió un error al mostrar los inmuebles.
       </Alert>
     );
   }

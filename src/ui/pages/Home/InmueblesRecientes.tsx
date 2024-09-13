@@ -84,7 +84,7 @@ const InmueblesRecientes = () => {
     return (
       <Wrapper>
         <Alert severity="error">
-          Ocurrio un error al mostrar los inmuebles recientes.
+        Ocurrió un error al mostrar los inmuebles recientes.
         </Alert>
       </Wrapper>
     );

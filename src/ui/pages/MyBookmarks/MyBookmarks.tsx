@@ -1,13 +1,14 @@
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
+import Bookmarks from "./Bookmarks";
 
-const Bookmarks = () => {
+const MyBookmarks = () => {
   return (
     <PageWrapper>
       <Header />
-      <div>Bookmarks</div>
+      <Bookmarks />
     </PageWrapper>
   );
 };
 
-export default Bookmarks;
+export default MyBookmarks;

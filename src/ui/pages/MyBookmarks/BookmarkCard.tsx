@@ -7,6 +7,8 @@ import { PropertyType } from "../../../models/property";
 import { getPropertyTypeNameByType } from "../../../helpers";
 import styled from "styled-components";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
+import { paths } from "../../../navigation/paths";
 
 const DesktopCardContentWrapper = styled.div`
   height: 100%;
@@ -65,7 +67,6 @@ const Spinner = styled.span`
 `;
 
 const DeleteButton = styled(Button)`
-  height: 20px;
   align-self: center;
 `;
 
@@ -95,49 +96,61 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
           height: 180
         }}
       >
-        <DesktopCardContentWrapper>
-          <CardMedia
-            component="img"
-            height="100%"
-            sx={{
-              width: 280
-            }}
-            image={image}
-            alt="inmueble publicado recientemente"
-          />
-          <CardContent sx={{
-            width: "100%", height: "100%"
-          }}>
-            <CardDetailsContainer>
-              <PropertyDetails>
-                <Typography variant="body2" sx={{
-                  color: "text.secondary", textAlign: "left", paddingBottom: "8px"
-                }}>
-                  {propertyType}
-                </Typography>
-                <Typography gutterBottom variant="h4" component="div">
+        <CardActionArea component={Link} to={paths.propertyDetails} sx={{
+          width: "100%",
+          height: "100%"
+        }}>
+          <DesktopCardContentWrapper>
+            <CardMedia
+              component="img"
+              height="100%"
+              sx={{
+                width: 280
+              }}
+              image={image}
+              alt="inmueble publicado recientemente"
+            />
+            <CardContent sx={{
+              width: "100%", height: "100%"
+            }}>
+              <CardDetailsContainer>
+                <PropertyDetails>
+                  <Typography variant="body2" sx={{
+                    color: "text.secondary", textAlign: "left", paddingBottom: "8px"
+                  }}>
+                    {propertyType}
+                  </Typography>
+                  <Typography gutterBottom variant="h4" component="div">
                   ${price}
-                </Typography>
-                <Typography variant="body2" sx={{
-                  color: "text.secondary"
-                }}>
-                  {district}
-                </Typography>
-              </PropertyDetails>
+                  </Typography>
+                  <Typography variant="body2" sx={{
+                    color: "text.secondary"
+                  }}>
+                    {district}
+                  </Typography>
+                </PropertyDetails>
 
-              {
-                loading
-                  ? <SpinnerContainer>
-                    <Spinner />
-                  </SpinnerContainer>
-                  : <DeleteButton onClick={() => onDelete(id)}>
+                {
+                  loading
+                    ? <SpinnerContainer>
+                      <Spinner />
+                    </SpinnerContainer>
+                    : <DeleteButton
+                      onMouseDown={e => e.stopPropagation()}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        onDelete(id);
+                      }}
+                    >
                       Eliminar
-                  </DeleteButton>
-              }
+                    </DeleteButton>
+                }
 
-            </CardDetailsContainer>
-          </CardContent>
-        </DesktopCardContentWrapper>
+              </CardDetailsContainer>
+            </CardContent>
+          </DesktopCardContentWrapper>
+        </CardActionArea>
       </Card>
     );
   }
@@ -149,7 +162,10 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
         width: "100%"
       }}
     >
-      <CardActionArea>
+      <CardActionArea component={Link} to={paths.propertyDetails} sx={{
+        width: "100%",
+        height: "100%"
+      }}>
         <CardMedia
           component="img"
           height="120"
@@ -179,7 +195,14 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
                 ? <SpinnerContainer>
                   <Spinner />
                 </SpinnerContainer>
-                : <DeleteButton onClick={() => onDelete(id)}>
+                : <DeleteButton
+                  onMouseDown={e => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    onDelete(id);
+                  }}
+                >
                       Eliminar
                 </DeleteButton>
             }

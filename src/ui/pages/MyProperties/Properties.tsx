@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert, useMediaQuery } from "@mui/material";
 import { isMobileMediaQuery } from "../../../helpers";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import MyPropertyCard from "./MyPropertyCard";
-import { fetchMyProperties, selectMyProperties, selectMyPropertiesStatus } from "../../../store/properties/myPropertiesSlice";
+import { fetchMyProperties, selectMyProperties, selectMyPropertiesStatus, selectTogglePropertyActiveStatus, togglePropertyActiveStatus } from "../../../store/properties/myPropertiesSlice";
+import { Property } from "../../../models/property";
 
 const PropertiesContainer = styled.main`
   padding: 16px;
@@ -43,6 +44,23 @@ const Contracts = () => {
   const isMobile = useMediaQuery(isMobileMediaQuery);
   const myProperties = useAppSelector(selectMyProperties);
   const myPropertiesStatus = useAppSelector(selectMyPropertiesStatus);
+  const togglePropertyActiveState = useAppSelector(selectTogglePropertyActiveStatus);
+
+  const [propertyIdToBeToggle, setPropertyIdToBeToggle] = useState(-1);
+
+  const handlePropertyStatusChange = async (property: Property, newStatus: boolean) => {
+    const { id } = property;
+    setPropertyIdToBeToggle(id);
+    const updatedProperty = {
+      ...property
+    };
+    updatedProperty.active = newStatus;
+    await dispatch(togglePropertyActiveStatus({
+      propertyId: id,
+      updatedProperty
+    }));
+    setPropertyIdToBeToggle(-1);
+  };
 
   useEffect(() => {
     dispatch(fetchMyProperties());
@@ -76,11 +94,15 @@ const Contracts = () => {
       <PropertiesSection>
         {
           myProperties.map(property => {
+            const isToggleLoading = togglePropertyActiveState === "LOADING" && propertyIdToBeToggle === property.id;
+
             return (
               <MyPropertyCard
                 orientation={isMobile ? "vertical" : "horizontal"}
                 key={property.id}
                 property={property}
+                isToggleLoading={isToggleLoading}
+                handlePropertyStatusChange={handlePropertyStatusChange}
               />
             );
           })

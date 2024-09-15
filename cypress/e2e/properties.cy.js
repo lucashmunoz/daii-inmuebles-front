@@ -13,14 +13,14 @@ describe("Página de Mis Publicaciones", () => {
 
   it("Verifica que un inmueble contiene los detalles correctos", () => {
     cy.get(".property-card").first().as("firstProperty");
-    cy.get("@firstProperty").find("h4").should("not.be.empty");  // Verifica el precio
-    cy.get("@firstProperty").find("img").should("have.attr", "src").should("include", "image");  // Verifica que la imagen se muestra
+    cy.get("@firstProperty").find("h4").should("not.be.empty");
+    cy.get("@firstProperty").find("img").should("have.attr", "src").should("include", "image");
   });
 
   it("Simula un estado de carga de inmuebles (loading)", () => {
     cy.intercept("GET", "/api/my-properties", {
       statusCode: 200,
-      delay: 1000, // Simula una demora en la carga de datos
+      delay: 1000,
       body: []
     }).as("getMyPropertiesLoading");
     cy.visit("/my-properties");

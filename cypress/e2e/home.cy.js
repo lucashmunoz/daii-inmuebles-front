@@ -8,18 +8,17 @@ describe("Página Home", () => {
   });
 
   it("Verifica que los filtros principales están presentes", () => {
-    cy.get("form").should("exist");  // Verifica que el formulario de filtros esté presente
+    cy.get("form").should("exist");
     cy.get("button[type='submit']").contains("Buscar").should("be.visible");
   });
 
   it("Verifica que los inmuebles recientes se muestran", () => {
-    cy.get("h2").contains("Inmuebles Publicados Recientemente").should("be.visible");  // Verifica el título
-    cy.get(".property-card").should("have.length.at.least", 1);  // Verifica que haya al menos un inmueble
+    cy.get("h2").contains("Inmuebles Publicados Recientemente").should("be.visible");
+    cy.get(".property-card").should("have.length.at.least", 1);
   });
 
   it("Simula la búsqueda de inmuebles", () => {
-    // Selecciona el tipo de propiedad y hace clic en "Buscar"
-    cy.get("select").select("APARTMENT");  // Cambia según el select de tu página
+    cy.get("select").select("APARTMENT");
     cy.get("button[type='submit']").click();
     cy.url().should("include", "/properties?type=APARTMENT");
   });

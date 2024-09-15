@@ -8,7 +8,7 @@ describe("Página de Lista de Propiedades", () => {
   });
 
   it("Verifica que se muestran las propiedades", () => {
-    cy.get(".property-card").should("have.length.at.least", 1); // Verifica que haya al menos una propiedad
+    cy.get(".property-card").should("have.length.at.least", 1);
   });
 
   it("Simula el uso de filtros (Precio, Dormitorios, Superficie)", () => {
@@ -19,7 +19,7 @@ describe("Página de Lista de Propiedades", () => {
     cy.get("input[name='minSurface']").type("50");
     cy.get("input[name='maxSurface']").type("150");
     cy.get("button").contains("Aplicar Filtros").click();
-    cy.get(".property-card").should("have.length.at.least", 1); // Al menos una propiedad después de aplicar los filtros
+    cy.get(".property-card").should("have.length.at.least", 1);
   });
 
   it("Simula el reinicio de los filtros", () => {

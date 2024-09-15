@@ -19,8 +19,8 @@ describe("Página de Mis Contratos", () => {
 
   it("Verifica que un contrato individual contiene los detalles correctos", () => {
     cy.get(".contract-card").first().as("firstContract");
-    cy.get("@firstContract").find("h4").should("not.be.empty");  // Verifica el precio
-    cy.get("@firstContract").find("p").contains("ALQUILADO").should("exist");  // Verifica el estado
-    cy.get("@firstContract").find("img").should("have.attr", "src").should("include", "image");  // Verifica que la imagen se muestra
+    cy.get("@firstContract").find("h4").should("not.be.empty");
+    cy.get("@firstContract").find("p").contains("ALQUILADO").should("exist");
+    cy.get("@firstContract").find("img").should("have.attr", "src").should("include", "image");
   });
 });

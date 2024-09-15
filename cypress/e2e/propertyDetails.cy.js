@@ -1,6 +1,6 @@
 describe("Página de Detalles de Propiedad", () => {
   beforeEach(() => {
-    cy.visit("/property/1");  // Suponiendo que la propiedad con ID 1 es la que estás probando
+    cy.visit("/property/1");
   });
 
   it("Verifica que la página de detalles carga correctamente", () => {
@@ -16,9 +16,6 @@ describe("Página de Detalles de Propiedad", () => {
 
   it("Simula la interacción con el botón de alquilar", () => {
     cy.get("button").contains("Alquilar").should("be.visible").click();
-
-    // Aquí podrías verificar la funcionalidad relacionada con el alquiler
-    // por ejemplo, redireccionar a una nueva página o mostrar un modal
   });
 
   it("Verifica que el carrusel de imágenes funciona correctamente", () => {

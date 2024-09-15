@@ -77,11 +77,11 @@ const Header = (): ReactElement => {
         </LinkButton>
         <Divider />
         <LinkButton to={paths.myContracts}>
-          Mis contratos
+          Mis Contratos
         </LinkButton>
         <Divider />
         <LinkButton to={paths.myProperties}>
-          Mis publicaciones
+          Mis Publicaciones
         </LinkButton>
         <Divider />
         <LinkButton to={paths.createProperty}>
@@ -89,7 +89,7 @@ const Header = (): ReactElement => {
         </LinkButton>
         <Divider />
         <LinkButton to={paths.bookmarks}>
-          Mis favoritos
+          Mis Favoritos
         </LinkButton>
       </Actions>
     </Wrapper>

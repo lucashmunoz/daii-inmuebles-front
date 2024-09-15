@@ -21,7 +21,6 @@ export const fetchBookmarkedProperties = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     const params = new URLSearchParams();
     params.append("page", "0");
-    params.append("userId", "1");
 
     try{
       const response = await api.get(
@@ -43,19 +42,11 @@ interface DeleteBookmarkPayload {
 export const deleteBookmark = createAsyncThunk(
   "users/deleteBookmark",
   async ({ propertyId }: DeleteBookmarkPayload, { rejectWithValue }) => {
-    const deleteParams = new URLSearchParams();
-    deleteParams.append("userId", "1");
-
     const fetchParams = new URLSearchParams();
     fetchParams.append("page", "0");
-    fetchParams.append("userId", "1");
 
     try{
-      await api.delete(
-        `${API_HOST}/properties/${propertyId}/favorites`, {
-          params: deleteParams
-        }
-      );
+      await api.delete(`${API_HOST}/properties/${propertyId}/favorites`);
 
       const response = await api.get(
         `${API_HOST}${endpoints.bookmark}`, {

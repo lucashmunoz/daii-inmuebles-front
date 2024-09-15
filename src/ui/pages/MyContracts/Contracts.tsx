@@ -81,6 +81,7 @@ const Contracts = () => {
               <ContractCard
                 orientation={isMobile ? "vertical" : "horizontal"}
                 id={id}
+                key={id}
                 district={district}
                 image={image}
                 price={formattedPrice}

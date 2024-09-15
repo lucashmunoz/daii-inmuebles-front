@@ -65,7 +65,7 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
             component="img"
             height="100%"
             sx={{
-              width: 280
+              width: 270
             }}
             image={image}
             alt="inmueble publicado recientemente"

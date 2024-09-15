@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Alert, useMediaQuery } from "@mui/material";
-import { formatNumberToCurrency, isMobileMediaQuery } from "../../../helpers";
+import { isMobileMediaQuery } from "../../../helpers";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
@@ -64,7 +64,7 @@ const Contracts = () => {
       <PropertiesContainer>
         <MyPropertiesPageTitle />
         <Alert severity="error">
-          Ocurrió un error al mostrar sus favoritos.
+          Ocurrió un error al mostrar sus propiedades.
         </Alert>
       </PropertiesContainer>
     );
@@ -76,20 +76,11 @@ const Contracts = () => {
       <PropertiesSection>
         {
           myProperties.map(property => {
-            const { id, images, price, district, type } = property;
-            const image = images[0];
-            const formattedPrice = formatNumberToCurrency({
-              number: price
-            });
-
             return (
               <MyPropertyCard
                 orientation={isMobile ? "vertical" : "horizontal"}
-                id={id}
-                district={district}
-                image={image}
-                price={formattedPrice}
-                type={type}
+                key={property.id}
+                property={property}
               />
             );
           })

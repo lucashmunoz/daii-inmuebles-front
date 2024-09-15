@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { paths } from "../../../navigation/paths";
@@ -46,10 +46,22 @@ const LinkButton = styled(Link)`
 
 const Header = (): ReactElement => {
   const [showActions, setShowActions] = useState(false);
+  const menuRef = useRef<HTMLElement>(null);
 
   const handleShowActions = () => {
     setShowActions(prev => !prev);
   };
+
+  useEffect(() => {
+    const closeMenu = (e: MouseEvent) => {
+      if(!menuRef.current?.contains(e.target as HTMLElement)) {
+        setShowActions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", closeMenu);
+    return () => document.removeEventListener("mousedown", closeMenu);
+  }, []);
 
   return (
     <Wrapper>
@@ -59,7 +71,7 @@ const Header = (): ReactElement => {
       <MenuButton aria-label="Menu">
         <MenuIcon fontSize="large" onClick={handleShowActions} />
       </MenuButton>
-      <Actions $showActions={showActions}>
+      <Actions $showActions={showActions} ref={menuRef}>
         <LinkButton to={paths.properties}>
           Buscar Propiedades
         </LinkButton>

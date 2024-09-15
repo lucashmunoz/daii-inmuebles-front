@@ -6,7 +6,7 @@ import InmueblesRecientes from "./InmueblesRecientes";
 import PageWrapper from "../../components/PageWrapper";
 
 const EncontraTuHogarContainer = styled.div`
-  background-color: #8174a2;
+  background-color: #1890ff;
   padding: 8px;
   display: flex;
   justify-content: center;

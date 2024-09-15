@@ -36,8 +36,7 @@ interface FetchRentalsParams {
 export const fetchRentals = createAsyncThunk(
   "users/fetchRentals",
   async ({ role }: FetchRentalsParams, { rejectWithValue }) => {
-    const userId = 1;
-    const fetchRentalsUrl = `${API_HOST}${endpoints.rentals}/${userId}?role=${role}`;
+    const fetchRentalsUrl = `${API_HOST}${endpoints.rentals}?role=${role}`;
     try{
       const response = await api.get(fetchRentalsUrl);
       const { rentals, rent_processes } = response.data;

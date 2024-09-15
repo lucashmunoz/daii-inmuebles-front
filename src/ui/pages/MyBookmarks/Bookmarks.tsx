@@ -83,7 +83,7 @@ const Contracts = () => {
 
   return (
     <BookmarksContainer>
-      <h1>Mis Favoritos</h1>
+      <BookmarksPageTitle />
       <BookmarksSection>
         {
           bookmarkedProperties.map(bookmark => {

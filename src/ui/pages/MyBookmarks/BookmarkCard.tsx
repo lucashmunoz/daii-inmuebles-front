@@ -107,7 +107,7 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
               component="img"
               height="100%"
               sx={{
-                width: 280
+                width: 270
               }}
               image={image}
               alt="inmueble publicado recientemente"

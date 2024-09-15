@@ -1,11 +1,16 @@
 {
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "allowJs": true,
+    "noImplicitAny": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" },  
+    { "path": "./tsconfig.node.json" },
   ],
-  "compilerOptions": {
-    "allowJs": true,
-    "noImplicitAny": false,
-  }
 }

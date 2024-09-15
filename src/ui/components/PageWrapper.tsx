@@ -8,7 +8,7 @@ const PageWrapper = styled.div`
   flex-direction: column;
 
   background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), url("src/assets/background.jpg");
-  background-size: 100% 100% 
+  background-size: 100% 100%;
   background-repeat: repeat;
   background-blend-mode: lighten;
 `;

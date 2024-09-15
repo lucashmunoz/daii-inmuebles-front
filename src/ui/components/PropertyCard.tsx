@@ -30,6 +30,8 @@ export const PropertyCard = ({ orientation, id, district, image, price, rooms, b
 
   const isHorizontal = orientation === "horizontal";
 
+  const detailsPageLink = `${paths.properties}/${id}`;
+
   return (
     <Card
       key={id}
@@ -37,7 +39,7 @@ export const PropertyCard = ({ orientation, id, district, image, price, rooms, b
         width: isHorizontal ? "100%" : 220, height: 280
       }}
     >
-      <CardActionArea component={Link} to={paths.propertyDetails}>
+      <CardActionArea component={Link} to={detailsPageLink}>
         <CardMedia
           component="img"
           height="120"

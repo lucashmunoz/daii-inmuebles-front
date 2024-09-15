@@ -1,5 +1,5 @@
 
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import ThemeCustomization from "./themes";
@@ -12,42 +12,21 @@ import PropertiesList from "./ui/pages/PropertiesList";
 import Home from "./ui/pages/Home";
 import MyBookmarks from "./ui/pages/MyBookmarks";
 
-const router = createBrowserRouter([
-  {
-    path: paths.home,
-    element: <Home />
-  },
-  {
-    path: paths.properties,
-    element: <PropertiesList />
-  },
-  {
-    path: paths.propertyDetails,
-    element: <PropertyDetails />
-  },
-  {
-    path: paths.myProperties,
-    element: <MyProperties />
-  },
-  {
-    path: paths.myContracts,
-    element: <MyContracts />
-  },
-  {
-    path: paths.createProperty,
-    element: <CreateProperty />
-  },
-  {
-    path: paths.bookmarks,
-    element: <MyBookmarks />
-  }
-]);
-
 function App() {
   return (
     <Provider store={store}>
       <ThemeCustomization>
-        <RouterProvider router={router} />
+        <Routes>
+          <Route path={paths.home} element={<Home />} />
+          <Route path={paths.properties}>
+            <Route path="" element={<PropertiesList />} />
+            <Route path=":id" element={<PropertyDetails />} />
+          </Route>
+          <Route path={paths.myProperties} element={<MyProperties />} />
+          <Route path={paths.myContracts} element={<MyContracts />} />
+          <Route path={paths.createProperty} element={<CreateProperty />} />
+          <Route path={paths.bookmarks} element={<MyBookmarks />} />
+        </Routes>
       </ThemeCustomization>
     </Provider>
   );

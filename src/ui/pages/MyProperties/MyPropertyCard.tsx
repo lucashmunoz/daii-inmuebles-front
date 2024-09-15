@@ -9,8 +9,6 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
 import { Button, FormControlLabel, Switch } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { selectTogglePropertyActiveStatus, togglePropertyActiveStatus } from "../../../store/properties/myPropertiesSlice";
 
 const DesktopCardContentWrapper = styled.div`
   height: 100%;
@@ -83,12 +81,12 @@ const Spinner = styled.span`
 interface PropertyCardProps {
   orientation: "vertical" | "horizontal"
   property: Property
+  isToggleLoading: boolean
+  handlePropertyStatusChange: (property: Property, newStatus: boolean) => void
 }
 
-const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
+const MyPropertyCard = ({ orientation, property, isToggleLoading, handlePropertyStatusChange }: PropertyCardProps) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const togglePropertyActiveState = useAppSelector(selectTogglePropertyActiveStatus);
   const { id, images, price, district, type, active } = property;
 
   const image = images[0];
@@ -97,24 +95,12 @@ const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
   });
 
   const propertyType = getPropertyTypeNameByType(type).toUpperCase();
-
   const isHorizontal = orientation === "horizontal";
 
   const detailsPageLink = `${paths.properties}/${id}`;
 
   const handleEditClick = () => {
     navigate(`${paths.myProperties}/edit/${id}`);
-  };
-
-  const handlePropertyStatusChange = () => {
-    const updatedProperty = {
-      ...property
-    };
-    updatedProperty.active = !active;
-    dispatch(togglePropertyActiveStatus({
-      propertyId: id,
-      updatedProperty
-    }));
   };
 
   if(isHorizontal) {
@@ -174,7 +160,7 @@ const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
                   </Button>
 
                   {
-                    togglePropertyActiveState === "LOADING"
+                    isToggleLoading
                       ? <SpinnerContainer>
                         <Spinner />
                       </SpinnerContainer>
@@ -186,7 +172,7 @@ const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           e.preventDefault();
-                          handlePropertyStatusChange();
+                          handlePropertyStatusChange(property, !active);
                         }}
                       />
                   }
@@ -248,7 +234,7 @@ const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
               </Button>
 
               {
-                togglePropertyActiveState === "LOADING"
+                isToggleLoading
                   ? <SpinnerContainer><Spinner /></SpinnerContainer>
                   : <FormControlLabel
                     control={<Switch defaultChecked />}
@@ -258,7 +244,7 @@ const MyPropertyCard = ({ orientation, property }: PropertyCardProps) => {
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();
-                      handlePropertyStatusChange();
+                      handlePropertyStatusChange(property, !active);
                     }}
                   />
               }

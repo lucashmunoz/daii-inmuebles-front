@@ -29,15 +29,15 @@ describe("Página Home", () => {
   });
 
   it("Muestra un mensaje de error si ocurre un error al cargar los inmuebles recientes", () => {
-    cy.intercept('GET', '**/properties?sortBy=RECENT', {
+    cy.intercept("GET", "**/properties?sortBy=RECENT", {
       statusCode: 500,
-      body: {},
-    }).as('getRecentProperties');
-    cy.visit('/');
-    cy.wait('@getRecentProperties');
-    cy.get('.MuiAlert-root')
-      .should('be.visible')
-      .and('contain.text', 'Ocurrió un error al mostrar los inmuebles recientes');
+      body: {}
+    }).as("getRecentProperties");
+    cy.visit("/");
+    cy.wait("@getRecentProperties");
+    cy.get(".MuiAlert-root")
+      .should("be.visible")
+      .and("contain.text", "Ocurrió un error al mostrar los inmuebles recientes");
   });
 
   it("Verifica que cada tarjeta de propiedad contiene la información correcta", () => {
@@ -52,13 +52,13 @@ describe("Página Home", () => {
   });
 
   it("Verifica que el carrusel se muestra en dispositivos de escritorio", () => {
-    cy.viewport(1280, 720); // Simula una pantalla grande
+    cy.viewport(1280, 720);
     cy.get(".react-multi-carousel-track").should("exist");
     cy.get(".react-multi-carousel-item").should("have.length.at.least", 1);
   });
 
   it("Verifica que las propiedades se muestran en formato horizontal en dispositivos móviles", () => {
-    cy.viewport('iphone-6'); // Cambia la resolución a móvil
+    cy.viewport("iphone-6");
     cy.get(".MuiCard-root").first().should("have.css", "flex-direction", "row");
   });
 

@@ -86,6 +86,8 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
 
   const isHorizontal = orientation === "horizontal";
 
+  const detailsPageLink = `${paths.properties}/${id}`;
+
   if(isHorizontal) {
     return (
       <Card
@@ -96,7 +98,7 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
           height: 180
         }}
       >
-        <CardActionArea component={Link} to={paths.propertyDetails} sx={{
+        <CardActionArea component={Link} to={detailsPageLink} sx={{
           width: "100%",
           height: "100%"
         }}>
@@ -162,7 +164,7 @@ const BookmarkCard = ({ orientation, id, district, image, price, type, onDelete,
         width: "100%"
       }}
     >
-      <CardActionArea component={Link} to={paths.propertyDetails} sx={{
+      <CardActionArea component={Link} to={detailsPageLink} sx={{
         width: "100%",
         height: "100%"
       }}>

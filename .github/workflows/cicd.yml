@@ -1,1 +1,48 @@
+name: CICD
 
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21.7.1'
+      
+      - name: Install dependencies using npm ci
+        run: npm ci
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+      
+      - name: Build Docker image
+        run: docker build -t joubina/smartmovefront .
+      
+      - name: Publish image to Docker Hub
+        run: docker push joubina/smartmovefront:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Delete old container
+        run: sudo docker rm -f smartmovecontainerfront
+
+      - name: Remove old image
+        run: sudo docker image prune -f
+
+      - name: Pull Image from Docker Hub
+        run: sudo docker pull joubina/smartmovefront:latest
+
+      - name: Run Docker Container
+        run: |
+            sudo docker run -d -p 5000:5000 --name smartmovecontainerfront joubina/smartmovefront

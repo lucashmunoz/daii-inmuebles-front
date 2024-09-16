@@ -4,6 +4,7 @@ import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
+import FavouriteButton from "./FavouriteButton";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -63,6 +64,13 @@ const AlquilarButton = styled(Button)`
   font-weight: bold;
 `;
 
+const FavouriteContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
 interface PropertyMainDetailsProps {
   type: PropertyType;
   title: string;
@@ -110,7 +118,10 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   return(
     <ContentContainer>
 
-      <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
+      <FavouriteContainer>
+        <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
+        <FavouriteButton />
+      </FavouriteContainer>
       <PropertyTitle>{title}</PropertyTitle>
       <PublicationDetails>{publication_details}</PublicationDetails>
 

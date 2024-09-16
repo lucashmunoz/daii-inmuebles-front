@@ -5,6 +5,7 @@ import Carousel from "./Carrousel";
 import PageWrapper from "../../components/PageWrapper";
 import PropertyMainDetails from "./PropertyMainDetails";
 import PropertyMap from "./PropertyMap";
+import PropertySecondaryDetails from "./PropertySecondaryDetails";
 
 const MainWrapper = styled.main`
   display: flex;
@@ -34,6 +35,7 @@ const PropertyDetails = (): ReactElement => {
         <PropertyMainDetails />
       </MainWrapper>
 
+      <PropertySecondaryDetails/>
       <PropertyMap/>
     </PageWrapper>
   );

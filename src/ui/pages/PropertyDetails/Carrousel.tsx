@@ -53,19 +53,12 @@ const ControlButton = styled.button`
   }
 `;
 
-const Carousel = (): ReactElement => {
+interface CarrouselProps {
+  images: string[];
+}
+
+const Carousel = ({ images }: CarrouselProps): ReactElement => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const images = [
-    {
-      src: "/src/assets/property-carrousel.jpg"
-    },
-    {
-      src: "/src/assets/property-carrousel2.jpg"
-    },
-    {
-      src: "/src/assets/property-carrousel3.jpg"
-    }
-  ];
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) => (prevIndex === 0 ? images.length - 1 : prevIndex - 1));
@@ -80,7 +73,7 @@ const Carousel = (): ReactElement => {
       <CarouselInner $currentIndex={currentIndex}>
         {images.map((image, index) => (
           <CarouselItem key={index}>
-            <CarouselImage src={image.src} alt={`Slide ${index + 1}`} />
+            <CarouselImage src={image} alt={`Slide ${index + 1}`} />
           </CarouselItem>
         ))}
       </CarouselInner>

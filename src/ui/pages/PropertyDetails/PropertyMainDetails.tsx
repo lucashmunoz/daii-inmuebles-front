@@ -2,6 +2,8 @@ import styled from "styled-components";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 import { Button } from "@mui/material";
+import { PropertyType } from "../../../models/property";
+import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -39,12 +41,6 @@ const Price = styled.h2`
   padding-top: 24px;
 `;
 
-const Expenses = styled.p`
-  font-size: 15px;
-  font-weight: lighter;
-  color: #000;
-`;
-
 const PropertySpecsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -61,32 +57,74 @@ const PropertySpecs = styled.div`
 `;
 
 const AlquilarButton = styled(Button)`
-  background-color: #8174a2;
+  background-color: #1890ff;
   color: #fff;
   cursor: pointer;
   font-weight: bold;
 `;
 
-const PropertyMainDetails = () => {
+interface PropertyMainDetailsProps {
+  type: PropertyType;
+  title: string;
+  created_at: string;
+  user_id: number;
+  price: number;
+  surface_total: number;
+  bathrooms: number;
+}
+
+const calculateDaysPassed = (created_at: string): string => {
+  const createdDate = new Date(created_at);
+  const currentDate = new Date();
+
+  const adjustedDate = new Date(createdDate);
+  adjustedDate.setFullYear(adjustedDate.getFullYear() + 3);
+
+  const timeDifference = currentDate.getTime() - adjustedDate.getTime();
+
+  const hoursPassed = Math.floor(timeDifference / (1000 * 3600));
+  const daysPassed = Math.floor(timeDifference / (1000 * 3600 * 24));
+  const monthsPassed = Math.floor(daysPassed / 30);
+  const yearsPassed = Math.floor(daysPassed / 365);
+
+  if (hoursPassed < 24) {
+    return `Publicado hace ${hoursPassed} horas.`;
+  } else if (daysPassed < 30) {
+    return `Publicado hace ${daysPassed} días.`;
+  } else if (daysPassed < 365) {
+    return `Publicado hace ${monthsPassed} meses.`;
+  } else {
+    return `Publicado hace ${yearsPassed} años.`;
+  }
+};
+
+const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms }: PropertyMainDetailsProps) => {
+  const publication_details = calculateDaysPassed(created_at);
+  const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
+  const surfaceTotalText = `${surface_total} m² totales.`;
+  const propertype = getPropertyTypeNameByType(type);
+  const formattedPrice = formatNumberToCurrency({
+    number: price
+  });
+
   return(
     <ContentContainer>
 
-      <TypeDepartment>Departamento en Alquiler</TypeDepartment>
-      <PropertyTitle>Departamento amoblado en Puerto Madero</PropertyTitle>
-      <PublicationDetails>Publicado hace 5 dias por Lucas Muñoz</PublicationDetails>
+      <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
+      <PropertyTitle>{title}</PropertyTitle>
+      <PublicationDetails>{publication_details}</PublicationDetails>
 
-      <Price>$ 650.000</Price>
-      <Expenses>Expensas aproximadas $ 80.000</Expenses>
+      <Price>${formattedPrice}</Price>
 
       <PropertySpecsContainer>
         <PropertySpecs>
           <HouseSidingOutlinedIcon />
-          <span> 100 m² totales </span>
+          <span> {surfaceTotalText}</span>
         </PropertySpecs>
 
         <PropertySpecs>
           <BathtubOutlinedIcon />
-          <span>2 Baños</span>
+          <span>{bathroomsText}</span>
         </PropertySpecs>
 
       </PropertySpecsContainer>

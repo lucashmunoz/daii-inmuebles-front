@@ -25,7 +25,7 @@ jobs:
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       
       - name: Build Docker image
-        run: docker build -t joubina/smartmovefront .
+        run: docker build -t joubina/smartmovefront . --progress=plain
       
       - name: Publish image to Docker Hub
         run: docker push joubina/smartmovefront:latest

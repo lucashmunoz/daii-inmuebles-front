@@ -37,13 +37,17 @@ const initialState: PropertyDetailsState = {
   propertyDetailsStatus: "LOADING"
 };
 
+interface FetchPropertyDetailsPayload {
+  propertyId: number
+}
+
 export const fetchPropertyDetails = createAsyncThunk(
   "users/fetchPropertyDetails",
-  async (_, { rejectWithValue }) => {
-    const fetchPropertyDetailsUrl = `${API_HOST}${endpoints.properties}?`;
+  async ({ propertyId }: FetchPropertyDetailsPayload, { rejectWithValue }) => {
+    const fetchPropertyDetailsUrl = `${API_HOST}${endpoints.properties}/${propertyId}`;
     try{
       const response = await api.get(fetchPropertyDetailsUrl);
-      return response.data.content as Property;
+      return response.data as Property;
     }catch(error) {
       return rejectWithValue(error);
     }
@@ -58,17 +62,20 @@ export const propertyDetailsSlice = createSlice({
     builder
       .addCase(fetchPropertyDetails.pending, (state) => {
         state.propertyDetailsStatus = "LOADING";
+        state.propertyDetails = {} as Property;
       })
-      .addCase(fetchPropertyDetails.fulfilled, (state) => {
+      .addCase(fetchPropertyDetails.fulfilled, (state, action) => {
         state.propertyDetailsStatus = "SUCCESS";
+        state.propertyDetails = action.payload;
       })
       .addCase(fetchPropertyDetails.rejected, (state) => {
         state.propertyDetailsStatus = "ERROR";
+        state.propertyDetails = {} as Property;
       });
   }
 });
 
-export const selectPropertyDetails = (state: RootState) => state.propertyDetails.propertyDetails;
+export const selectPropertyDetails = (state: RootState) => state.propertyDetails.propertyDetails || {};
 export const selectPropertyDetailsStatus = (state: RootState) => state.propertyDetails.propertyDetailsStatus;
 
 export default propertyDetailsSlice.reducer;

@@ -26,4 +26,5 @@ export interface Property {
   type: PropertyType,
   surface_covered: number,
   surface_total: number,
+  created_at: string,
 }

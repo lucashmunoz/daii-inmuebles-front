@@ -48,7 +48,7 @@ const PropertyDetails = (): ReactElement => {
   const propertyDetails = useAppSelector(selectPropertyDetails);
   const propertyDetailsStatus = useAppSelector(selectPropertyDetailsStatus);
 
-  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type } = propertyDetails;
+  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type, favorite } = propertyDetails;
 
   useEffect(() => {
     dispatch(fetchPropertyDetails({
@@ -96,6 +96,8 @@ const PropertyDetails = (): ReactElement => {
           price={price}
           surface_total={surface_total}
           bathrooms={bathrooms}
+          propertyId={Number(id)}
+          favorite={favorite}
         />
 
       </MainWrapper>

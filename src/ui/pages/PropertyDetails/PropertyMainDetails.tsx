@@ -71,16 +71,6 @@ const FavouriteContainer = styled.div`
   align-items: center;
 `;
 
-interface PropertyMainDetailsProps {
-  type: PropertyType;
-  title: string;
-  created_at: string;
-  user_id: number;
-  price: number;
-  surface_total: number;
-  bathrooms: number;
-}
-
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
   const currentDate = new Date();
@@ -106,7 +96,18 @@ const calculateDaysPassed = (created_at: string): string => {
   }
 };
 
-const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms }: PropertyMainDetailsProps) => {
+interface PropertyMainDetailsProps {
+  type: PropertyType;
+  title: string;
+  created_at: string;
+  propertyId: number;
+  price: number;
+  surface_total: number;
+  bathrooms: number;
+  favorite: boolean;
+}
+
+const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
   const publication_details = calculateDaysPassed(created_at);
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
   const surfaceTotalText = `${surface_total} m² totales.`;
@@ -120,7 +121,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
       <FavouriteContainer>
         <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
-        <FavouriteButton />
+        <FavouriteButton propertyId={propertyId} favorite={favorite}/>
       </FavouriteContainer>
       <PropertyTitle>{title}</PropertyTitle>
       <PublicationDetails>{publication_details}</PublicationDetails>

@@ -47,6 +47,7 @@ const LinkButton = styled(Link)`
 const Header = (): ReactElement => {
   const [showActions, setShowActions] = useState(false);
   const menuRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const handleShowActions = () => {
     setShowActions(prev => !prev);
@@ -54,7 +55,7 @@ const Header = (): ReactElement => {
 
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
-      if(!menuRef.current?.contains(e.target as HTMLElement)) {
+      if(!menuRef.current?.contains(e.target as HTMLElement) && !menuButtonRef.current?.contains(e.target as HTMLElement)) {
         setShowActions(false);
       }
     };
@@ -68,7 +69,7 @@ const Header = (): ReactElement => {
       <Link to={paths.home}>
         <Logo src="src/assets/logo.png" alt="Smart Move logo" />
       </Link>
-      <MenuButton aria-label="Menu">
+      <MenuButton aria-label="Menu" ref={menuButtonRef}>
         <MenuIcon fontSize="large" onClick={handleShowActions} />
       </MenuButton>
       <Actions $showActions={showActions} ref={menuRef}>

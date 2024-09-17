@@ -4,6 +4,7 @@ export type SurfaceType = "COVERED" | "TOTAL"
 
 export interface Property {
   id: number,
+  active: boolean,
   beds: number,
   bathrooms: number,
   country: string,
@@ -25,4 +26,5 @@ export interface Property {
   type: PropertyType,
   surface_covered: number,
   surface_total: number,
+  created_at: string,
 }

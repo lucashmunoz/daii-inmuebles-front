@@ -3,6 +3,6 @@ export const paths = {
   properties: "/properties",
   myProperties: "/myproperties",
   myContracts: "/mycontracts",
-  createProperty: "/createProperty",
+  createProperty: "/createproperty",
   bookmarks: "/bookmarks"
 } as const;

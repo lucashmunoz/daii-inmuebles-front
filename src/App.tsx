@@ -11,6 +11,7 @@ import CreateProperty from "./ui/pages/CreateProperty";
 import PropertiesList from "./ui/pages/PropertiesList";
 import Home from "./ui/pages/Home";
 import MyBookmarks from "./ui/pages/MyBookmarks";
+import EditProperty from "./ui/pages/EditProperty";
 
 function App() {
   return (
@@ -22,7 +23,12 @@ function App() {
             <Route path="" element={<PropertiesList />} />
             <Route path=":id" element={<PropertyDetails />} />
           </Route>
-          <Route path={paths.myProperties} element={<MyProperties />} />
+
+          <Route path={paths.myProperties}>
+            <Route path="" element={<MyProperties />} />
+            <Route path="edit/:id" element={<EditProperty />} />
+          </Route>
+
           <Route path={paths.myContracts} element={<MyContracts />} />
           <Route path={paths.createProperty} element={<CreateProperty />} />
           <Route path={paths.bookmarks} element={<MyBookmarks />} />

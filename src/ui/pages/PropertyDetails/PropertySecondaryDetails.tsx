@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LocalHotelOutlinedIcon from "@mui/icons-material/LocalHotelOutlined";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
+import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 
 const MainWrapper = styled.main`
   display: flex;
@@ -71,7 +72,7 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
 
       <PropertyCharacContainer>
 
-        <h2> Caracteristicas</h2>
+        <h2> Características</h2>
 
         <PropertyCharacteristics>
           <LocalHotelOutlinedIcon/>
@@ -89,11 +90,8 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
         </PropertyCharacteristics>
 
         <PropertyCharacteristics>
-          <p> {surface_covered}m² cubiertos</p>
-        </PropertyCharacteristics>
-
-        <PropertyCharacteristics>
-          <p> {surface_total}m² totales</p>
+          <HouseSidingOutlinedIcon />
+          <p> {surface_covered}m² cub. | {surface_total}m² tot.</p>
         </PropertyCharacteristics>
 
       </PropertyCharacContainer>

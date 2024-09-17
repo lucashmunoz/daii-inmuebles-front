@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "cypress run"
   },
   "dependencies": {
     "@ant-design/colors": "^7.1.0",

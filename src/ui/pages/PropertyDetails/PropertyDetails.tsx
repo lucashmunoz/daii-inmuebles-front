@@ -95,7 +95,7 @@ const PropertyDetails = (): ReactElement => {
           created_at={created_at}
           price={price}
           surface_total={surface_total}
-          bathrooms={bathrooms}
+          district={district}
         />
 
       </MainWrapper>

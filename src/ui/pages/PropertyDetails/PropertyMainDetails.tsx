@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
+import FmdGoodOutlinedIcon from "@mui/icons-material/FmdGoodOutlined";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -13,6 +13,7 @@ const ContentContainer = styled.div`
   border-radius: 5px;
   padding: 10px;
   background-color: #fff;
+  justify-content: space-between;
 `;
 
 const TypeDepartment = styled.p`
@@ -63,6 +64,17 @@ const AlquilarButton = styled(Button)`
   font-weight: bold;
 `;
 
+const PricePredictionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 6px;
+  font-size: 16px;
+  color: #000;
+  border: 1px solid gray;
+  border-radius: 12px;
+  margin-bottom: 15px;
+`;
+
 interface PropertyMainDetailsProps {
   type: PropertyType;
   title: string;
@@ -70,7 +82,7 @@ interface PropertyMainDetailsProps {
   user_id: number;
   price: number;
   surface_total: number;
-  bathrooms: number;
+  district: string;
 }
 
 const calculateDaysPassed = (created_at: string): string => {
@@ -98,9 +110,8 @@ const calculateDaysPassed = (created_at: string): string => {
   }
 };
 
-const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms }: PropertyMainDetailsProps) => {
+const PropertyMainDetails = ({ type, title, created_at, price, surface_total, district }: PropertyMainDetailsProps) => {
   const publication_details = calculateDaysPassed(created_at);
-  const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
   const surfaceTotalText = `${surface_total} m² totales.`;
   const propertype = getPropertyTypeNameByType(type);
   const formattedPrice = formatNumberToCurrency({
@@ -123,11 +134,15 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         </PropertySpecs>
 
         <PropertySpecs>
-          <BathtubOutlinedIcon />
-          <span>{bathroomsText}</span>
+          <FmdGoodOutlinedIcon />
+          <span>{district}</span>
         </PropertySpecs>
 
       </PropertySpecsContainer>
+
+      <PricePredictionContainer>
+        <p>Precio vs mercado: Caro</p>
+      </PricePredictionContainer>
 
       <AlquilarButton>Alquilar</AlquilarButton>
     </ContentContainer>

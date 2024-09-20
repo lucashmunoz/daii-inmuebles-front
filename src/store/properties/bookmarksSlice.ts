@@ -128,7 +128,7 @@ export const bookmarksSlice = createSlice({
         state.toggleBookmarkStatus = "NOT_INITIALIZED";
       })
       .addCase(toggleBookmark.fulfilled, (state, action) => {
-        state.toggleBookmarkStatus = action.payload.operation as ToggleBookmarkStatus;
+        state.toggleBookmarkStatus = action.payload.operation === "ADD" ? "ADDED" : "DELETED";
       })
       .addCase(toggleBookmark.rejected, (state) => {
         state.toggleBookmarkStatus = "NOT_INITIALIZED";

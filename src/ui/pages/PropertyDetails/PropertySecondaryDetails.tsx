@@ -4,7 +4,7 @@ import LocalHotelOutlinedIcon from "@mui/icons-material/LocalHotelOutlined";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 
-const MainWrapper = styled.main`
+const SectionWrapper = styled.section`
   display: flex;
   max-width: 1280px;
   margin: 0 auto;
@@ -62,7 +62,7 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
   const formattedDescription = formatDescription(description);
 
   return (
-    <MainWrapper>
+    <SectionWrapper>
 
       <PropertyDescriptionContainer>
         <h2> Descripción</h2>
@@ -97,7 +97,7 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
         </PropertyCharacteristics>
 
       </PropertyCharacContainer>
-    </MainWrapper>
+    </SectionWrapper>
   );
 };
 

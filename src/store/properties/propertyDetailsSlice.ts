@@ -18,6 +18,8 @@ const initialState: PropertyDetailsState = {
     city: "",
     state: "",
     rooms: 0,
+    created_at: "",
+    active: true,
     title: "",
     description: "",
     district: "",

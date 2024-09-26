@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
 import { useMediaQuery } from "@mui/material";
 import { isMobileMediaQuery } from "../../../../helpers";
-import { PropertiesMap } from "../../../components/PropertiesMap";
+import PropertiesMap from "../../../components/PropertiesMap";
 
 const FiltersWrapper = styled.div`
   display: flex;
@@ -15,6 +15,10 @@ const FiltersWrapper = styled.div`
 
 const VerMapaButton = styled(Button)`
   text-transform: capitalize;
+`;
+
+const MapContainer = styled.div`
+  padding-top: 20px;
 `;
 
 interface FilterActionsProps {
@@ -53,7 +57,7 @@ const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
           </Button>
         )}
       </FiltersWrapper>
-      {showMap && <PropertiesMap />}
+      {showMap && <MapContainer><PropertiesMap /></MapContainer>}
     </>
   );
 };

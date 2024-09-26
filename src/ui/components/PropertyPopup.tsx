@@ -1,13 +1,6 @@
 import styled from "styled-components";
-
-interface PropertyPopupProps {
-  id: number;
-  imageUrl?: string;
-  title?: string;
-  price?: string;
-  location?: string;
-  navigate: (path: string) => void;
-}
+import { paths } from "../../navigation/paths";
+import { formatNumberToCurrency } from "../../helpers";
 
 const PopupContainer = styled.div`
   display: flex;
@@ -16,6 +9,7 @@ const PopupContainer = styled.div`
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   background-color: white;
+  cursor: pointer;
 `;
 
 const PopupImageContainer = styled.div`
@@ -29,7 +23,6 @@ const PopupImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  cursor: pointer;
 `;
 
 const PopupDetails = styled.div`
@@ -55,20 +48,32 @@ const PopupLocation = styled.p`
   margin: 5px 0;
 `;
 
-export const PropertyPopup = ({ id, imageUrl, title, price, location, navigate }: PropertyPopupProps) => {
+interface PropertyPopupProps {
+  id: number;
+  image: string;
+  title: string;
+  price: number;
+  location: string;
+}
+
+export const PropertyPopup = ({ id, image, title, price, location }: PropertyPopupProps) => {
   const handleImageClick = () => {
-    navigate(`/properties/${id}`);
+    window.open(`${paths.properties}/${id}`);
   };
 
+  const formattedPrice = formatNumberToCurrency({
+    number: price
+  });
+
   return (
-    <PopupContainer>
-      <PopupImageContainer onClick={handleImageClick}>
-        {imageUrl && <PopupImage src={imageUrl} alt={title} />}
+    <PopupContainer onClick={handleImageClick}>
+      <PopupImageContainer>
+        <PopupImage src={image} alt={title} />
       </PopupImageContainer>
       <PopupDetails>
-        {title && <PopupTitle>{title}</PopupTitle>}
-        {price && <PopupPrice>{price}</PopupPrice>}
-        {location && <PopupLocation>{location}</PopupLocation>}
+        <PopupTitle>{title}</PopupTitle>
+        <PopupPrice>${formattedPrice}</PopupPrice>
+        <PopupLocation>{location}</PopupLocation>
       </PopupDetails>
     </PopupContainer>
   );

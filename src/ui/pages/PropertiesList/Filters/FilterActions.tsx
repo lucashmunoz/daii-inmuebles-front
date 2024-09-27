@@ -1,8 +1,10 @@
+import { useState } from "react";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Button from "@mui/material/Button";
 import styled from "styled-components";
 import { useMediaQuery } from "@mui/material";
 import { isMobileMediaQuery } from "../../../../helpers";
+import PropertiesMap, { Bouds } from "../../../components/PropertiesMap";
 
 const FiltersWrapper = styled.div`
   display: flex;
@@ -15,35 +17,49 @@ const VerMapaButton = styled(Button)`
   text-transform: capitalize;
 `;
 
+const MapContainer = styled.div`
+  padding-top: 20px;
+`;
+
 interface FilterActionsProps {
-  handleFilterButtonClick: () => void
+  handleFilterButtonClick: () => void;
+  onMapBoundsChange: (bounds: Bouds) => void
 }
 
-const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
+const FilterActions = ({ handleFilterButtonClick, onMapBoundsChange }: FilterActionsProps) => {
+  const [showMap, setShowMap] = useState(false);
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
+  const handleMapButtonClick = () => {
+    setShowMap(prevShowMap => !prevShowMap);
+  };
+
   return (
-    <FiltersWrapper>
-      <VerMapaButton
-        size="small"
-        variant="text"
-        startIcon={<LocationOnIcon />}
-      >
-        Ver Mapa
-      </VerMapaButton>
-      {
-        isMobile && <Button
+    <>
+      <FiltersWrapper>
+        <VerMapaButton
           size="small"
-          variant="contained"
-          sx={{
-            textTransform: "capitalize"
-          }}
-          onClick={handleFilterButtonClick}
+          variant="text"
+          startIcon={<LocationOnIcon />}
+          onClick={handleMapButtonClick}
         >
-          Filtrar
-        </Button>
-      }
-    </ FiltersWrapper>
+          mapa
+        </VerMapaButton>
+        {isMobile && (
+          <Button
+            size="small"
+            variant="contained"
+            sx={{
+              textTransform: "capitalize"
+            }}
+            onClick={handleFilterButtonClick}
+          >
+            Filtrar
+          </Button>
+        )}
+      </FiltersWrapper>
+      {showMap && <MapContainer><PropertiesMap onMapBoundsChange={onMapBoundsChange}/></MapContainer>}
+    </>
   );
 };
 

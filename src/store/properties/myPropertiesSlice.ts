@@ -20,7 +20,7 @@ export const fetchMyProperties = createAsyncThunk(
   "users/fetchMyProperties",
   async (_, { rejectWithValue }) => {
     const params = new URLSearchParams();
-    params.append("userId", "1");
+    params.append("propertyOwnerId", "1");
 
     try{
       const response = await api.get(

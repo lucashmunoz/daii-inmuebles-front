@@ -346,14 +346,14 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Titulo <span>*</span>
+                  Título <span>*</span>
                   </Typography>
                   <StyledTextField
                     name="description"
                     onChange={handleInputChange}
                     multiline
                     fullWidth
-                    placeholder="Ej.: Casa remolada con jardín, cercana al subte 9 de Julio"
+                    placeholder="Ej.: Casa remolada con jardín, cercana al subte."
                   />
                 </Grid>
 

@@ -77,7 +77,11 @@ const FiltersContent = () => {
     maxRooms: filtersParams.get("maxRooms") || "",
     minBathrooms: filtersParams.get("minBathrooms") || "",
     maxBathrooms: filtersParams.get("maxBathrooms") || "",
-    districts: filtersParams.get("districts") || ""
+    districts: filtersParams.get("districts") || "",
+    minLat: filtersParams.get("minLat") || "",
+    maxLat: filtersParams.get("maxLat") || "",
+    minLon: filtersParams.get("minLon") || "",
+    maxLon: filtersParams.get("maxLon") || ""
   });
 
   const {
@@ -110,6 +114,10 @@ const FiltersContent = () => {
     filtersParams.delete("minBathrooms");
     filtersParams.delete("maxBathrooms");
     filtersParams.delete("districts");
+    filtersParams.delete("minLat");
+    filtersParams.delete("maxLat");
+    filtersParams.delete("minLon");
+    filtersParams.delete("maxLon");
     setFiltersParams(filtersParams);
     setFilstersState({
       type: "APARTMENT",
@@ -124,7 +132,11 @@ const FiltersContent = () => {
       maxRooms: "",
       minBathrooms: "",
       maxBathrooms: "",
-      districts: ""
+      districts: "",
+      minLat: "",
+      maxLat: "",
+      minLon: "",
+      maxLon: ""
     });
   };
 

@@ -12,6 +12,7 @@ import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
 import { useSearchParams } from "react-router-dom";
 import { PropertyType, SurfaceType } from "../../../models/property";
+import { Bouds } from "../../components/PropertiesMap";
 
 const Main = styled.main`
   display: flex;
@@ -48,6 +49,8 @@ const PropertiesList = (): ReactElement => {
   const [filtersParams, setFiltersParams] = useSearchParams();
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
+  const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
+
   const filters = {
     type: filtersParams.get("type") as PropertyType || "APARTMENT",
     minPrice: filtersParams.get("minPrice") || "",
@@ -61,7 +64,11 @@ const PropertiesList = (): ReactElement => {
     maxRooms: filtersParams.get("maxRooms") || "",
     minBathrooms: filtersParams.get("minBathrooms") || "",
     maxBathrooms: filtersParams.get("maxBathrooms") || "",
-    districts: filtersParams.get("districts") || ""
+    districts: filtersParams.get("districts") || "",
+    minLat: filtersParams.get("minLat") || "",
+    maxLat: filtersParams.get("maxLat") || "",
+    minLon: filtersParams.get("minLon") || "",
+    maxLon: filtersParams.get("maxLon") || ""
   };
 
   const handleSearch = (e: FormEvent) => {
@@ -71,7 +78,46 @@ const PropertiesList = (): ReactElement => {
     }));
   };
 
-  const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
+  const onMapBoundsChange = (bounds: Bouds) => {
+    const {
+      latNorthEast,
+      lngNorthEast,
+      latSouthWest,
+      lngSouthWest
+    } = bounds;
+
+    const maxLat = latNorthEast.toString();
+    const maxLon = lngNorthEast.toString();
+    const minLat = latSouthWest.toString();
+    const minLon = lngSouthWest.toString();
+
+    if(
+      filters.maxLat === maxLat &&
+      filters.maxLon === maxLon &&
+      filters.minLat === minLat &&
+      filters.minLon === minLon
+    ) {
+      return;
+    }
+
+    setFiltersParams((prev) => {
+      prev.set("minLat", minLat);
+      prev.set("maxLat", maxLat);
+      prev.set("minLon", minLon);
+      prev.set("maxLon", maxLon);
+      return prev;
+    });
+
+    dispatch(fetchProperties({
+      filters: {
+        ...filters,
+        maxLat,
+        maxLon,
+        minLat,
+        minLon
+      }
+    }));
+  };
 
   useEffect(() => {
     if(!filtersParams.get("type")) {
@@ -116,7 +162,10 @@ const PropertiesList = (): ReactElement => {
             </FiltersContentContainer>
         }
         <PropertiesContainer>
-          <FilterActions handleFilterButtonClick={() => setIsFiltersDrawerOpen(true)}/>
+          <FilterActions
+            onMapBoundsChange={onMapBoundsChange}
+            handleFilterButtonClick={() => setIsFiltersDrawerOpen(true)}
+          />
           <Properties />
         </PropertiesContainer>
       </Main>

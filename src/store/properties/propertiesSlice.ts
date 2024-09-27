@@ -28,6 +28,7 @@ interface PropertyState {
   loadingProperties: boolean
   properties: Property[],
   isPropertiesError: boolean,
+  totalPropertiesPages: number,
 
   loadingRecentProperties: boolean
   recentProperties: Property[],
@@ -38,6 +39,7 @@ const initialState: PropertyState = {
   loadingProperties: true,
   properties: [],
   isPropertiesError: false,
+  totalPropertiesPages: 0,
 
   loadingRecentProperties: true,
   recentProperties: [],
@@ -47,11 +49,12 @@ const initialState: PropertyState = {
 interface FetchPropertiesParams {
   sortBy?: SortBy,
   filters?: Partial<Filters>
+  page: string
 }
 
 export const fetchProperties = createAsyncThunk(
   "users/fetchProperties",
-  async ({ sortBy, filters = {} }: FetchPropertiesParams, { rejectWithValue }) => {
+  async ({ sortBy, filters = {}, page }: FetchPropertiesParams, { rejectWithValue }) => {
     const sortByQuery = sortBy ? `sortBy=${sortBy}` : "";
 
     const {
@@ -92,6 +95,7 @@ export const fetchProperties = createAsyncThunk(
     const maxLatQuery = maxLat ? `maxLat=${maxLat}` : "";
     const minLonQuery = minLon ? `minLon=${minLon}` : "";
     const maxLonQuery = maxLon ? `maxLon=${maxLon}` : "";
+    const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
 
     const queries = [
       sortByQuery,
@@ -112,14 +116,18 @@ export const fetchProperties = createAsyncThunk(
       minLatQuery,
       maxLatQuery,
       minLonQuery,
-      maxLonQuery
+      maxLonQuery,
+      pageQuery
     ].filter(query => query !== "").join("&");
 
     const fetchPropertiesUrl = `${API_HOST}${endpoints.properties}?${queries}`;
 
     try{
       const response = await api.get(fetchPropertiesUrl);
-      return response.data.content as Property[];
+      return {
+        properties: response.data.content as Property[],
+        totalPages: response.data.totalPages as number
+      };
     }catch(error) {
       return rejectWithValue(error);
     }
@@ -147,16 +155,19 @@ export const propertiesSlice = createSlice({
     builder
       .addCase(fetchProperties.pending, (state) => {
         state.loadingProperties = true;
+        state.totalPropertiesPages = 0;
         state.properties = [];
         state.isPropertiesError = false;
       })
       .addCase(fetchProperties.fulfilled, (state, action) => {
         state.loadingProperties = false;
         state.isPropertiesError = false;
-        state.properties = action.payload;
+        state.properties = action.payload.properties;
+        state.totalPropertiesPages = action.payload.totalPages;
       })
       .addCase(fetchProperties.rejected, (state) => {
         state.loadingProperties = false;
+        state.totalPropertiesPages = 0;
         state.isPropertiesError = true;
         state.properties = [];
       })
@@ -181,6 +192,7 @@ export const propertiesSlice = createSlice({
 export const selectProperties = (state: RootState) => state.properties.properties;
 export const selectLoadingProperties = (state: RootState) => state.properties.loadingProperties;
 export const selectIsPropertiesError = (state: RootState) => state.properties.isPropertiesError;
+export const selectTotalPropertiesPages = (state: RootState) => state.properties.totalPropertiesPages;
 
 export const selectRecentProperties = (state: RootState) => state.properties.recentProperties;
 export const selectLoadingRecentProperties = (state: RootState) => state.properties.loadingRecentProperties;

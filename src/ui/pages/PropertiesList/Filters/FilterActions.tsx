@@ -24,14 +24,21 @@ const MapContainer = styled.div`
 interface FilterActionsProps {
   handleFilterButtonClick: () => void;
   onMapBoundsChange: (bounds: Bouds) => void
+  hideMap: () => void
 }
 
-const FilterActions = ({ handleFilterButtonClick, onMapBoundsChange }: FilterActionsProps) => {
+const FilterActions = ({ handleFilterButtonClick, onMapBoundsChange, hideMap }: FilterActionsProps) => {
   const [showMap, setShowMap] = useState(false);
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
   const handleMapButtonClick = () => {
-    setShowMap(prevShowMap => !prevShowMap);
+    const newShowMapState = !showMap;
+
+    setShowMap(newShowMapState);
+
+    if(!newShowMapState) {
+      hideMap();
+    }
   };
 
   return (

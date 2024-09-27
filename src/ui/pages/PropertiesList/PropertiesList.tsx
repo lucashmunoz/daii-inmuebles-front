@@ -71,10 +71,13 @@ const PropertiesList = (): ReactElement => {
     maxLon: filtersParams.get("maxLon") || ""
   };
 
+  const page = filtersParams.get("page") || "";
+
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     dispatch(fetchProperties({
-      filters
+      filters,
+      page
     }));
   };
 
@@ -115,7 +118,44 @@ const PropertiesList = (): ReactElement => {
         maxLon,
         minLat,
         minLon
-      }
+      },
+      page
+    }));
+  };
+
+  const handlePageChange = (page: number) => {
+    const strPage = page.toString();
+
+    setFiltersParams((prev) => {
+      prev.set("page", strPage);
+      return prev;
+    });
+
+    dispatch(fetchProperties({
+      filters,
+      page: strPage
+    }));
+  };
+
+  const hideMap = () => {
+    setFiltersParams((prev) => {
+      prev.set("page", "1");
+      prev.delete("minLat");
+      prev.delete("maxLat");
+      prev.delete("minLon");
+      prev.delete("maxLon");
+      return prev;
+    });
+
+    dispatch(fetchProperties({
+      filters: {
+        ...filters,
+        maxLat: "",
+        maxLon: "",
+        minLat: "",
+        minLon: ""
+      },
+      page: "1"
     }));
   };
 
@@ -134,7 +174,8 @@ const PropertiesList = (): ReactElement => {
     }
 
     dispatch(fetchProperties({
-      filters
+      filters,
+      page
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
@@ -165,8 +206,9 @@ const PropertiesList = (): ReactElement => {
           <FilterActions
             onMapBoundsChange={onMapBoundsChange}
             handleFilterButtonClick={() => setIsFiltersDrawerOpen(true)}
+            hideMap={hideMap}
           />
-          <Properties />
+          <Properties handlePageChange={handlePageChange}/>
         </PropertiesContainer>
       </Main>
     </PageWrapper>

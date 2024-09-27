@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import styled from "styled-components";
 import { useMediaQuery } from "@mui/material";
 import { isMobileMediaQuery } from "../../../../helpers";
-import PropertiesMap from "../../../components/PropertiesMap";
+import PropertiesMap, { Bouds } from "../../../components/PropertiesMap";
 
 const FiltersWrapper = styled.div`
   display: flex;
@@ -23,9 +23,10 @@ const MapContainer = styled.div`
 
 interface FilterActionsProps {
   handleFilterButtonClick: () => void;
+  onMapBoundsChange: (bounds: Bouds) => void
 }
 
-const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
+const FilterActions = ({ handleFilterButtonClick, onMapBoundsChange }: FilterActionsProps) => {
   const [showMap, setShowMap] = useState(false);
   const isMobile = useMediaQuery(isMobileMediaQuery);
 
@@ -57,7 +58,7 @@ const FilterActions = ({ handleFilterButtonClick }: FilterActionsProps) => {
           </Button>
         )}
       </FiltersWrapper>
-      {showMap && <MapContainer><PropertiesMap /></MapContainer>}
+      {showMap && <MapContainer><PropertiesMap onMapBoundsChange={onMapBoundsChange}/></MapContainer>}
     </>
   );
 };

@@ -53,10 +53,10 @@ interface PropertyPopupProps {
   image: string;
   title: string;
   price: number;
-  location: string;
+  district: string;
 }
 
-export const PropertyPopup = ({ id, image, title, price, location }: PropertyPopupProps) => {
+export const PropertyPopup = ({ id, image, title, price, district }: PropertyPopupProps) => {
   const handleImageClick = () => {
     window.open(`${paths.properties}/${id}`);
   };
@@ -73,7 +73,7 @@ export const PropertyPopup = ({ id, image, title, price, location }: PropertyPop
       <PopupDetails>
         <PopupTitle>{title}</PopupTitle>
         <PopupPrice>${formattedPrice}</PopupPrice>
-        <PopupLocation>{location}</PopupLocation>
+        <PopupLocation>{district}</PopupLocation>
       </PopupDetails>
     </PopupContainer>
   );

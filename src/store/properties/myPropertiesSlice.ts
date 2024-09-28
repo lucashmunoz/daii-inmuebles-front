@@ -48,9 +48,7 @@ export const togglePropertyActiveStatus = createAsyncThunk(
       await api.put(
         `${API_HOST}${endpoints.properties}/${propertyId}`,
         {
-          ...updatedProperty,
-          /* Momentaneamente enviando un address porque la api lo tiene como campo obligatorio (aunque no exista el campo). */
-          address: "-"
+          ...updatedProperty
         }
       );
 

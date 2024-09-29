@@ -22,7 +22,7 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
     case "APARTMENT":
       return "Departamento";
     case "PH":
-      return "PH";  
+      return "PH";
     case "ALL":
       return "Todos";
   }

@@ -1,6 +1,6 @@
 describe("Página de Detalles de Propiedad", () => {
   beforeEach(() => {
-    cy.visit("/property/1");
+    cy.visit("/property/2");
   });
 
   it("Verifica que la página de detalles carga correctamente", () => {

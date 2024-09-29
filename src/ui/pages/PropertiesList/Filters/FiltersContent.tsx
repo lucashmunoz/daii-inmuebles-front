@@ -65,7 +65,8 @@ const FiltersContent = () => {
   const allDistrictsArray = useAppSelector(selectDistricts);
 
   const [filtersParams, setFiltersParams] = useSearchParams();
-  const [filtersState, setFiltersState] = useState<Filters>({
+
+  const [filtersState, setFilstersState] = useState<Filters>({
     sort: filtersParams.get("sort") as SortBy || "",
     type: filtersParams.get("type") as PropertyType || "ALL",
     minPrice: filtersParams.get("minPrice") || "",

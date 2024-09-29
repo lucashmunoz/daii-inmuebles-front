@@ -38,7 +38,7 @@ const Home = (): ReactElement => {
 
       <EncontraTuHogarContainer>
         <EncontraTuHogarText>
-          Entontrá tu próximo hogar en Smart Move
+          Encontrá tu próximo hogar en Smart Move
         </EncontraTuHogarText>
       </EncontraTuHogarContainer>
 

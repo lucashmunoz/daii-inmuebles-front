@@ -33,7 +33,12 @@ const MapImage = styled.img`
   object-fit: fill;
 `;
 
-const PropertyMap = (): ReactElement => {
+interface PropertyMapProps {
+  address: string;
+  district: string;
+}
+
+const PropertyMap = ({ address, district } : PropertyMapProps): ReactElement => {
   return(
     <ContentContainer>
       <Divider />
@@ -41,7 +46,7 @@ const PropertyMap = (): ReactElement => {
 
       <Direction>
         <PlaceIcon />
-        <span>Av. Ing. Huergo 849, Puerto Madero, CABA</span>
+        <p>{address}, {district}, Cdad. Autónoma de Buenos Aires</p>
       </Direction>
 
       <MapImage src="/src/assets/property-map.jpg" />

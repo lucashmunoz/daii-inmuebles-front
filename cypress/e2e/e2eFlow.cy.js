@@ -1,5 +1,5 @@
 describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () => {
-  /*describe("Página Home", () => {
+  describe("Página Home", () => {
     beforeEach(() => {
       cy.visit("/");
     });
@@ -30,8 +30,8 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Muestra un mensaje de error si ocurre un error al cargar los inmuebles recientes", () => {
-      cy.intercept("GET", "**/ //properties?sortBy=RECENT", {
-  /*statusCode: 500,
+      cy.intercept("GET", "**/ properties?sortBy=RECENT", {
+  statusCode: 500,
         body: {}
       }).as("getRecentProperties");
       cy.visit("/");
@@ -130,8 +130,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     // TODO: Implementar test de loading skeleton
 
     it("Simula un error al cargar las propiedades", () => {
-      cy.intercept("GET", "**/ //properties*", {
-  /*
+      cy.intercept("GET", "**/ properties*", {
         statusCode: 500,
         body: {}
       }).as("getPropertiesError");
@@ -145,22 +144,24 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         .and("contain.text", "Ocurrió un error al mostrar los inmuebles");
     });
   });
-  */
+
 
   describe("Página de Detalles de Propiedad", () => {
     beforeEach(() => {
-      cy.visit("/property/2");
+      cy.visit("/properties/2");
     });
 
     it("Verifica que la página de detalles carga correctamente", () => {
       cy.get("p").contains("Departamento en Alquiler").should("be.visible");
-      cy.get("h1").contains("Departamento amoblado en Puerto Madero").should("be.visible");
-      cy.get("h2").contains("$ 650.000").should("be.visible");
+      cy.get("h2").contains("Descripción").should("be.visible");
+      cy.get("h2").contains("Ubicación").should("be.visible");
+      cy.get("button").contains("Alquilar").should("exist");
     });
 
     it("Verifica que las especificaciones de la propiedad están visibles", () => {
-      cy.get("span").contains("100 m² totales").should("be.visible");
-      cy.get("span").contains("2 Baños").should("be.visible");
+      cy.get("p").contains(/Publicado hace \d+ meses/).should("be.visible");
+      cy.get("p").contains(/\d+ dormitorios/).should("be.visible");
+      cy.get("p").contains(/\d+ ambiente/).should("be.visible");
     });
 
     it("Simula la interacción con el botón de alquilar", () => {
@@ -168,11 +169,14 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Verifica que el carrusel de imágenes funciona correctamente", () => {
-      cy.get("img").first().should("have.attr", "src").and("include", "property-carrousel.jpg");
+      cy.get("img[alt=\"Slide 1\"]")
+        .should("be.visible");
       cy.get("button").contains(">").click();
-      cy.get("img").first().should("have.attr", "src").and("include", "property-carrousel2.jpg");
+      cy.get("img[alt=\"Slide 2\"]")
+        .should("be.visible");
       cy.get("button").contains("<").click();
-      cy.get("img").first().should("have.attr", "src").and("include", "property-carrousel.jpg");
+      cy.get("img[alt=\"Slide 1\"]")
+        .should("be.visible");
     });
   });
 });

@@ -119,7 +119,9 @@ const InmueblesRecientes = () => {
             </HorizontalCardContainer>
           );
         })
-          : <CarouselContainer>
+          : <CarouselContainer style={{
+            paddingBottom: "12px"
+          }}>
             <Carousel responsive={responsive}>
               {recentProperties.map(property => {
                 const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;

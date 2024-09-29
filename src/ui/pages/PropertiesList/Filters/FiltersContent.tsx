@@ -67,7 +67,7 @@ const FiltersContent = () => {
   const [filtersParams, setFiltersParams] = useSearchParams();
   const [filtersState, setFilstersState] = useState<Filters>({
     sort: filtersParams.get("sort") as SortBy || "",
-    type: filtersParams.get("type") as PropertyType || "APARTMENT",
+    type: filtersParams.get("type") as PropertyType || "",
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
@@ -121,10 +121,11 @@ const FiltersContent = () => {
     filtersParams.delete("maxLat");
     filtersParams.delete("minLon");
     filtersParams.delete("maxLon");
+    filtersParams.delete("type")
     setFiltersParams(filtersParams);
     setFilstersState({
       sort: "RECENT",
-      type: "APARTMENT",
+      type: "",
       minPrice: "",
       maxPrice: "",
       minSurface: "",
@@ -210,8 +211,12 @@ const FiltersContent = () => {
         <SelectPropertyType
           selectedPropertyType={type as PropertyType}
           setSelectedPropertyType={(value) => {
+
             setFiltersParams((prev) => {
               prev.set("type", value);
+              if(value==""){
+                filtersParams.delete("type")
+              }
               return prev;
             });
             setFilstersState((prev) => ({

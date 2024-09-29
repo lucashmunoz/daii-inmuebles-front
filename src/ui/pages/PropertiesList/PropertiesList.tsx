@@ -52,7 +52,7 @@ const PropertiesList = (): ReactElement => {
   const [isFiltersDrawerOpen, setIsFiltersDrawerOpen] = useState(false);
 
   const filters = {
-    type: filtersParams.get("type") as PropertyType || "APARTMENT",
+    type: filtersParams.get("type") as PropertyType,
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
@@ -165,12 +165,7 @@ const PropertiesList = (): ReactElement => {
   };
 
   useEffect(() => {
-    if(!filtersParams.get("type")) {
-      setFiltersParams((prev) => {
-        prev.set("type", "APARTMENT");
-        return prev;
-      });
-    }
+
     if(!filtersParams.get("surfaceType")) {
       setFiltersParams((prev) => {
         prev.set("surfaceType", "COVERED");

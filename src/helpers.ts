@@ -21,18 +21,10 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "Casa";
     case "APARTMENT":
       return "Departamento";
-    case "SEMIFLOOR":
-      return "Semipiso";
-    case "FLOOR":
-      return "Piso";
-    case "DUPLEX":
-      return "Duplex";
-    case "TRIPLEX":
-      return "Triplex";
-    case "PENTHOUSE":
-      return "Penthouse";
+    case "PH":
+      return "Propiedad horizontal";
     default:
-      return "";
+      return "-";
   }
 };
 

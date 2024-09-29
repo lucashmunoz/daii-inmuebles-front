@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import PropertySecondaryDetails from "./PropertySecondaryDetails";
 
-const MainWrapper = styled.main`
+const SectionWrapper = styled.section`
   display: flex;
   max-width: 1280px;
   margin: 0 auto;
@@ -25,7 +25,8 @@ const MainWrapper = styled.main`
   }
 `;
 
-const CarrouselContainer = styled.div` flex: 3;
+const CarrouselContainer = styled.div` 
+  flex: 3;
   height: 500px;
 `;
 
@@ -37,10 +38,6 @@ const LoaderContainer = styled.div`
   padding: 28px 20px;
 `;
 
-const ContentContainer = styled.div`
-  max-width: 1280px;
-`;
-
 const PropertyDetails = (): ReactElement => {
   const dispatch = useAppDispatch();
   const { id } = useParams<{id: string}>();
@@ -48,7 +45,7 @@ const PropertyDetails = (): ReactElement => {
   const propertyDetails = useAppSelector(selectPropertyDetails);
   const propertyDetailsStatus = useAppSelector(selectPropertyDetailsStatus);
 
-  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type } = propertyDetails;
+  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type, favorite } = propertyDetails;
 
   useEffect(() => {
     dispatch(fetchPropertyDetails({
@@ -82,35 +79,40 @@ const PropertyDetails = (): ReactElement => {
     <PageWrapper>
       <Header />
 
-      <ContentContainer></ContentContainer>
-      <MainWrapper>
-        <CarrouselContainer>
-          <Carousel
-            images={images}
+      <main>
+
+        <SectionWrapper>
+          <CarrouselContainer>
+            <Carousel
+              images={images}
+            />
+          </CarrouselContainer>
+          <PropertyMainDetails
+            type={type}
+            title={title}
+            created_at={created_at}
+            price={price}
+            surface_total={surface_total}
+            bathrooms={bathrooms}
+            propertyId={Number(id)}
+            favorite={favorite}
           />
-        </CarrouselContainer>
-        <PropertyMainDetails
-          type={type}
-          title={title}
-          created_at={created_at}
-          price={price}
+
+        </SectionWrapper>
+        <Divider />
+        <PropertySecondaryDetails
+          description={description}
+          beds={beds}
+          baths={bathrooms}
+          rooms={rooms}
+          surface_covered={surface_covered}
           surface_total={surface_total}
-          bathrooms={bathrooms}
+          district={district}
         />
 
-      </MainWrapper>
-      <Divider />
-      <PropertySecondaryDetails
-        description={description}
-        beds={beds}
-        baths={bathrooms}
-        rooms={rooms}
-        surface_covered={surface_covered}
-        surface_total={surface_total}
-        district={district}
-      />
+        <PropertyMap/>
 
-      <PropertyMap/>
+      </main>
     </PageWrapper>
   );
 };

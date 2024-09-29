@@ -4,16 +4,20 @@ import { endpoints } from "../../api/endpoints";
 import api, { API_HOST } from "../../api/api";
 import { Property } from "../../models/property";
 
+type ToggleBookmarkStatus = "NOT_INITIALIZED" | "ADDED" | "DELETED" | "ERROR";
+
 interface BookmarksState {
   bookmarkedProperties: Property[]
   bookmarksStatus: "SUCCESS" | "ERROR" | "LOADING"
   deleteBookmarkStatus: "NOT_INITIALIZED" | "ERROR" | "LOADING"
-}
+  toggleBookmarkStatus: ToggleBookmarkStatus
+};
 
 const initialState: BookmarksState = {
   bookmarkedProperties: [],
   bookmarksStatus: "LOADING",
-  deleteBookmarkStatus: "NOT_INITIALIZED"
+  deleteBookmarkStatus: "NOT_INITIALIZED",
+  toggleBookmarkStatus: "NOT_INITIALIZED"
 };
 
 export const fetchBookmarkedProperties = createAsyncThunk(
@@ -61,10 +65,40 @@ export const deleteBookmark = createAsyncThunk(
   }
 );
 
+interface ToggleBookmarkPayload {
+  propertyId: number;
+  operation: "ADD" | "DELETE";
+}
+
+export const toggleBookmark = createAsyncThunk(
+  "users/toggleBookmark",
+  async ({ propertyId, operation }: ToggleBookmarkPayload, { rejectWithValue }) => {
+    try {
+      if (operation === "ADD") {
+        await api.post(`${API_HOST}/properties/${propertyId}/favorites`);
+        return {
+          operation
+        };
+      }
+
+      await api.delete(`${API_HOST}/properties/${propertyId}/favorites`);
+      return {
+        operation
+      };
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const bookmarksSlice = createSlice({
   name: "bookmarks",
   initialState,
-  reducers: {},
+  reducers: {
+    finishToggleBookmarkUpdates: (state) => {
+      state.toggleBookmarkStatus = "NOT_INITIALIZED";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchBookmarkedProperties.pending, (state) => {
@@ -89,6 +123,15 @@ export const bookmarksSlice = createSlice({
       })
       .addCase(deleteBookmark.rejected, (state) => {
         state.deleteBookmarkStatus = "ERROR";
+      })
+      .addCase(toggleBookmark.pending, (state) => {
+        state.toggleBookmarkStatus = "NOT_INITIALIZED";
+      })
+      .addCase(toggleBookmark.fulfilled, (state, action) => {
+        state.toggleBookmarkStatus = action.payload.operation === "ADD" ? "ADDED" : "DELETED";
+      })
+      .addCase(toggleBookmark.rejected, (state) => {
+        state.toggleBookmarkStatus = "NOT_INITIALIZED";
       });
   }
 });
@@ -96,5 +139,7 @@ export const bookmarksSlice = createSlice({
 export const selectBookmarkedProperties = (state: RootState) => state.bookmarks.bookmarkedProperties || [];
 export const selectBookmarksStatus = (state: RootState) => state.bookmarks.bookmarksStatus;
 export const selectDeleteBookmarkStatus = (state: RootState) => state.bookmarks.deleteBookmarkStatus;
+export const selectToggleBookmarkStatus = (state: RootState) => state.bookmarks.toggleBookmarkStatus;
 
+export const { finishToggleBookmarkUpdates } = bookmarksSlice.actions;
 export default bookmarksSlice.reducer;

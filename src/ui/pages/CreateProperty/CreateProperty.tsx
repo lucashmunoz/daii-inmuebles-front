@@ -82,6 +82,7 @@ const CreateProperty = () => {
     id: 0,
     beds: 1,
     active: true,
+    favorite: false,
     bathrooms: 1,
     country: "Argentina",
     city: "Ciudad Autonoma de Buenos Aires",

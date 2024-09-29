@@ -3,5 +3,6 @@ export const endpoints = {
   propertyDetails: "/properties/{id}",
   rentals: "/rentals",
   districts: "/districts",
-  bookmark: "/properties/favorites"
+  bookmark: "/properties/favorites",
+  predictPrice: "/predict"
 } as const;

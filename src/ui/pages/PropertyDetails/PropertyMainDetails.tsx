@@ -1,10 +1,14 @@
+import { useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
+import { fetchPropertyPricePrediction, selectPricePrediction, selectPricePredictionStatus } from "../../../store/properties/propertyDetailsSlice";
+import type { AppDispatch } from "../../../store";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -71,6 +75,17 @@ const FavouriteContainer = styled.div`
   align-items: center;
 `;
 
+const PricePredictionContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 6px;
+  font-size: 16px;
+  color: #000;
+  border: 1px solid gray;
+  border-radius: 12px;
+  margin-bottom: 15px;
+`;
+
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
   const currentDate = new Date();
@@ -108,6 +123,17 @@ interface PropertyMainDetailsProps {
 }
 
 const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const pricePrediction = useSelector(selectPricePrediction);
+  const pricePredictionStatus = useSelector(selectPricePredictionStatus);
+
+  useEffect(() => {
+    if (pricePredictionStatus === "NOT_INITIALIZED") {
+      dispatch(fetchPropertyPricePrediction(propertyId));
+    }
+  }, [dispatch, propertyId, pricePredictionStatus]);
+
   const publication_details = calculateDaysPassed(created_at);
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
   const surfaceTotalText = `${surface_total} m² totales.`;
@@ -115,13 +141,22 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const formattedPrice = formatNumberToCurrency({
     number: price
   });
+  const pricePredictionText = (() => {
+    switch (pricePredictionStatus) {
+      case "SUCCESS":
+        return `Precio vs mercado: ${pricePrediction.classification}`;
+      case "ERROR":
+        return "No se pudo obtener la predicción de precio.";
+      default:
+        return "Obteniendo predicción de precio...";
+    }
+  })();
 
-  return(
+  return (
     <ContentContainer>
-
       <FavouriteContainer>
         <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
-        <FavouriteButton propertyId={propertyId} favorite={favorite}/>
+        <FavouriteButton propertyId={propertyId} favorite={favorite} />
       </FavouriteContainer>
       <PropertyTitle>{title}</PropertyTitle>
       <PublicationDetails>{publication_details}</PublicationDetails>
@@ -138,8 +173,11 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
           <BathtubOutlinedIcon />
           <span>{bathroomsText}</span>
         </PropertySpecs>
-
       </PropertySpecsContainer>
+
+      <PricePredictionContainer>
+        <p>{pricePredictionText}</p>
+      </PricePredictionContainer>
 
       <AlquilarButton>Alquilar</AlquilarButton>
     </ContentContainer>

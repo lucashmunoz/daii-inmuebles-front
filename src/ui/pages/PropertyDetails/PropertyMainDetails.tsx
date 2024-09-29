@@ -18,6 +18,7 @@ const ContentContainer = styled.div`
   border-radius: 5px;
   padding: 10px;
   background-color: #fff;
+  justify-content: space-between;
 `;
 
 const TypeDepartment = styled.p`

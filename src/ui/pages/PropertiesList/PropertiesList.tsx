@@ -11,7 +11,7 @@ import { isMobileMediaQuery } from "../../../helpers";
 import { Button, useMediaQuery } from "@mui/material";
 import FiltersDrawer from "./Filters/FiltersDrawer";
 import { useSearchParams } from "react-router-dom";
-import { PropertyType, SurfaceType } from "../../../models/property";
+import { PropertyType, SortBy, SurfaceType } from "../../../models/property";
 import { Bouds } from "../../components/PropertiesMap";
 
 const Main = styled.main`
@@ -73,9 +73,12 @@ const PropertiesList = (): ReactElement => {
 
   const page = filtersParams.get("page") || "";
 
+  const sortBy = filtersParams.get("sort") as SortBy || "RECENT";
+
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
     dispatch(fetchProperties({
+      sortBy,
       filters,
       page
     }));
@@ -132,6 +135,7 @@ const PropertiesList = (): ReactElement => {
     });
 
     dispatch(fetchProperties({
+      sortBy,
       filters,
       page: strPage
     }));
@@ -148,6 +152,7 @@ const PropertiesList = (): ReactElement => {
     });
 
     dispatch(fetchProperties({
+      sortBy,
       filters: {
         ...filters,
         maxLat: "",
@@ -174,11 +179,12 @@ const PropertiesList = (): ReactElement => {
     }
 
     dispatch(fetchProperties({
+      sortBy,
       filters,
       page
     }));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [sortBy, dispatch]);
 
   return (
     <PageWrapper>

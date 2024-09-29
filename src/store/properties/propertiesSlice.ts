@@ -5,6 +5,7 @@ import api, { API_HOST } from "../../api/api";
 import { Property, PropertyType, SortBy, SurfaceType } from "../../models/property";
 
 export interface Filters {
+  sort: SortBy
   type: PropertyType
   minPrice: string
   maxPrice: string

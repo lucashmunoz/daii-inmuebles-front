@@ -31,7 +31,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
 
     it("Muestra un mensaje de error si ocurre un error al cargar los inmuebles recientes", () => {
       cy.intercept("GET", "**/ //properties?sortBy=RECENT", {
-        /*statusCode: 500,
+  /*statusCode: 500,
         body: {}
       }).as("getRecentProperties");
       cy.visit("/");

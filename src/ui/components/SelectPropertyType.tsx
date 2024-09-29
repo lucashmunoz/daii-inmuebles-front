@@ -14,7 +14,8 @@ const propertiesTypes: PropertiesTypes = [
   {
     value: "",
     label: getPropertyTypeNameByType("")
-  },  {
+  },
+  {
     value: "APARTMENT",
     label: getPropertyTypeNameByType("APARTMENT")
   },

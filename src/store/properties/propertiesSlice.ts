@@ -97,6 +97,7 @@ export const fetchProperties = createAsyncThunk(
     const minLonQuery = minLon ? `minLon=${minLon}` : "";
     const maxLonQuery = maxLon ? `maxLon=${maxLon}` : "";
     const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
+    const sizeQuery = "size=60";
 
     const queries = [
       sortByQuery,
@@ -118,7 +119,8 @@ export const fetchProperties = createAsyncThunk(
       maxLatQuery,
       minLonQuery,
       maxLonQuery,
-      pageQuery
+      pageQuery,
+      sizeQuery
     ].filter(query => query !== "").join("&");
 
     const fetchPropertiesUrl = `${API_HOST}${endpoints.properties}?${queries}`;

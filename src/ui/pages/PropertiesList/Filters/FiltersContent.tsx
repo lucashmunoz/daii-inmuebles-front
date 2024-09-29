@@ -121,7 +121,7 @@ const FiltersContent = () => {
     filtersParams.delete("maxLat");
     filtersParams.delete("minLon");
     filtersParams.delete("maxLon");
-    filtersParams.delete("type")
+    filtersParams.delete("type");
     setFiltersParams(filtersParams);
     setFilstersState({
       sort: "RECENT",
@@ -211,11 +211,10 @@ const FiltersContent = () => {
         <SelectPropertyType
           selectedPropertyType={type as PropertyType}
           setSelectedPropertyType={(value) => {
-
             setFiltersParams((prev) => {
               prev.set("type", value);
-              if(value==""){
-                filtersParams.delete("type")
+              if(value == "") {
+                filtersParams.delete("type");
               }
               return prev;
             });

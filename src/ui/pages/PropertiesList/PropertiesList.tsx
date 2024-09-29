@@ -165,7 +165,6 @@ const PropertiesList = (): ReactElement => {
   };
 
   useEffect(() => {
-
     if(!filtersParams.get("surfaceType")) {
       setFiltersParams((prev) => {
         prev.set("surfaceType", "COVERED");

@@ -43,7 +43,7 @@ export const getRentStatusNameByStatus = (rentStatus: RentStatus) => {
   }
 };
 
-export const getSortByType= (sortBy: SortBy) => {
+export const getSortByType = (sortBy: SortBy) => {
   switch(sortBy) {
     case "RECENT":
       return "Mas recientes";

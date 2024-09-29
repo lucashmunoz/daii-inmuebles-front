@@ -1,4 +1,4 @@
-import { PropertyType } from "./models/property";
+import { PropertyType, SortBy } from "./models/property";
 import { RentProcessStatus, RentStatus } from "./models/rentals";
 
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
@@ -21,18 +21,10 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "Casa";
     case "APARTMENT":
       return "Departamento";
-    case "SEMIFLOOR":
-      return "Semipiso";
-    case "FLOOR":
-      return "Piso";
-    case "DUPLEX":
-      return "Duplex";
-    case "TRIPLEX":
-      return "Triplex";
-    case "PENTHOUSE":
-      return "Penthouse";
+    case "PH":
+      return "Propiedad horizontal";
     default:
-      return "";
+      return "-";
   }
 };
 
@@ -46,6 +38,19 @@ export const getRentStatusNameByStatus = (rentStatus: RentStatus) => {
       return "Completado";
     case "CANCELLED":
       return "Cancelado";
+    default:
+      return "";
+  }
+};
+
+export const getSortByType = (sortBy: SortBy) => {
+  switch(sortBy) {
+    case "RECENT":
+      return "Mas recientes";
+    case "PRICE_DESC":
+      return "Mayor precio";
+    case "PRICE_ASC":
+      return "Menor precio";
     default:
       return "";
   }

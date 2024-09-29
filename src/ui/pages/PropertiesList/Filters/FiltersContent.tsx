@@ -2,7 +2,7 @@ import { Checkbox, FormControlLabel, FormGroup, FormLabel, Radio, RadioGroup } f
 import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 import SelectPropertyType from "../../../components/SelectPropertyType";
-import { PropertyType, SurfaceType } from "../../../../models/property";
+import { PropertyType, SortBy, SurfaceType } from "../../../../models/property";
 import { isNumber } from "../../../../helpers";
 import { useSearchParams } from "react-router-dom";
 import RestartAltOutlinedIcon from "@mui/icons-material/RestartAltOutlined";
@@ -10,6 +10,7 @@ import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { Filters } from "../../../../store/properties/propertiesSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { fetchDistricts, selectDistricts } from "../../../../store/properties/districtsSlice";
+import SelectSortType from "../SelectSortType";
 
 const ResetButtonContainer = styled.div`
   width: 100%;
@@ -65,7 +66,8 @@ const FiltersContent = () => {
 
   const [filtersParams, setFiltersParams] = useSearchParams();
   const [filtersState, setFilstersState] = useState<Filters>({
-    type: filtersParams.get("type") as PropertyType || "APARTMENT",
+    sort: filtersParams.get("sort") as SortBy || "",
+    type: filtersParams.get("type") as PropertyType || "",
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
@@ -85,6 +87,7 @@ const FiltersContent = () => {
   });
 
   const {
+    sort,
     type,
     minPrice,
     maxPrice,
@@ -118,9 +121,11 @@ const FiltersContent = () => {
     filtersParams.delete("maxLat");
     filtersParams.delete("minLon");
     filtersParams.delete("maxLon");
+    filtersParams.delete("type");
     setFiltersParams(filtersParams);
     setFilstersState({
-      type: "APARTMENT",
+      sort: "RECENT",
+      type: "",
       minPrice: "",
       maxPrice: "",
       minSurface: "",
@@ -186,12 +191,31 @@ const FiltersContent = () => {
         </ResetButton>
       </ResetButtonContainer>
       <FilterContainer>
+        <FilterTitle>Ordenar por: </FilterTitle>
+        <SelectSortType
+          selectedSortType={sort as SortBy}
+          setSelectedSortType={(value) => {
+            setFiltersParams((prev) => {
+              prev.set("sort", value);
+              return prev;
+            });
+            setFilstersState((prev) => ({
+              ...prev,
+              sort: value
+            }));
+          }}
+        />
+      </FilterContainer>
+      <FilterContainer>
         <FilterTitle>Tipo de inmueble</FilterTitle>
         <SelectPropertyType
           selectedPropertyType={type as PropertyType}
           setSelectedPropertyType={(value) => {
             setFiltersParams((prev) => {
               prev.set("type", value);
+              if(value == "") {
+                filtersParams.delete("type");
+              }
               return prev;
             });
             setFilstersState((prev) => ({

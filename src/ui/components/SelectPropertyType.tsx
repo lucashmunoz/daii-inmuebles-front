@@ -12,6 +12,10 @@ type PropertiesTypes = Array<
 
 const propertiesTypes: PropertiesTypes = [
   {
+    value: "",
+    label: getPropertyTypeNameByType("")
+  },
+  {
     value: "APARTMENT",
     label: getPropertyTypeNameByType("APARTMENT")
   },
@@ -20,24 +24,8 @@ const propertiesTypes: PropertiesTypes = [
     label: getPropertyTypeNameByType("HOUSE")
   },
   {
-    value: "SEMIFLOOR",
-    label: getPropertyTypeNameByType("SEMIFLOOR")
-  },
-  {
-    value: "FLOOR",
-    label: getPropertyTypeNameByType("FLOOR")
-  },
-  {
-    value: "DUPLEX",
-    label: getPropertyTypeNameByType("DUPLEX")
-  },
-  {
-    value: "TRIPLEX",
-    label: getPropertyTypeNameByType("TRIPLEX")
-  },
-  {
-    value: "PENTHOUSE",
-    label: getPropertyTypeNameByType("PENTHOUSE")
+    value: "PH",
+    label: getPropertyTypeNameByType("PH")
   }
 ];
 

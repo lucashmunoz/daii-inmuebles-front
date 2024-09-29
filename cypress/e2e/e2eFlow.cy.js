@@ -5,7 +5,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Verifica que el contenedor de 'Encontrá tu próximo hogar' está presente", () => {
-      cy.get("h1").contains("Entontrá tu próximo hogar en Smart Move").should("be.visible");
+      cy.get("h1").contains("Encontrá tu próximo hogar en Smart Move").should("be.visible");
     });
 
     it("Verifica que los filtros principales están presentes", () => {

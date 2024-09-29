@@ -15,6 +15,9 @@ const initialState: PropertyDetailsState = {
     beds: 0,
     bathrooms: 0,
     country: "",
+    active: true,
+    created_at: "",
+    favorite: false,
     city: "",
     state: "",
     rooms: 0,
@@ -59,7 +62,14 @@ export const fetchPropertyDetails = createAsyncThunk(
 export const propertyDetailsSlice = createSlice({
   name: "properties",
   initialState,
-  reducers: {},
+  reducers: {
+    bookmarkProperty: (state) => {
+      state.propertyDetails.favorite = true;
+    },
+    unbookmarkProperty: (state) => {
+      state.propertyDetails.favorite = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPropertyDetails.pending, (state) => {
@@ -80,4 +90,5 @@ export const propertyDetailsSlice = createSlice({
 export const selectPropertyDetails = (state: RootState) => state.propertyDetails.propertyDetails || {};
 export const selectPropertyDetailsStatus = (state: RootState) => state.propertyDetails.propertyDetailsStatus;
 
+export const { bookmarkProperty, unbookmarkProperty } = propertyDetailsSlice.actions;
 export default propertyDetailsSlice.reducer;

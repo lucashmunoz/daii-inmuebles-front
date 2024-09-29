@@ -4,6 +4,7 @@ import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
 import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
+import FavouriteButton from "./FavouriteButton";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -63,15 +64,12 @@ const AlquilarButton = styled(Button)`
   font-weight: bold;
 `;
 
-interface PropertyMainDetailsProps {
-  type: PropertyType;
-  title: string;
-  created_at: string;
-  user_id: number;
-  price: number;
-  surface_total: number;
-  bathrooms: number;
-}
+const FavouriteContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
@@ -98,7 +96,18 @@ const calculateDaysPassed = (created_at: string): string => {
   }
 };
 
-const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms }: PropertyMainDetailsProps) => {
+interface PropertyMainDetailsProps {
+  type: PropertyType;
+  title: string;
+  created_at: string;
+  propertyId: number;
+  price: number;
+  surface_total: number;
+  bathrooms: number;
+  favorite: boolean;
+}
+
+const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
   const publication_details = calculateDaysPassed(created_at);
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
   const surfaceTotalText = `${surface_total} m² totales.`;
@@ -110,7 +119,10 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   return(
     <ContentContainer>
 
-      <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
+      <FavouriteContainer>
+        <TypeDepartment>{propertype} en Alquiler</TypeDepartment>
+        <FavouriteButton propertyId={propertyId} favorite={favorite}/>
+      </FavouriteContainer>
       <PropertyTitle>{title}</PropertyTitle>
       <PublicationDetails>{publication_details}</PublicationDetails>
 

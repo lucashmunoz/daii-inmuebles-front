@@ -27,4 +27,5 @@ export interface Property {
   surface_covered: number,
   surface_total: number,
   created_at: string,
+  favorite: boolean,
 }

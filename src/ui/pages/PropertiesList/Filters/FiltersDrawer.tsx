@@ -28,6 +28,10 @@ const CloseButton = styled.button`
   border: none;
 `;
 
+const ButtonSpace = styled.div`
+height: 43px;
+`;
+
 const DrawerFooter = styled.div`
    position: fixed;
    bottom: 0px;
@@ -88,6 +92,7 @@ const FiltersDrawer = ({ isFiltersDrawerOpen, closeCallback }: FiltersDrawerProp
         </CloseButtonHeader>
 
         <FiltersContent />
+        <ButtonSpace/>
 
         <DrawerFooter>
           <FullWidthButton

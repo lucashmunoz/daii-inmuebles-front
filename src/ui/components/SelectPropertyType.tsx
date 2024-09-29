@@ -12,8 +12,8 @@ type PropertiesTypes = Array<
 
 const propertiesTypes: PropertiesTypes = [
   {
-    value: "",
-    label: getPropertyTypeNameByType("")
+    value: "ALL",
+    label: getPropertyTypeNameByType("ALL")
   },
   {
     value: "APARTMENT",

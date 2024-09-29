@@ -65,9 +65,9 @@ const FiltersContent = () => {
   const allDistrictsArray = useAppSelector(selectDistricts);
 
   const [filtersParams, setFiltersParams] = useSearchParams();
-  const [filtersState, setFilstersState] = useState<Filters>({
+  const [filtersState, setFiltersState] = useState<Filters>({
     sort: filtersParams.get("sort") as SortBy || "",
-    type: filtersParams.get("type") as PropertyType || "",
+    type: filtersParams.get("type") as PropertyType || "ALL",
     minPrice: filtersParams.get("minPrice") || "",
     maxPrice: filtersParams.get("maxPrice") || "",
     minSurface: filtersParams.get("minSurface") || "",
@@ -123,9 +123,9 @@ const FiltersContent = () => {
     filtersParams.delete("maxLon");
     filtersParams.delete("type");
     setFiltersParams(filtersParams);
-    setFilstersState({
+    setFiltersState({
       sort: "RECENT",
-      type: "",
+      type: "ALL",
       minPrice: "",
       maxPrice: "",
       minSurface: "",
@@ -155,7 +155,7 @@ const FiltersContent = () => {
       prev.set(name, value);
       return prev;
     });
-    setFilstersState((prev) => ({
+    setFiltersState((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -173,7 +173,7 @@ const FiltersContent = () => {
     filtersParams.delete("districts");
     filtersParams.set("districts", newCheckboxesStrArray);
     setFiltersParams(filtersParams);
-    setFilstersState((prev) => ({
+    setFiltersState((prev) => ({
       ...prev,
       districts: newCheckboxesStrArray
     }));
@@ -199,7 +199,7 @@ const FiltersContent = () => {
               prev.set("sort", value);
               return prev;
             });
-            setFilstersState((prev) => ({
+            setFiltersState((prev) => ({
               ...prev,
               sort: value
             }));
@@ -213,12 +213,12 @@ const FiltersContent = () => {
           setSelectedPropertyType={(value) => {
             setFiltersParams((prev) => {
               prev.set("type", value);
-              if(value == "") {
+              if(value == "ALL") {
                 filtersParams.delete("type");
               }
               return prev;
             });
-            setFilstersState((prev) => ({
+            setFiltersState((prev) => ({
               ...prev,
               type: value
             }));
@@ -289,7 +289,7 @@ const FiltersContent = () => {
               prev.set("surfaceType", value);
               return prev;
             });
-            setFilstersState((prev) => ({
+            setFiltersState((prev) => ({
               ...prev,
               surfaceType: value as SurfaceType
             }));

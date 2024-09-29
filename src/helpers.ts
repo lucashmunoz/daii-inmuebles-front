@@ -24,7 +24,7 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
     case "PH":
       return "Propiedad horizontal";
     default:
-      return "-";
+      return "Todos";
   }
 };
 

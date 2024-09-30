@@ -1,13 +1,23 @@
 import { TextField, Button, Typography, Card, Grid, InputAdornment, Divider, CardMedia, CardContent, IconButton } from "@mui/material";
 import styled from "styled-components";
 import Header from "../../components/Header";
+import { useDebounce } from "use-debounce";
 import PageWrapper from "../../components/PageWrapper";
 import SelectPropertyType from "../../components/SelectPropertyType";
 import { PropertyType, Property } from "../../../models/property";
 import ImageDescription from "../../../assets/property-create-image.svg";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import DeleteIcon from "@mui/icons-material/Close";
+import MapAddress from "./MapAddress";
+import { getGeocode, getLatLng } from "use-places-autocomplete";
+import { Coordinates } from "../../../models/address";
+import SMSelect from "../../components/SelectDistrict";
+import { fetchDistricts, selectDistricts } from "../../../store/properties/districtsSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+
+const CABA_CENTER_LAT = -34.6144806;
+const CABA_CENTER_LNG = -58.4464348;
 
 const MainContainer = styled.main`
   padding: 16px;
@@ -77,12 +87,31 @@ const DeleteButton = styled(IconButton)`
 `;
 
 const CreateProperty = () => {
+  const dispatch = useAppDispatch();
+
+  const districts = useAppSelector(selectDistricts);
+
+  const districtsOptions = useMemo(() => {
+    return districts.map(district => ({
+      value: district,
+      label: district
+    }));
+  }, [districts]);
+
+  const setSelectedDistrict = (selectedDistrict: string) => {
+    setFormData({
+      ...formData,
+      "district": selectedDistrict
+    });
+  };
+
   const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType>("APARTMENT");
   const [formData, setFormData] = useState<Property>({
     id: 0,
     beds: 1,
     active: true,
     favorite: false,
+    zipcode: "",
     bathrooms: 1,
     country: "Argentina",
     city: "Ciudad Autonoma de Buenos Aires",
@@ -104,7 +133,13 @@ const CreateProperty = () => {
     created_at: ""
   });
   const [images, setImages] = useState<string[]>([]);
-
+  const [addressCoordinates, setAddressCoordinates] = useState<Coordinates>({
+    lat: CABA_CENTER_LAT,
+    lng: CABA_CENTER_LNG
+  });
+  const [debouncedAddressCoordinates] = useDebounce(addressCoordinates, 1500, {
+    maxWait: 2000
+  });
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -112,6 +147,8 @@ const CreateProperty = () => {
       [name]: value
     });
   };
+
+  const showMapMarker = formData.address.length !== 0 && addressCoordinates.lat === debouncedAddressCoordinates.lat && addressCoordinates.lng === debouncedAddressCoordinates.lng;
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -136,6 +173,27 @@ const CreateProperty = () => {
     onDrop: handleDrop
   });
 
+  const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setFormData({
+      ...formData,
+      "address": value
+    });
+
+    const result = await getGeocode({
+      address: value + ", CABA"
+    }); //get geocoding object
+    const { lat, lng } = await getLatLng(result[0]);
+    setAddressCoordinates({
+      lat, lng
+    });
+  };
+
+  useEffect(() => {
+    dispatch(fetchDistricts());
+  }, [dispatch]);
+
   return (
     <PageWrapper>
       <Header />
@@ -157,7 +215,7 @@ const CreateProperty = () => {
 
               {/* Contenedor 2: Imagen */}
               <ImageContainer>
-                <img src={ImageDescription} alt="Icono" style={{
+                <img src={ImageDescription} alt="" style={{
                   height: "80%"
                 }} />
               </ImageContainer>
@@ -171,7 +229,7 @@ const CreateProperty = () => {
             <StyledForm onSubmit={handleSubmit}>
               {/* Contenedor 3: Todos los textfields en 2 columnas */}
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
@@ -187,26 +245,20 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Dirección <span>*</span>
+                  Precio <span>*</span>
                   </Typography>
                   <StyledTextField
-                    name="address"
+                    name="price"
+                    type="number"
                     onChange={handleInputChange}
                     fullWidth
-                    placeholder="Ej.: Reconquista 123"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Typography variant="body1" gutterBottom style={{
-                    marginBottom: "1px"
-                  }}>
-                  Barrio <span>*</span>
-                  </Typography>
-                  <StyledTextField
-                    name="district"
-                    onChange={handleInputChange}
-                    fullWidth
+                    inputProps={{
+                      min: 0
+                    }}
+                    InputProps={{
+                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
+                      endAdornment: <InputAdornment position="end">por mes</InputAdornment>
+                    }}
                   />
                 </Grid>
 
@@ -311,14 +363,13 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Bauleras <span>*</span>
+                  Dirección <span>*</span>
                   </Typography>
                   <StyledTextField
-                    name="storages"
-                    type="number"
-                    onChange={handleInputChange}
+                    name="address"
+                    onChange={handleAddressChange}
                     fullWidth
-                    placeholder="Si no tiene bauleras, indica 0."
+                    placeholder="Ej.: Reconquista 123"
                   />
                 </Grid>
 
@@ -326,21 +377,18 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Precio <span>*</span>
+                  Barrio <span>*</span>
                   </Typography>
-                  <StyledTextField
-                    name="price"
-                    type="number"
-                    onChange={handleInputChange}
-                    fullWidth
-                    inputProps={{
-                      min: 0
-                    }}
-                    InputProps={{
-                      startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                      endAdornment: <InputAdornment position="end">por mes</InputAdornment>
-                    }}
+                  <SMSelect
+                    id="select-district"
+                    options={districtsOptions}
+                    selectedOption={districtsOptions[0]?.value ?? ""}
+                    setSelectedOption={setSelectedDistrict}
                   />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <MapAddress addressCoordinates={debouncedAddressCoordinates} showMarker={showMapMarker}/>
                 </Grid>
 
                 <Grid item xs={12}>

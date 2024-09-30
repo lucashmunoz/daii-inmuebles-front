@@ -97,6 +97,7 @@ const Contracts = () => {
             return (
               <BookmarkCard
                 orientation={isMobile ? "vertical" : "horizontal"}
+                key={id}
                 id={id}
                 district={district}
                 image={image}

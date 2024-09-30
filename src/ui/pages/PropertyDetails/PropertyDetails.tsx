@@ -45,7 +45,7 @@ const PropertyDetails = (): ReactElement => {
   const propertyDetails = useAppSelector(selectPropertyDetails);
   const propertyDetailsStatus = useAppSelector(selectPropertyDetailsStatus);
 
-  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type, favorite, address } = propertyDetails;
+  const { bathrooms, beds, created_at, description, district, images, price, rooms, surface_covered, surface_total, title, type, favorite, address, longitude, latitude } = propertyDetails;
 
   useEffect(() => {
     dispatch(fetchPropertyDetails({
@@ -113,6 +113,8 @@ const PropertyDetails = (): ReactElement => {
         <PropertyMap
           address={address}
           district={district}
+          latitude={latitude}
+          longitude={longitude}
         />
 
       </main>

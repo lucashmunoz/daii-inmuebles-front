@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import { useDebounce } from "use-debounce";
 import PageWrapper from "../../components/PageWrapper";
-import SelectPropertyType from "../../components/SelectPropertyType";
 import { PropertyType, Property } from "../../../models/property";
 import ImageDescription from "../../../assets/property-create-image.svg";
 import { useEffect, useMemo, useState } from "react";
@@ -12,9 +11,10 @@ import DeleteIcon from "@mui/icons-material/Close";
 import MapAddress from "./MapAddress";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { Coordinates } from "../../../models/address";
-import SMSelect from "../../components/SelectDistrict";
+import SMSelect from "../../components/SMSelect";
 import { fetchDistricts, selectDistricts } from "../../../store/properties/districtsSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getPropertyTypeNameByType } from "../../../helpers";
 
 const CABA_CENTER_LAT = -34.6144806;
 const CABA_CENTER_LNG = -58.4464348;
@@ -86,6 +86,28 @@ const DeleteButton = styled(IconButton)`
   right: -5px;
 `;
 
+type PropertiesTypes = Array<
+  {
+    value: PropertyType,
+    label: string
+  }
+>
+
+const propertiesTypes: PropertiesTypes = [
+  {
+    value: "APARTMENT",
+    label: getPropertyTypeNameByType("APARTMENT")
+  },
+  {
+    value: "HOUSE",
+    label: getPropertyTypeNameByType("HOUSE")
+  },
+  {
+    value: "PH",
+    label: getPropertyTypeNameByType("PH")
+  }
+];
+
 const CreateProperty = () => {
   const dispatch = useAppDispatch();
 
@@ -101,11 +123,17 @@ const CreateProperty = () => {
   const setSelectedDistrict = (selectedDistrict: string) => {
     setFormData({
       ...formData,
-      "district": selectedDistrict
+      district: selectedDistrict
     });
   };
 
-  const [selectedPropertyType, setSelectedPropertyType] = useState<PropertyType>("APARTMENT");
+  const setSelectedPropertyType = (selectedPropertyType: string) => {
+    setFormData({
+      ...formData,
+      type: selectedPropertyType as PropertyType
+    });
+  };
+
   const [formData, setFormData] = useState<Property>({
     id: 0,
     beds: 1,
@@ -127,7 +155,7 @@ const CreateProperty = () => {
     storeys: 0,
     price: 0,
     garages: 0,
-    type: selectedPropertyType,
+    type: "APARTMENT",
     surface_covered: 0,
     surface_total: 0,
     created_at: ""
@@ -235,9 +263,11 @@ const CreateProperty = () => {
                   }}>
                   Tipo de propiedad
                   </Typography>
-                  <SelectPropertyType
-                    selectedPropertyType={selectedPropertyType}
-                    setSelectedPropertyType={setSelectedPropertyType}
+                  <SMSelect
+                    id="select-property-type"
+                    options={propertiesTypes}
+                    selectedOption={propertiesTypes[0]?.value ?? ""}
+                    setSelectedOption={setSelectedPropertyType}
                   />
                 </Grid>
 

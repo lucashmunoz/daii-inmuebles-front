@@ -177,5 +177,39 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("img[alt=\"Slide 1\"]")
         .should("be.visible");
     });
+
+    // TODO: Testear que funcione el botón de like a propiedad, de paso sirve para el test de favoritos.
   });
+
+  describe("Página de Mis Favoritos", () => {
+    beforeEach(() => {
+      cy.visit("/bookmarks");
+    });
+
+    it("Verifica que la página de 'Mis Favoritos' carga correctamente", () => {
+      cy.get("h1").contains("Mis Favoritos").should("be.visible");
+    });
+
+    it("Verifica que los bookmarks se muestran", () => {
+      cy.get(".MuiCard-root").should("have.length.at.least", 1);
+      cy.get(".MuiCard-root").each(($card) => {
+        cy.wrap($card).within(() => {
+          cy.get("img").should("be.visible");
+        });
+      });
+    });
+
+    it("Simula la eliminación de un bookmark", () => {
+      cy.intercept("DELETE", "/properties/*/favorites").as("deleteFavorite");
+      cy.get(".MuiCard-root").then((cards) => {
+        const initialCount = cards.length;
+        cy.get(".MuiCard-root").first().as("firstBookmark");
+        cy.get("@firstBookmark").find("button:contains(\"Eliminar\")").click();
+        cy.wait("@deleteFavorite").its("response.statusCode").should("eq", 204);
+        cy.get(".MuiCard-root").should("have.length", initialCount - 1);
+      });
+    });
+  });
+
+  // TODO: Implementar test de publicar.
 });

@@ -36,8 +36,7 @@ const PropertiesMap = ({ onMapBoundsChange }: PropertiesMapProps) => {
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    version: "beta",
-    libraries: ["places"]
+    nonce: "google-map-loader"
   });
 
   const handleMapChange = (map: google.maps.Map) => {

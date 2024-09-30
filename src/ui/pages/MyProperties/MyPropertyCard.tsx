@@ -237,7 +237,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
                 isToggleLoading
                   ? <SpinnerContainer><Spinner /></SpinnerContainer>
                   : <FormControlLabel
-                    control={<Switch defaultChecked />}
+                    control={<Switch defaultChecked={active} />}
                     label={active ? "Pausar" : "Activar"}
                     checked={active}
                     onMouseDown={e => e.stopPropagation()}

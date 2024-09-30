@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5173
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "echo VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY && echo VITE_MAP_ID=$VITE_MAP_ID && npm run dev"]

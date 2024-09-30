@@ -45,8 +45,7 @@ const PropertyMap = ({ address, district, latitude, longitude }:PropertyMapProps
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    version: "beta",
-    libraries: ["places"]
+    nonce: "google-map-loader"
   });
 
   useEffect(() => {

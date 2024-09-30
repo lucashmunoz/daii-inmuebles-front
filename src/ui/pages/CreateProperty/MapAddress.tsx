@@ -17,8 +17,8 @@ interface MapAddress {
 
 const MapAddress = ({ addressCoordinates, showMarker }: MapAddress) => {
   const { isLoaded } = useJsApiLoader({
-    id: "create-property-map",
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+    nonce: "google-map-loader"
   });
 
   return isLoaded ? (

@@ -36,7 +36,8 @@ export const PropertyCard = ({ orientation, id, district, image, price, rooms, b
     <Card
       key={id}
       sx={{
-        width: isHorizontal ? "100%" : 220, height: 280
+        width: isHorizontal ? "100%" : 220, height: 280,
+        marginBottom: "6px"
       }}
     >
       <CardActionArea component={Link} to={detailsPageLink}>

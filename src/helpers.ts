@@ -1,5 +1,6 @@
 import { PropertyType, SortBy } from "./models/property";
 import { RentProcessStatus, RentStatus } from "./models/rentals";
+import PricePrediction from "./ui/pages/PropertyDetails/PricePredictionContainer";
 
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
   const strNumber = number.toString();
@@ -25,6 +26,31 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "PH";
     case "ALL":
       return "Todos";
+  }
+};
+
+export const getPriceClassificationByName = (classification: string) => {
+  switch(classification) {
+    case "ECONOMICAL":
+      return PricePrediction({
+        color: "#58d68d", fontColor: "#1d8348", wording: "MUY BARATO"
+      });
+    case "AFFORDABLE":
+      return PricePrediction({
+        color: "#27ae60", fontColor: "#196f3d", wording: "BARATO"
+      });
+    case "MARKET_PRICE":
+      return PricePrediction({
+        color: "#f7dc6f", fontColor: "#9a7d0a", wording: "PRECIO DE MERCADO"
+      });
+    case "PREMIUM":
+      return PricePrediction({
+        color: "#dc7633", fontColor: "#873600", wording: "CARO"
+      });
+    case "LUXURY":
+      return PricePrediction({
+        color: "#e74c3c", fontColor: "#641e16", wording: "MUY CARO"
+      });
   }
 };
 

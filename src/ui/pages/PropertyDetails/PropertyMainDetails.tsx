@@ -3,9 +3,9 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
-import { Button } from "@mui/material";
+import { Button, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import { PropertyType } from "../../../models/property";
-import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
+import { formatNumberToCurrency, getPriceClassificationByName, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
 import { fetchPropertyPricePrediction, selectPricePrediction, selectPricePredictionStatus } from "../../../store/properties/propertyDetailsSlice";
 import type { AppDispatch } from "../../../store";
@@ -76,16 +76,18 @@ const FavouriteContainer = styled.div`
   align-items: center;
 `;
 
-const PricePredictionContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding: 6px;
-  font-size: 16px;
-  color: #000;
-  border: 1px solid gray;
-  border-radius: 12px;
-  margin-bottom: 15px;
-`;
+const TooltipCustom = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{
+    popper: className
+  }} />
+))(() => ({
+
+  [`& .${tooltipClasses.tooltip}`]: {
+    fontSize: 14
+  }
+}));
+
+const predictionTooltip = "El precio estimado es una aproximación basada en las características de la propiedad en comparación con otras del mercado.";
 
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
@@ -142,16 +144,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const formattedPrice = formatNumberToCurrency({
     number: price
   });
-  const pricePredictionText = (() => {
-    switch (pricePredictionStatus) {
-      case "SUCCESS":
-        return `Precio vs mercado: ${pricePrediction.classification}`;
-      case "ERROR":
-        return "No se pudo obtener la predicción de precio.";
-      default:
-        return "Obteniendo predicción de precio...";
-    }
-  })();
+  const pricePredictionText = getPriceClassificationByName(pricePrediction.classification);
 
   return (
     <ContentContainer>
@@ -176,9 +169,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         </PropertySpecs>
       </PropertySpecsContainer>
 
-      <PricePredictionContainer>
-        <p>{pricePredictionText}</p>
-      </PricePredictionContainer>
+      <TooltipCustom title={predictionTooltip} placement="right" arrow>
+        {pricePredictionText}
+      </TooltipCustom>
 
       <AlquilarButton>Alquilar</AlquilarButton>
     </ContentContainer>

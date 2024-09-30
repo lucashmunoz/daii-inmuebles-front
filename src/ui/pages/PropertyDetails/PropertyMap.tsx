@@ -1,7 +1,8 @@
-import { ReactElement } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PlaceIcon from "@mui/icons-material/Place";
 import Divider from "@mui/material/Divider";
+import { useJsApiLoader } from "@react-google-maps/api";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -27,29 +28,76 @@ const Direction = styled.div`
   align-items: center;
 `;
 
-const MapImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: fill;
-`;
-
 interface PropertyMapProps {
   address: string;
   district: string;
+  latitude: number;
+  longitude: number;
 }
 
-const PropertyMap = ({ address, district } : PropertyMapProps): ReactElement => {
+const PropertyMap = ({ address, district, latitude, longitude }:PropertyMapProps): ReactElement => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+
+  const center = {
+    centerLat: latitude,
+    centerLng: longitude
+  };
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    version: "beta",
+    libraries: ["places"]
+  });
+
+  useEffect(() => {
+    if (isLoaded && mapRef.current) {
+      async function loadMap() {
+        const map = new google.maps.Map(mapRef.current!, {
+          center: {
+            lat: center.centerLat,
+            lng: center.centerLng
+          },
+          zoom: 16,
+          mapId: import.meta.env.VITE_MAP_ID,
+          disableDefaultUI: true,
+          gestureHandling: "none",
+          scrollwheel: false
+        });
+
+        // Crear el marcador avanzado
+        new google.maps.Marker({
+          map,
+          position: {
+            lat: latitude,
+            lng: longitude
+          }
+        });
+      }
+
+      loadMap();
+    }
+  }, [isLoaded]);
+
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
+
   return(
     <ContentContainer>
-      <Divider />
+      <Divider/>
       <Title> Ubicación </Title>
 
       <Direction>
-        <PlaceIcon />
+        <PlaceIcon/>
         <p>{address}, {district}, Cdad. Autónoma de Buenos Aires</p>
       </Direction>
-
-      <MapImage src="/src/assets/property-map.jpg" />
+      <div
+        ref={mapRef}
+        style={{
+          width: "100%",
+          height: "400px"
+        }}
+      />
     </ContentContainer>
   );
 };

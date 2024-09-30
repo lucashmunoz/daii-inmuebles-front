@@ -24,6 +24,9 @@ jobs:
       
       - name: Build Docker image
         run: docker build -t joubina/smartmovefront . --progress=plain
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{secrets.VITE_GOOGLE_MAPS_API_KEY}}
+          VITE_MAP_ID: ${{secrets.VITE_MAP_ID}}
       
       - name: Publish image to Docker Hub
         run: docker push joubina/smartmovefront:latest

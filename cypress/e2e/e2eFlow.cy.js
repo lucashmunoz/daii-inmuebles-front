@@ -211,5 +211,38 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
-  // TODO: Implementar test de publicar.
+  describe("My Properties Page", () => {
+    beforeEach(() => {
+      cy.visit("/myproperties");
+    });
+
+    it("Verifica que las propiedades se muestran correctamente", () => {
+      cy.get("h1").contains("Mis Publicaciones").should("be.visible");
+      cy.get(".MuiCard-root").should("have.length.at.least", 1);
+    });
+
+    it("Debe redirigir a la página de edición cuando se hace clic en \"Editar\"", () => {
+      cy.get(".MuiCard-root").first().within(() => {
+        cy.contains("Editar").click();
+      });
+      cy.url().should("include", "/myproperties/edit/");
+    });
+
+    it("Debe permitir activar o pausar una propiedad", () => {
+      cy.get(".MuiCard-root").first().within(() => {
+        cy.get("input[type=\"checkbox\"]").click();
+      });
+      cy.get(".MuiCard-root").first().within(() => {
+        cy.get("input[type=\"checkbox\"]").should("be.checked");
+      });
+    });
+
+    it("Muestra el esqueleto de carga mientras las propiedades están cargando", () => {
+      cy.intercept("/myproperties", {
+        fixture: "loading"
+      }).as("getProperties");
+      cy.visit("/myproperties");
+      cy.get(".MuiSkeleton-root").should("be.visible");
+    });
+  });
 });

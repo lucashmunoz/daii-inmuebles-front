@@ -15,6 +15,7 @@ import SMSelect from "../../components/SMSelect";
 import { fetchDistricts, selectDistricts } from "../../../store/properties/districtsSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getPropertyTypeNameByType } from "../../../helpers";
+import { createNewProperty } from "../../../store/properties/propertiesSlice";
 
 const CABA_CENTER_LAT = -34.6144806;
 const CABA_CENTER_LNG = -58.4464348;
@@ -86,6 +87,14 @@ const DeleteButton = styled(IconButton)`
   right: -5px;
 `;
 
+const Select = styled(SMSelect)`
+  width: 100%;
+  
+  & .MuiInputBase-root{
+    height: 40px;
+  } 
+`;
+
 type PropertiesTypes = Array<
   {
     value: PropertyType,
@@ -150,9 +159,8 @@ const CreateProperty = () => {
     description: "",
     latitude: 0,
     longitude: 0,
-    images: [""],
+    images: [],
     address: "",
-    storeys: 0,
     price: 0,
     garages: 0,
     type: "APARTMENT",
@@ -160,7 +168,6 @@ const CreateProperty = () => {
     surface_total: 0,
     created_at: ""
   });
-  const [images, setImages] = useState<string[]>([]);
   const [addressCoordinates, setAddressCoordinates] = useState<Coordinates>({
     lat: CABA_CENTER_LAT,
     lng: CABA_CENTER_LNG
@@ -180,18 +187,39 @@ const CreateProperty = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    dispatch(createNewProperty({
+      property: formData
+    }));
   };
 
   const handleDrop = (acceptedFiles: File[]) => {
-    const uploadedImages = acceptedFiles.map((file) =>
-      URL.createObjectURL(file)
-    );
-    setImages([...images, ...uploadedImages]); // Mantenemos las imágenes anteriores y añadimos las nuevas
+    Promise.all(
+      acceptedFiles.map(
+        (acceptedFile) =>{
+          const reader = new FileReader();
+          reader.readAsDataURL(acceptedFile as Blob);
+
+          return new Promise((resolve, reject) => {
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = (error) => reject(error);
+          });
+        }
+      )
+    ).then((base64Images) => {
+      setFormData({
+        ...formData,
+        images: [...formData.images, ...base64Images as string[]]
+      });
+    });
   };
 
   const handleRemoveImage = (index: number) => {
-    const updatedImages = images.filter((_, imgIndex) => imgIndex !== index);
-    setImages(updatedImages);
+    const updatedImages = formData.images.filter((_, imgIndex) => imgIndex !== index);
+    setFormData({
+      ...formData,
+      images: updatedImages as string[]
+    });
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -204,17 +232,19 @@ const CreateProperty = () => {
   const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    setFormData({
-      ...formData,
-      "address": value
-    });
-
     const result = await getGeocode({
       address: value + ", CABA"
     }); //get geocoding object
     const { lat, lng } = await getLatLng(result[0]);
     setAddressCoordinates({
       lat, lng
+    });
+
+    setFormData({
+      ...formData,
+      address: value,
+      latitude: lat,
+      longitude: lng
     });
   };
 
@@ -263,10 +293,10 @@ const CreateProperty = () => {
                   }}>
                   Tipo de propiedad
                   </Typography>
-                  <SMSelect
+                  <Select
                     id="select-property-type"
                     options={propertiesTypes}
-                    selectedOption={propertiesTypes[0]?.value ?? ""}
+                    selectedOption={formData.type}
                     setSelectedOption={setSelectedPropertyType}
                   />
                 </Grid>
@@ -393,13 +423,13 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Dirección <span>*</span>
+                  Barrio <span>*</span>
                   </Typography>
-                  <StyledTextField
-                    name="address"
-                    onChange={handleAddressChange}
-                    fullWidth
-                    placeholder="Ej.: Reconquista 123"
+                  <Select
+                    id="select-district"
+                    options={districtsOptions}
+                    selectedOption={formData.district}
+                    setSelectedOption={setSelectedDistrict}
                   />
                 </Grid>
 
@@ -407,13 +437,28 @@ const CreateProperty = () => {
                   <Typography variant="body1" gutterBottom style={{
                     marginBottom: "1px"
                   }}>
-                  Barrio <span>*</span>
+                  Código Postal <span>*</span>
                   </Typography>
-                  <SMSelect
-                    id="select-district"
-                    options={districtsOptions}
-                    selectedOption={districtsOptions[0]?.value ?? ""}
-                    setSelectedOption={setSelectedDistrict}
+                  <StyledTextField
+                    name="zipcode"
+                    type="text"
+                    onChange={handleInputChange}
+                    fullWidth
+                    placeholder="Código Postal"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Typography variant="body1" gutterBottom style={{
+                    marginBottom: "1px"
+                  }}>
+                  Dirección <span>*</span>
+                  </Typography>
+                  <StyledTextField
+                    name="address"
+                    onChange={handleAddressChange}
+                    fullWidth
+                    placeholder="Ej.: Reconquista 123"
                   />
                 </Grid>
 
@@ -428,7 +473,7 @@ const CreateProperty = () => {
                   Título <span>*</span>
                   </Typography>
                   <StyledTextField
-                    name="description"
+                    name="title"
                     onChange={handleInputChange}
                     multiline
                     fullWidth
@@ -468,7 +513,7 @@ const CreateProperty = () => {
               </div>
 
               <ImagePreview>
-                {images.map((image, index) => (
+                {formData.images.map((image, index) => (
                   <PreviewCard key={image}>
                     <CardMedia
                       component="img"

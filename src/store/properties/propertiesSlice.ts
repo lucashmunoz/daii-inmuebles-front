@@ -34,6 +34,9 @@ interface PropertyState {
   loadingRecentProperties: boolean
   recentProperties: Property[],
   isRecentPropertiesError: boolean
+
+  createPropertyState: "LOADING" | "CREATED" | "ERROR" | "NOT_INITIALIZED";
+  createdPropertyId: string
 }
 
 const initialState: PropertyState = {
@@ -44,7 +47,10 @@ const initialState: PropertyState = {
 
   loadingRecentProperties: true,
   recentProperties: [],
-  isRecentPropertiesError: false
+  isRecentPropertiesError: false,
+
+  createPropertyState: "NOT_INITIALIZED",
+  createdPropertyId: ""
 };
 
 interface FetchPropertiesParams {
@@ -150,6 +156,23 @@ export const fetchRecentProperties = createAsyncThunk(
   }
 );
 
+interface CreateNewPropertyParams {
+  property: Property
+}
+
+export const createNewProperty = createAsyncThunk(
+  "users/createNewProperty",
+  async ({ property }: CreateNewPropertyParams, { rejectWithValue }) => {
+    const createNewPropertyUrl = `${API_HOST}${endpoints.properties}`;
+    try{
+      const respose = await api.post(createNewPropertyUrl, property);
+      return respose.data.content.id as string;
+    }catch(error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
@@ -188,6 +211,16 @@ export const propertiesSlice = createSlice({
         state.loadingRecentProperties = false;
         state.isRecentPropertiesError = true;
         state.recentProperties = [];
+      })
+      .addCase(createNewProperty.pending, (state) => {
+        state.createPropertyState = "LOADING";
+      })
+      .addCase(createNewProperty.fulfilled, (state, action) => {
+        state.createPropertyState = "CREATED";
+        state.createdPropertyId = action.payload;
+      })
+      .addCase(createNewProperty.rejected, (state) => {
+        state.createPropertyState = "ERROR";
       });
   }
 });

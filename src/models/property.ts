@@ -18,11 +18,8 @@ export interface Property {
   district: string
   latitude: number,
   longitude: number,
-  images: [
-    string
-  ],
+  images: string[],
   address: string,
-  storeys: number,
   price: number,
   garages: number,
   type: PropertyType,

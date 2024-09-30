@@ -17,14 +17,16 @@ interface SelectDistrictProps {
   options: OptionType[]
   selectedOption: string
   setSelectedOption: (selectedOption: string) => void
+  className?: string
 }
 
-const SMSelect = ({ id, options, selectedOption, setSelectedOption }: SelectDistrictProps) => {
+const SMSelect = ({ id, options, selectedOption, setSelectedOption, className }: SelectDistrictProps) => {
   return (
     <Select
       id={id}
       size="small"
       select
+      className={className}
       value={selectedOption}
       onChange={(e) => setSelectedOption(e.target.value as string)}
       sx={{

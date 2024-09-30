@@ -16,6 +16,9 @@ jobs:
       
       - name: Install dependencies using npm ci
         run: npm ci
+
+      - name: Run Cypress tests
+        run: npx cypress run
       
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
@@ -48,7 +51,7 @@ jobs:
           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
           -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
           joubina/smartmovefront
-      
+          
       - name: Verify environment variables
         run: |
           sudo docker exec smartmovecontainerfront printenv VITE_GOOGLE_MAPS_API_KEY

@@ -76,6 +76,7 @@ const PropertyMap = ({ address, district, latitude, longitude }:PropertyMapProps
 
       loadMap();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded]);
 
   if (loadError) {

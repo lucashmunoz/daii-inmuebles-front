@@ -56,6 +56,13 @@ const Properties = ({ handlePageChange }:PropertiesProps) => {
     );
   }
 
+  if (properties.length === 0) {
+    return (
+      <Alert severity="info">
+        No se encontraron inmuebles para esos criterios de búsqueda
+      </Alert>
+    );
+  }
   return (
     <PropertiesContainer>
       <PropertiesListWrapper>

@@ -1,9 +1,7 @@
 name: CICD
-
 on:
   push:
     branches: [main]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,7 +16,7 @@ jobs:
       
       - name: Install dependencies using npm ci
         run: npm ci
-
+      
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
       
@@ -37,13 +35,16 @@ jobs:
     steps:
       - name: Delete old container
         run: sudo docker rm -f smartmovecontainerfront
-
+      
       - name: Remove old image
         run: sudo docker image prune -f
-
+      
       - name: Pull Image from Docker Hub
         run: sudo docker pull joubina/smartmovefront:latest
-
+      
       - name: Run Docker Container
         run: |
-            sudo docker run -d -p 5173:5173 --name smartmovecontainerfront -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} joubina/smartmovefront
+          sudo docker run -d -p 5173:5173 --name smartmovecontainerfront \
+          -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
+          -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
+          joubina/smartmovefront

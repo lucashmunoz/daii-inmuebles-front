@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
-import { Button, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
-import { formatNumberToCurrency, getPriceClassificationByName, getPropertyTypeNameByType } from "../../../helpers";
+import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
-import { fetchPropertyPricePrediction, selectPricePrediction } from "../../../store/properties/propertyDetailsSlice";
-import type { AppDispatch } from "../../../store";
+import { fetchPropertyPricePrediction } from "../../../store/properties/propertyDetailsSlice";
+import PricePrediction from "./PricePrediction";
+import { useAppDispatch } from "../../../store/hooks";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -76,19 +76,6 @@ const FavouriteContainer = styled.div`
   align-items: center;
 `;
 
-const TooltipCustom = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{
-    popper: className
-  }} />
-))(() => ({
-
-  [`& .${tooltipClasses.tooltip}`]: {
-    fontSize: 14
-  }
-}));
-
-const predictionTooltip = "El precio estimado es una aproximación basada en las características de la propiedad en comparación con otras del mercado.";
-
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
   const currentDate = new Date();
@@ -131,9 +118,7 @@ interface PropertyMainDetailsProps {
 }
 
 const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const pricePrediction = useSelector(selectPricePrediction);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchPropertyPricePrediction(propertyId));
@@ -146,7 +131,6 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const formattedPrice = formatNumberToCurrency({
     number: price
   });
-  const pricePredictionText = getPriceClassificationByName(pricePrediction.classification);
 
   const handleRent = () => {
     //TODO
@@ -175,9 +159,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         </PropertySpecs>
       </PropertySpecsContainer>
 
-      <TooltipCustom title={predictionTooltip} placement="right" arrow>
-        {pricePredictionText}
-      </TooltipCustom>
+      <PricePrediction />
 
       <AlquilarButton onClick={handleRent}>Alquilar</AlquilarButton>
     </ContentContainer>

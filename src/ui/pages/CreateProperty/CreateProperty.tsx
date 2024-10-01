@@ -1,4 +1,4 @@
-import { Typography, Card, Divider, CardContent } from "@mui/material";
+import { Typography, Card, Divider, CardContent, Button } from "@mui/material";
 import styled from "styled-components";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
@@ -6,10 +6,13 @@ import type { PropertyType } from "../../../models/property";
 import ImageDescription from "../../../assets/property-create-image.svg";
 import { useEffect, useState } from "react";
 import { fetchDistricts } from "../../../store/properties/districtsSlice";
-import { useAppDispatch } from "../../../store/hooks";
-import { createNewProperty } from "../../../store/properties/propertiesSlice";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { createNewProperty, selectCreatedPropertyId, selectCreatePropertyState } from "../../../store/properties/propertiesSlice";
 import PropertyForm from "../../components/PropertyForm";
 import type { FormPropertyData } from "../../components/PropertyForm/PropertyForm";
+import { isPropertyFormValid } from "../../components/PropertyForm/helpers";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../../navigation/paths";
 
 const MainContainer = styled.main`
   padding: 16px;
@@ -45,8 +48,16 @@ const TitleContainer = styled.div`
   margin-top: 20px;
 `;
 
+const ButtonContainer = styled.div`
+  text-align: center;
+`;
+
 const CreateProperty = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const createPropertyState = useAppSelector(selectCreatePropertyState);
+  const createdPropertyId = useAppSelector(selectCreatedPropertyId);
 
   const [formData, setFormData] = useState<FormPropertyData>({
     beds: "",
@@ -70,9 +81,7 @@ const CreateProperty = () => {
     surface_total: ""
   });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = () => {
     dispatch(createNewProperty({
       property: {
         beds: parseInt(formData.beds),
@@ -101,6 +110,12 @@ const CreateProperty = () => {
   useEffect(() => {
     dispatch(fetchDistricts());
   }, [dispatch]);
+
+  useEffect(() => {
+    if(createPropertyState === "CREATED") {
+      navigate(`${paths.properties}/${createdPropertyId}`);
+    }
+  }, [createPropertyState, createdPropertyId, navigate]);
 
   return (
     <PageWrapper>
@@ -136,9 +151,24 @@ const CreateProperty = () => {
 
             <PropertyForm
               formData={formData}
-              handleSubmit={handleSubmit}
               setFormData={setFormData}
             />
+
+            {/* Contenedor 5: Botón de enviar */}
+            <ButtonContainer>
+              <Button
+                type="button"
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={!isPropertyFormValid(formData)}
+                style={{
+                  marginTop: "20px"
+                }}
+              >
+                  Publicar propiedad
+              </Button>
+            </ButtonContainer>
           </StyledCardContent>
         </StyledCard>
       </MainContainer>

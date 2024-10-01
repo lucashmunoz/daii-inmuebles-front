@@ -135,7 +135,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
   const handleRent = () => {
     dispatch(createRentProcess({
-      propertyId, userId: 1
+      propertyId
     }));
   };
 

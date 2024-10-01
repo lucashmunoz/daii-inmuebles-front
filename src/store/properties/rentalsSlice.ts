@@ -52,19 +52,14 @@ export const fetchRentals = createAsyncThunk(
 
 interface CreateRentProcessParams {
   propertyId: number,
-  userId: number
 }
 
 export const createRentProcess = createAsyncThunk(
   "rentals/createRentProcess",
-  async ({ propertyId, userId }: CreateRentProcessParams, { rejectWithValue }) => {
+  async ({ propertyId }: CreateRentProcessParams, { rejectWithValue }) => {
     const createRentProcessUrl = `${API_HOST}${endpoints.rentProcess}/${propertyId}`;
     try {
-      const response = await api.post(createRentProcessUrl, null, {
-        headers: {
-          "userId": userId
-        }
-      });
+      const response = await api.post(createRentProcessUrl);
       return response.data;
     } catch (error) {
       return rejectWithValue(error);

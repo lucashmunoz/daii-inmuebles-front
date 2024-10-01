@@ -61,6 +61,9 @@ function formatDescription(description: string): string {
 
 const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_covered, surface_total }: PropertySecondaryDetailsProps): ReactElement => {
   const formattedDescription = formatDescription(description);
+  const bathroomsText = `${baths} ${baths > 1 ? "baños." : "baño."}`;
+  const roomsText = `${rooms} ${rooms > 1 ? "ambientes." : "ambiente."}`;
+  const bedsText = `${beds} ${beds > 1 ? "dormitorios." : "dormitorio."}`;
 
   return (
     <SectionWrapper>
@@ -72,26 +75,26 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
 
       <PropertyCharacContainer>
 
-        <h2> Características</h2>
+        <h2> Características:</h2>
 
         <PropertyCharacteristics>
           <LocalHotelOutlinedIcon/>
-          <p> {beds} dormitorios</p>
+          <p>{bedsText}</p>
         </PropertyCharacteristics>
 
         <PropertyCharacteristics>
           <BathtubOutlinedIcon/>
-          <p> {baths} Baño</p>
+          <p>{bathroomsText}</p>
         </PropertyCharacteristics>
 
         <PropertyCharacteristics>
           <OpenInNewOutlinedIcon/>
-          <p> {rooms} ambiente</p>
+          <p>{roomsText}</p>
         </PropertyCharacteristics>
 
         <PropertyCharacteristics>
           <HouseSidingOutlinedIcon />
-          <p> {surface_covered}m² cub. | {surface_total}m² tot.</p>
+          <p> {surface_covered}m² cubiertos | {surface_total}m² totales.</p>
         </PropertyCharacteristics>
 
       </PropertyCharacContainer>

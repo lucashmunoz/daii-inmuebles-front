@@ -4,6 +4,8 @@ export type PropertyType = "APARTMENT" | "HOUSE" | "PH" | "ALL" | ""
 
 export type SurfaceType = "COVERED" | "TOTAL"
 
+export type PropertyClassification = "ECONOMICAL" | "AFFORDABLE" | "MARKET_PRICE" | "PREMIUM" | "LUXURY" | ""
+
 export interface Property {
   id: number,
   active: boolean,

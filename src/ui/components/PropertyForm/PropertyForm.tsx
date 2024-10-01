@@ -3,7 +3,7 @@ import DeleteIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
 import SMSelect from "../SMSelect";
 import { useDropzone } from "react-dropzone";
-import { propertiesTypes, shouldDisableSubmitProperty } from "./helpers";
+import { propertiesTypes } from "./helpers";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { isNumber } from "../../../helpers";
 import MapAddress from "./MapAddress";
@@ -51,10 +51,6 @@ const DeleteButton = styled(IconButton)`
   right: -5px;
 `;
 
-const ButtonContainer = styled.div`
-  text-align: center;
-`;
-
 const CABA_CENTER_LAT = -34.6144806;
 const CABA_CENTER_LNG = -58.4464348;
 
@@ -81,12 +77,11 @@ export interface FormPropertyData {
 }
 
 interface PropertyFormProps {
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void
   setFormData: (formData: FormPropertyData) => void
   formData: FormPropertyData
 }
 
-const PropertyForm = ({ handleSubmit, formData, setFormData }: PropertyFormProps) => {
+const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
   const districts = useAppSelector(selectDistricts);
 
   const districtsOptions = useMemo(() => {
@@ -198,7 +193,7 @@ const PropertyForm = ({ handleSubmit, formData, setFormData }: PropertyFormProps
   const showMapMarker = formData.address.length !== 0 && addressCoordinates.lat === debouncedAddressCoordinates.lat && addressCoordinates.lng === debouncedAddressCoordinates.lng;
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm>
       {/* Contenedor 3: Todos los textfields en 2 columnas */}
       <Grid container spacing={2}>
         <Grid item xs={6}>
@@ -450,20 +445,6 @@ const PropertyForm = ({ handleSubmit, formData, setFormData }: PropertyFormProps
         ))}
       </ImagePreview>
 
-      {/* Contenedor 5: Botón de enviar */}
-      <ButtonContainer>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          disabled={shouldDisableSubmitProperty(formData)}
-          style={{
-            marginTop: "20px"
-          }}
-        >
-          Publicar propiedad
-        </Button>
-      </ButtonContainer>
     </StyledForm>
   );
 };

@@ -11,7 +11,6 @@ const ContentContainer = styled.div`
   margin: 0 auto;
   padding: 16px; 
   gap: 12px;
-  background-color: #fff;
 `;
 
 const Title = styled.h2`

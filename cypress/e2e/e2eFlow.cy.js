@@ -80,6 +80,42 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
+  describe("Header", () => {
+    beforeEach(() => {
+      cy.visit("/");
+    });
+    it("Verifica que renderiza el logo y el botón de menú", () => {
+      cy.get("img[alt=\"Smart Move logo\"]").should("be.visible");
+      cy.get("button[aria-label=\"Menu\"]").should("be.visible");
+    });
+
+    it("Verifica que muestra y oculta el menú de acciones al hacer clic en el botón", () => {
+      cy.get("nav").should("not.be.visible");
+      cy.get("button[aria-label=\"Menu\"]").click();
+      cy.get("nav").should("be.visible");
+      cy.get("body").click(0, 0);
+      cy.get("nav").should("not.be.visible");
+    });
+
+    it("Verifica que tiene los enlaces correctos en el menú", () => {
+      cy.get("button[aria-label=\"Menu\"]").click();
+      cy.get("nav").within(() => {
+        cy.contains("Buscar Propiedades").should("have.attr", "href", "/properties");
+        cy.contains("Mis Contratos").should("have.attr", "href", "/mycontracts");
+        cy.contains("Mis Publicaciones").should("have.attr", "href", "/myproperties");
+        cy.contains("Publicar Inmueble").should("have.attr", "href", "/createproperty");
+        cy.contains("Mis Favoritos").should("have.attr", "href", "/bookmarks");
+      });
+    });
+
+    it("Verifica que cierra el menú cuando se hace clic afuera", () => {
+      cy.get("button[aria-label=\"Menu\"]").click();
+      cy.get("nav").should("be.visible");
+      cy.get("body").click(0, 0);
+      cy.get("nav").should("not.be.visible");
+    });
+  });
+
   describe("Página de Lista de Propiedades", () => {
     beforeEach(() => {
       cy.visit("/properties");
@@ -148,6 +184,30 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         .and("contain.text", "Ocurrió un error al mostrar los inmuebles");
     });
       */
+
+    it("Debe ordenar las propiedades por mayor precio correctamente", () => {
+      cy.get("#select-tipo-inmueble").click();
+      cy.contains("Mayor precio").click();
+      cy.wait(2500);
+      cy.get(".MuiTypography-h4").then(($prices) => {
+        const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
+        for (let i = 0; i < priceArray.length - 1; i++) {
+          expect(priceArray[i]).to.be.gte(priceArray[i + 1]);
+        }
+      });
+    });
+
+    it("Debe ordenar las propiedades por menor precio correctamente", () => {
+      cy.get("#select-tipo-inmueble").click();
+      cy.contains("Menor precio").click();
+      cy.wait(2500);
+      cy.get(".MuiTypography-h4").then(($prices) => {
+        const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
+        for (let i = 0; i < priceArray.length - 1; i++) {
+          expect(priceArray[i]).to.be.lte(priceArray[i + 1]);
+        }
+      });
+    });
   });
 
   describe("Página de Detalles de Propiedad", () => {
@@ -199,7 +259,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
-  describe("Agrega un like para el siguiente test", () => {
+  describe("Agrega un Like para el Test Siguiente", () => {
     beforeEach(() => {
       cy.visit("/properties/3");
     });

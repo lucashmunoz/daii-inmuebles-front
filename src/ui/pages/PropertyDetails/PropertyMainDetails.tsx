@@ -9,6 +9,7 @@ import { formatNumberToCurrency, getPriceClassificationByName, getPropertyTypeNa
 import FavouriteButton from "./FavouriteButton";
 import { fetchPropertyPricePrediction, selectPricePrediction } from "../../../store/properties/propertyDetailsSlice";
 import type { AppDispatch } from "../../../store";
+import { createRentProcess } from "../../../store/properties/rentalsSlice";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -149,7 +150,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const pricePredictionText = getPriceClassificationByName(pricePrediction.classification);
 
   const handleRent = () => {
-    //TODO
+    dispatch(createRentProcess({
+      propertyId, userId: 1
+    }));
   };
 
   return (

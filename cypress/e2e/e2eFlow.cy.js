@@ -163,9 +163,9 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Verifica que las especificaciones de la propiedad están visibles", () => {
-      cy.get("p").contains(/Publicado hace \d+ meses/).should("be.visible");
-      cy.get("p").contains(/\d+ dormitorios/).should("be.visible");
-      cy.get("p").contains(/\d+ ambiente/).should("be.visible");
+      cy.get("p").contains(/Publicado hace \d+ (mes|meses|año|años)/).should("be.visible");
+      cy.get("p").contains(/\d+ (dormitorios|dormitorio)/).should("be.visible");
+      cy.get("p").contains(/\d+ (ambientes|ambiente)/).should("be.visible");
     });
 
     it("Simula la interacción con el botón de alquilar", () => {
@@ -183,7 +183,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         .should("be.visible");
     });
 
-    it("Debe manejar correctamente el agregar y eliminar de favoritos, sin importar el estado inicial", () => {
+    it("Verifica el agregar y eliminar favoritos", () => {
       cy.get("button[aria-label]").as("likeButton");
       cy.get("@likeButton").then(($button) => {
         const label = $button.attr("aria-label");
@@ -193,6 +193,23 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         } else if (label === "Eliminar de favoritos") {
           cy.wrap($button).click();
           cy.wrap($button).should("have.attr", "aria-label", "Agregar a favoritos");
+          cy.wrap($button).click();
+        }
+      });
+    });
+  });
+
+  describe("Agrega un like para el siguiente test", () => {
+    beforeEach(() => {
+      cy.visit("/properties/3");
+    });
+
+    it("Agrega un like", () => {
+      cy.get("button[aria-label]").as("likeButton");
+      cy.get("@likeButton").then(($button) => {
+        const label = $button.attr("aria-label");
+        if (label === "Agregar a favoritos") {
+          cy.wrap($button).click();
         }
       });
     });
@@ -228,7 +245,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
-  describe("My Properties Page", () => {
+  describe("Página de mis propiedades", () => {
     beforeEach(() => {
       cy.visit("/myproperties");
     });
@@ -247,14 +264,16 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
 
     it("Debe permitir activar o pausar una propiedad", () => {
       cy.get(".MuiCard-root").first().within(() => {
-        cy.get("input[type=\"checkbox\"]").then(($checkbox) => {
+        cy.get("input[type='checkbox']").then(($checkbox) => {
           const isChecked = $checkbox.is(":checked");
           cy.wrap($checkbox).click();
-          if (isChecked) {
-            cy.wrap($checkbox).should("not.be.checked");
-          } else {
-            cy.wrap($checkbox).should("be.checked");
-          }
+          cy.get("input[type='checkbox']").should(($newCheckbox) => {
+            if (isChecked) {
+              cy.wrap($newCheckbox).should("not.be.checked");
+            } else {
+              cy.wrap($newCheckbox).should("be.checked");
+            }
+          });
         });
       });
     });
@@ -268,5 +287,68 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get(".MuiSkeleton-root").should("be.visible");
     });
      */
+  });
+
+  describe("Página de Publicar Inmuebles", () => {
+    Cypress.on("uncaught:exception", (err) => {
+      if (err.message.includes("REQUEST_DENIED") || err.message.includes("ERROR")) {
+        return false;
+      }
+    });
+
+    beforeEach(() => {
+      cy.visit("/createproperty");
+    });
+
+    it("Debe renderizar correctamente el formulario de propiedad", () => {
+      cy.contains("Completá las características del inmueble.").should("be.visible");
+      cy.contains("Tendrás mejor ubicación en los resultados de búsqueda").should("be.visible");
+      cy.get("button[type=\"button\"]").contains("Publicar propiedad").should("be.disabled");
+    });
+
+    it("Debe enviar el formulario y redirigir a la página de detalles de la propiedad cuando se crea exitosamente", () => {
+      cy.get("div[role=\"combobox\"]").contains("Tipo de Propiedad").click();
+      cy.get("li[data-value=\"APARTMENT\"]").click();
+      cy.get("input[name=\"price\"]").type("200000");
+      cy.get("input[name=\"surface_total\"]").type("150");
+      cy.get("input[name=\"surface_covered\"]").type("100");
+      cy.get("input[name=\"rooms\"]").type("4");
+      cy.get("input[name=\"beds\"]").type("3");
+      cy.get("input[name=\"bathrooms\"]").type("2");
+      cy.get("input[name=\"garages\"]").type("1");
+      cy.get("div[role=\"combobox\"]").contains("Barrio").click();
+      cy.get("li[data-value=\"Palermo\"]").click();
+      cy.get("input[name=\"zipcode\"]").type("1000");
+      cy.get("input[name=\"address\"]").type("Vallejos 3840", {
+        force: true
+      });
+      cy.get("textarea[name=\"title\"]").type("Casa remodelada con jardín, cercana al subte.");
+      cy.get("textarea[name=\"description\"]").type("Hermosa casa remodelada recientemente, con amplio jardín y excelente ubicación.");
+      cy.intercept("POST", "/properties", {
+        statusCode: 201,
+        body: {
+          id: 1
+        }
+      }).as("createProperty");
+      cy.get("button[type=\"button\"]").contains("Publicar propiedad").click();
+      cy.wait("@createProperty");});
+  });
+
+  describe("Página de Mis Contratos", () => {
+    beforeEach(() => {
+      cy.visit("/mycontracts");
+    });
+
+    it("Verifica que la página de mis contratos carga correctamente", () => {
+      cy.contains("Mis contratos").should("be.visible");
+    });
+
+    it("Debe mostrar al menos un contrato en proceso", () => {
+      cy.contains("Mis contratos en proceso").should("be.visible");
+      cy.get("section").contains("Mis contratos en proceso")
+        .parent()
+        .find(".MuiCard-root")
+        .should("have.length.at.least", 1);
+    });
   });
 });

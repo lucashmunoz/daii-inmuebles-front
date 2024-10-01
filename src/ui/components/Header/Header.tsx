@@ -67,7 +67,7 @@ const Header = (): ReactElement => {
   return (
     <Wrapper>
       <Link to={paths.home}>
-        <Logo src="src/assets/logo.png" alt="Smart Move logo" />
+        <Logo src="/src/assets/logo.png" alt="Smart Move logo" />
       </Link>
       <MenuButton aria-label="Menu" ref={menuButtonRef}>
         <MenuIcon fontSize="large" onClick={handleShowActions} />

@@ -7,6 +7,7 @@ import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
 import { fetchPropertyPricePrediction } from "../../../store/properties/propertyDetailsSlice";
+import { createRentProcess } from "../../../store/properties/rentalsSlice";
 import PricePrediction from "./PricePrediction";
 import { useAppDispatch } from "../../../store/hooks";
 
@@ -133,7 +134,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   });
 
   const handleRent = () => {
-    //TODO
+    dispatch(createRentProcess({
+      propertyId, userId: 1
+    }));
   };
 
   return (

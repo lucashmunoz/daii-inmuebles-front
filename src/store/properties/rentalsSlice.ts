@@ -50,6 +50,28 @@ export const fetchRentals = createAsyncThunk(
   }
 );
 
+interface CreateRentProcessParams {
+  propertyId: number,
+  userId: number
+}
+
+export const createRentProcess = createAsyncThunk(
+  "rentals/createRentProcess",
+  async ({ propertyId, userId }: CreateRentProcessParams, { rejectWithValue }) => {
+    const createRentProcessUrl = `${API_HOST}${endpoints.rentProcess}/${propertyId}`;
+    try {
+      const response = await api.post(createRentProcessUrl, null, {
+        headers: {
+          "userId": userId
+        }
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const rentalsSlice = createSlice({
   name: "rentals",
   initialState,
@@ -70,6 +92,16 @@ export const rentalsSlice = createSlice({
         state.rentalsStatus = "ERROR";
         state.rentals = [];
         state.rentalProcesses = [];
+      })
+      .addCase(createRentProcess.pending, (state) => {
+        state.rentalsStatus = "LOADING";
+      })
+      .addCase(createRentProcess.fulfilled, (state, action) => {
+        state.rentalsStatus = "SUCCESS";
+        state.rentalProcesses.push(action.payload);
+      })
+      .addCase(createRentProcess.rejected, (state) => {
+        state.rentalsStatus = "ERROR";
       });
   }
 });

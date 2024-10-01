@@ -1,24 +1,6 @@
-export interface FormPropertyData {
-  beds: string;
-  zipcode: string;
-  bathrooms: string;
-  country: string;
-  city: string;
-  state: string;
-  district: string;
-  rooms: string;
-  title: string;
-  description: string;
-  latitude: number;
-  longitude: number;
-  images: string[];
-  address: string;
-  price: string;
-  garages: string;
-  type: string;
-  surface_covered: string;
-  surface_total: string;
-}
+import { getPropertyTypeNameByType } from "../../../helpers";
+import { PropertyType } from "../../../models/property";
+import { FormPropertyData } from "./PropertyForm";
 
 export const shouldDisableSubmitProperty = (formData: FormPropertyData): boolean => {
   const {
@@ -63,3 +45,25 @@ export const shouldDisableSubmitProperty = (formData: FormPropertyData): boolean
   surface_covered.length === 0 ||
   surface_total.length === 0;
 };
+
+type PropertiesTypes = Array<
+  {
+    value: PropertyType,
+    label: string
+  }
+>
+
+export const propertiesTypes: PropertiesTypes = [
+  {
+    value: "APARTMENT",
+    label: getPropertyTypeNameByType("APARTMENT")
+  },
+  {
+    value: "HOUSE",
+    label: getPropertyTypeNameByType("HOUSE")
+  },
+  {
+    value: "PH",
+    label: getPropertyTypeNameByType("PH")
+  }
+];

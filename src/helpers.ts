@@ -26,6 +26,8 @@ export const getPropertyTypeNameByType = (propertyType: PropertyType) => {
       return "PH";
     case "ALL":
       return "Todos";
+    default:
+      return "";
   }
 };
 

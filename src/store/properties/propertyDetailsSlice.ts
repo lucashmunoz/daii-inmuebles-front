@@ -13,7 +13,7 @@ interface PropertyDetailsState {
   propertyDetails: Property;
   propertyDetailsStatus: "SUCCESS" | "ERROR" | "LOADING";
   pricePrediction: PricePrediction;
-  pricePredictionStatus: "NOT_INITIALIZED" | "SUCCESS" | "ERROR" | "LOADING";
+  pricePredictionStatus: "SUCCESS" | "ERROR" | "LOADING";
 }
 
 const initialState: PropertyDetailsState = {
@@ -47,7 +47,7 @@ const initialState: PropertyDetailsState = {
     classification: "",
     estimated_price: 0
   },
-  pricePredictionStatus: "NOT_INITIALIZED"
+  pricePredictionStatus: "LOADING"
 };
 
 interface FetchPropertyDetailsPayload {

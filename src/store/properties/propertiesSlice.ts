@@ -157,7 +157,27 @@ export const fetchRecentProperties = createAsyncThunk(
 );
 
 interface CreateNewPropertyParams {
-  property: Property
+  property: Pick<Property,
+  "beds" |
+  "zipcode" |
+  "bathrooms" |
+  "country" |
+  "city" |
+  "state" |
+  "district" |
+  "rooms" |
+  "title" |
+  "description" |
+  "latitude" |
+  "longitude" |
+  "images" |
+  "address" |
+  "price" |
+  "garages" |
+  "type" |
+  "surface_covered" |
+  "surface_total"
+  >
 }
 
 export const createNewProperty = createAsyncThunk(

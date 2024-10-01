@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Header from "../../components/Header";
 import { useDebounce } from "use-debounce";
 import PageWrapper from "../../components/PageWrapper";
-import { PropertyType, Property } from "../../../models/property";
+import { PropertyType } from "../../../models/property";
 import ImageDescription from "../../../assets/property-create-image.svg";
 import { useEffect, useMemo, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -14,8 +14,9 @@ import { Coordinates } from "../../../models/address";
 import SMSelect from "../../components/SMSelect";
 import { fetchDistricts, selectDistricts } from "../../../store/properties/districtsSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getPropertyTypeNameByType } from "../../../helpers";
+import { getPropertyTypeNameByType, isNumber } from "../../../helpers";
 import { createNewProperty } from "../../../store/properties/propertiesSlice";
+import { FormPropertyData, shouldDisableSubmitProperty } from "./helpers";
 
 const CABA_CENTER_LAT = -34.6144806;
 const CABA_CENTER_LNG = -58.4464348;
@@ -143,30 +144,26 @@ const CreateProperty = () => {
     });
   };
 
-  const [formData, setFormData] = useState<Property>({
-    id: 0,
-    beds: 1,
-    active: true,
-    favorite: false,
+  const [formData, setFormData] = useState<FormPropertyData>({
+    beds: "",
     zipcode: "",
-    bathrooms: 1,
+    bathrooms: "",
     country: "Argentina",
     city: "Ciudad Autonoma de Buenos Aires",
     state: "Buenos Aires",
     district: "",
-    rooms: 1,
+    rooms: "",
     title: "",
     description: "",
     latitude: 0,
     longitude: 0,
     images: [],
     address: "",
-    price: 0,
-    garages: 0,
+    price: "",
+    garages: "",
     type: "",
-    surface_covered: 0,
-    surface_total: 0,
-    created_at: ""
+    surface_covered: "",
+    surface_total: ""
   });
   const [addressCoordinates, setAddressCoordinates] = useState<Coordinates>({
     lat: CABA_CENTER_LAT,
@@ -177,6 +174,20 @@ const CreateProperty = () => {
   });
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    const numericInputs = [
+      "price",
+      "surface_total",
+      "surface_covered",
+      "rooms",
+      "beds",
+      "bathrooms",
+      "garages"
+    ];
+
+    if(numericInputs.includes(name) && !isNumber(value)) {
+      return;
+    }
+
     setFormData({
       ...formData,
       [name]: value
@@ -189,7 +200,27 @@ const CreateProperty = () => {
     e.preventDefault();
 
     dispatch(createNewProperty({
-      property: formData
+      property: {
+        beds: parseInt(formData.beds),
+        zipcode: formData.zipcode,
+        bathrooms: parseInt(formData.bathrooms),
+        country: formData.country,
+        city: formData.city,
+        state: formData.state,
+        district: formData.district,
+        rooms: parseInt(formData.rooms),
+        title: formData.title,
+        description: formData.description,
+        latitude: formData.latitude,
+        longitude: formData.longitude,
+        images: formData.images,
+        address: formData.address,
+        price: parseInt(formData.price),
+        garages: parseInt(formData.garages),
+        type: formData.type as PropertyType,
+        surface_covered: parseInt(formData.surface_covered),
+        surface_total: parseInt(formData.surface_total)
+      }
     }));
   };
 
@@ -310,8 +341,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="price"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.price}
                     fullWidth
                     inputProps={{
                       min: 0
@@ -331,8 +362,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="surface_total"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.surface_total}
                     fullWidth
                     inputProps={{
                       min: 0
@@ -351,8 +382,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="surface_covered"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.surface_covered}
                     fullWidth
                     inputProps={{
                       min: 0
@@ -371,8 +402,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="rooms"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.rooms}
                     fullWidth
                   />
                 </Grid>
@@ -385,8 +416,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="beds"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.beds}
                     fullWidth
                   />
                 </Grid>
@@ -399,8 +430,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="bathrooms"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.bathrooms}
                     fullWidth
                   />
                 </Grid>
@@ -413,8 +444,8 @@ const CreateProperty = () => {
                   </Typography>
                   <StyledTextField
                     name="garages"
-                    type="number"
                     onChange={handleInputChange}
+                    value={formData.garages}
                     fullWidth
                     placeholder="Si no tiene cocheras, indica 0."
                   />
@@ -445,6 +476,7 @@ const CreateProperty = () => {
                     name="zipcode"
                     type="text"
                     onChange={handleInputChange}
+                    value={formData.zipcode}
                     fullWidth
                     placeholder="Código Postal"
                   />
@@ -459,6 +491,7 @@ const CreateProperty = () => {
                   <StyledTextField
                     name="address"
                     onChange={handleAddressChange}
+                    value={formData.address}
                     fullWidth
                     placeholder="Ej.: Reconquista 123"
                   />
@@ -477,6 +510,7 @@ const CreateProperty = () => {
                   <StyledTextField
                     name="title"
                     onChange={handleInputChange}
+                    value={formData.title}
                     multiline
                     fullWidth
                     placeholder="Ej.: Casa remolada con jardín, cercana al subte."
@@ -492,6 +526,7 @@ const CreateProperty = () => {
                   <StyledTextField
                     name="description"
                     onChange={handleInputChange}
+                    value={formData.description}
                     multiline
                     rows={4}
                     fullWidth
@@ -538,6 +573,7 @@ const CreateProperty = () => {
                   type="submit"
                   variant="contained"
                   color="primary"
+                  disabled={shouldDisableSubmitProperty(formData)}
                   style={{
                     marginTop: "20px"
                   }}

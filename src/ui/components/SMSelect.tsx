@@ -28,7 +28,7 @@ const SMSelect = ({ id, options, selectedOption, setSelectedOption, placeholder,
       size="small"
       select
       className={className}
-      value={selectedOption}
+      value={selectedOption ? selectedOption : "-"}
       onChange={(e) => setSelectedOption(e.target.value)}
       sx={{
         "& .MuiInputBase-input": {
@@ -38,7 +38,7 @@ const SMSelect = ({ id, options, selectedOption, setSelectedOption, placeholder,
       }}
     >
       {Boolean(placeholder) && (
-        <MenuItem value="" disabled>
+        <MenuItem value="-" disabled>
           {placeholder}
         </MenuItem>
       )}

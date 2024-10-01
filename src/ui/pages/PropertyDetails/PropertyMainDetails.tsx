@@ -7,7 +7,7 @@ import { Button, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
 import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPriceClassificationByName, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
-import { fetchPropertyPricePrediction, selectPricePrediction, selectPricePredictionStatus } from "../../../store/properties/propertyDetailsSlice";
+import { fetchPropertyPricePrediction, selectPricePrediction } from "../../../store/properties/propertyDetailsSlice";
 import type { AppDispatch } from "../../../store";
 
 const ContentContainer = styled.div`
@@ -92,9 +92,10 @@ const predictionTooltip = "El precio estimado es una aproximación basada en las
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
   const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 3);
 
   const adjustedDate = new Date(createdDate);
-  adjustedDate.setFullYear(adjustedDate.getFullYear() + 3);
+  adjustedDate.setFullYear(adjustedDate.getFullYear());
 
   const timeDifference = currentDate.getTime() - adjustedDate.getTime();
 
@@ -103,15 +104,19 @@ const calculateDaysPassed = (created_at: string): string => {
   const monthsPassed = Math.floor(daysPassed / 30);
   const yearsPassed = Math.floor(daysPassed / 365);
 
-  if (hoursPassed < 24) {
+  if (hoursPassed > 1 && hoursPassed < 24) {
     return `Publicado hace ${hoursPassed} horas.`;
-  } else if (daysPassed < 30) {
-    return `Publicado hace ${daysPassed} días.`;
-  } else if (daysPassed < 365) {
-    return `Publicado hace ${monthsPassed} meses.`;
-  } else {
-    return `Publicado hace ${yearsPassed} años.`;
   }
+  if (hoursPassed < 1) {
+    return "Publicado hace menos de una hora.";
+  }
+  if (daysPassed < 30) {
+    return `Publicado hace ${daysPassed} días.`;
+  }
+  if (daysPassed < 365) {
+    return `Publicado hace ${monthsPassed} meses.`;
+  }
+  return `Publicado hace ${yearsPassed} años.`;
 };
 
 interface PropertyMainDetailsProps {
@@ -129,13 +134,10 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const dispatch = useDispatch<AppDispatch>();
 
   const pricePrediction = useSelector(selectPricePrediction);
-  const pricePredictionStatus = useSelector(selectPricePredictionStatus);
 
   useEffect(() => {
-    if (pricePredictionStatus === "NOT_INITIALIZED") {
-      dispatch(fetchPropertyPricePrediction(propertyId));
-    }
-  }, [dispatch, propertyId, pricePredictionStatus]);
+    dispatch(fetchPropertyPricePrediction(propertyId));
+  }, [dispatch, propertyId]);
 
   const publication_details = calculateDaysPassed(created_at);
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
@@ -145,6 +147,10 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
     number: price
   });
   const pricePredictionText = getPriceClassificationByName(pricePrediction.classification);
+
+  const handleRent = () => {
+    //TODO
+  };
 
   return (
     <ContentContainer>
@@ -173,7 +179,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         {pricePredictionText}
       </TooltipCustom>
 
-      <AlquilarButton>Alquilar</AlquilarButton>
+      <AlquilarButton onClick={handleRent}>Alquilar</AlquilarButton>
     </ContentContainer>
   );
 };

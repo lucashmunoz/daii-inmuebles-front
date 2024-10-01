@@ -163,7 +163,7 @@ const CreateProperty = () => {
     address: "",
     price: 0,
     garages: 0,
-    type: "APARTMENT",
+    type: "",
     surface_covered: 0,
     surface_total: 0,
     created_at: ""
@@ -298,6 +298,7 @@ const CreateProperty = () => {
                     options={propertiesTypes}
                     selectedOption={formData.type}
                     setSelectedOption={setSelectedPropertyType}
+                    placeholder="Tipo de Propiedad"
                   />
                 </Grid>
 
@@ -430,6 +431,7 @@ const CreateProperty = () => {
                     options={districtsOptions}
                     selectedOption={formData.district}
                     setSelectedOption={setSelectedDistrict}
+                    placeholder="Barrio"
                   />
                 </Grid>
 

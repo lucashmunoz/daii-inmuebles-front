@@ -16,6 +16,7 @@ import { fetchDistricts, selectDistricts } from "../../../store/properties/distr
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getPropertyTypeNameByType } from "../../../helpers";
 import { createNewProperty } from "../../../store/properties/propertiesSlice";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const CABA_CENTER_LAT = -34.6144806;
 const CABA_CENTER_LNG = -58.4464348;
@@ -547,6 +548,7 @@ const CreateProperty = () => {
           </StyledCardContent>
         </StyledCard>
       </MainContainer>
+      <Footer />
     </PageWrapper>
   );
 };

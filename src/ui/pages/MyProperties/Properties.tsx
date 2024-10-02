@@ -17,7 +17,8 @@ const PropertiesContainer = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  height: 300px;
+  min-height: 100vh;
+  height: 100%;
 `;
 
 const LoaderContainer = styled.div`

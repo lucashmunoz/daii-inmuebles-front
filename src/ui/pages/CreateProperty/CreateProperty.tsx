@@ -13,6 +13,7 @@ import type { FormPropertyData } from "../../components/PropertyForm/PropertyFor
 import { isPropertyFormValid } from "../../components/PropertyForm/helpers";
 import { useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const MainContainer = styled.main`
   padding: 16px;
@@ -26,12 +27,6 @@ const StyledCard = styled(Card)`
 
 const StyledCardContent = styled(CardContent)`
   padding: 20px;
-`;
-
-const StyledTextField = styled(TextField)`
-  & .MuiInputBase-root {
-    background-color: #fefefe;
-  }
 `;
 
 const FormContainer = styled.div`
@@ -133,12 +128,12 @@ const CreateProperty = () => {
             <FormContainer>
               <TitleContainer>
                 <Typography variant="h5" gutterBottom fontSize={20}>
-                Completá las características del inmueble.
+                    Completá las características del inmueble.
                 </Typography>
                 <Typography variant="body1" color="textSecondary">
-                Tendrás mejor ubicación en los resultados de búsqueda y <br />
-                los interesados tendrán toda la información que <br />
-                necesitan.
+                    Tendrás mejor ubicación en los resultados de búsqueda y <br />
+                    los interesados tendrán toda la información que <br />
+                    necesitan.
                 </Typography>
               </TitleContainer>
 
@@ -178,7 +173,7 @@ const CreateProperty = () => {
           </StyledCardContent>
         </StyledCard>
       </MainContainer>
-      <Footer />
+      <Footer/>
     </PageWrapper>
   );
 };

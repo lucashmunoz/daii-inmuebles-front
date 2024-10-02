@@ -2,10 +2,10 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 import { endpoints } from "../../api/endpoints";
 import api, { API_HOST } from "../../api/api";
-import { Property } from "../../models/property";
+import { Property, PropertyClassification } from "../../models/property";
 
 interface PricePrediction {
-  classification: string;
+  classification: PropertyClassification;
   estimated_price: number;
 }
 
@@ -13,7 +13,7 @@ interface PropertyDetailsState {
   propertyDetails: Property;
   propertyDetailsStatus: "SUCCESS" | "ERROR" | "LOADING";
   pricePrediction: PricePrediction;
-  pricePredictionStatus: "NOT_INITIALIZED" | "SUCCESS" | "ERROR" | "LOADING";
+  pricePredictionStatus: "SUCCESS" | "ERROR" | "LOADING";
 }
 
 const initialState: PropertyDetailsState = {
@@ -47,7 +47,7 @@ const initialState: PropertyDetailsState = {
     classification: "",
     estimated_price: 0
   },
-  pricePredictionStatus: "NOT_INITIALIZED"
+  pricePredictionStatus: "LOADING"
 };
 
 interface FetchPropertyDetailsPayload {
@@ -178,8 +178,8 @@ export const selectPropertyDetails = (state: RootState) =>
   state.propertyDetails.propertyDetails || {};
 export const selectPropertyDetailsStatus = (state: RootState) =>
   state.propertyDetails.propertyDetailsStatus;
-export const selectPricePrediction = (state: RootState) =>
-  state.propertyDetails.pricePrediction;
+export const selectPricePredictionClassification = (state: RootState) =>
+  state.propertyDetails.pricePrediction.classification;
 export const selectPricePredictionStatus = (state: RootState) =>
   state.propertyDetails.pricePredictionStatus;
 

@@ -2,9 +2,9 @@ import styled from "styled-components";
 import { MenuItem, TextField } from "@mui/material";
 
 export interface OptionType {
-    value: string,
-    label: string
-  }
+  value: string,
+  label: string
+}
 
 const Select = styled(TextField)`
   & .MuiInputBase-root {
@@ -17,18 +17,19 @@ interface SelectDistrictProps {
   options: OptionType[]
   selectedOption: string
   setSelectedOption: (selectedOption: string) => void
+  placeholder?: string
   className?: string
 }
 
-const SMSelect = ({ id, options, selectedOption, setSelectedOption, className }: SelectDistrictProps) => {
+const SMSelect = ({ id, options, selectedOption, setSelectedOption, placeholder, className }: SelectDistrictProps) => {
   return (
     <Select
       id={id}
       size="small"
       select
       className={className}
-      value={selectedOption}
-      onChange={(e) => setSelectedOption(e.target.value as string)}
+      value={selectedOption ? selectedOption : "-"}
+      onChange={(e) => setSelectedOption(e.target.value)}
       sx={{
         "& .MuiInputBase-input": {
           fontSize: "0.875rem",
@@ -36,6 +37,11 @@ const SMSelect = ({ id, options, selectedOption, setSelectedOption, className }:
         }
       }}
     >
+      {Boolean(placeholder) && (
+        <MenuItem value="-" disabled>
+          {placeholder}
+        </MenuItem>
+      )}
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}

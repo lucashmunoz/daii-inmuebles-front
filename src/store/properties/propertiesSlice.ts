@@ -36,7 +36,7 @@ interface PropertyState {
   isRecentPropertiesError: boolean
 
   createPropertyState: "LOADING" | "CREATED" | "ERROR" | "NOT_INITIALIZED";
-  createdPropertyId: string
+  createdPropertyId: number
 }
 
 const initialState: PropertyState = {
@@ -50,7 +50,7 @@ const initialState: PropertyState = {
   isRecentPropertiesError: false,
 
   createPropertyState: "NOT_INITIALIZED",
-  createdPropertyId: ""
+  createdPropertyId: 0
 };
 
 interface FetchPropertiesParams {
@@ -157,7 +157,27 @@ export const fetchRecentProperties = createAsyncThunk(
 );
 
 interface CreateNewPropertyParams {
-  property: Property
+  property: Pick<Property,
+  "beds" |
+  "zipcode" |
+  "bathrooms" |
+  "country" |
+  "city" |
+  "state" |
+  "district" |
+  "rooms" |
+  "title" |
+  "description" |
+  "latitude" |
+  "longitude" |
+  "images" |
+  "address" |
+  "price" |
+  "garages" |
+  "type" |
+  "surface_covered" |
+  "surface_total"
+  >
 }
 
 export const createNewProperty = createAsyncThunk(
@@ -166,7 +186,7 @@ export const createNewProperty = createAsyncThunk(
     const createNewPropertyUrl = `${API_HOST}${endpoints.properties}`;
     try{
       const respose = await api.post(createNewPropertyUrl, property);
-      return respose.data.content.id as string;
+      return respose.data.id as number;
     }catch(error) {
       return rejectWithValue(error);
     }
@@ -233,5 +253,8 @@ export const selectTotalPropertiesPages = (state: RootState) => state.properties
 export const selectRecentProperties = (state: RootState) => state.properties.recentProperties;
 export const selectLoadingRecentProperties = (state: RootState) => state.properties.loadingRecentProperties;
 export const selectIsRecentPropertiesError = (state: RootState) => state.properties.isRecentPropertiesError;
+
+export const selectCreatedPropertyId = (state: RootState) => state.properties.createdPropertyId;
+export const selectCreatePropertyState = (state: RootState) => state.properties.createPropertyState;
 
 export default propertiesSlice.reducer;

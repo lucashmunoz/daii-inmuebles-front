@@ -11,7 +11,6 @@ const ContentContainer = styled.div`
   margin: 0 auto;
   padding: 16px; 
   gap: 12px;
-  background-color: #fff;
 `;
 
 const Title = styled.h2`
@@ -45,8 +44,7 @@ const PropertyMap = ({ address, district, latitude, longitude }:PropertyMapProps
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-    version: "beta",
-    libraries: ["places"]
+    nonce: "google-map-loader"
   });
 
   useEffect(() => {

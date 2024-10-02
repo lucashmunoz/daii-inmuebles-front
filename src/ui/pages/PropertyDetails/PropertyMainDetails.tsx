@@ -1,14 +1,15 @@
 import { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
-import { Button, Tooltip, tooltipClasses, TooltipProps } from "@mui/material";
+import { Button } from "@mui/material";
 import { PropertyType } from "../../../models/property";
-import { formatNumberToCurrency, getPriceClassificationByName, getPropertyTypeNameByType } from "../../../helpers";
+import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
-import { fetchPropertyPricePrediction, selectPricePrediction, selectPricePredictionStatus } from "../../../store/properties/propertyDetailsSlice";
-import type { AppDispatch } from "../../../store";
+import { fetchPropertyPricePrediction } from "../../../store/properties/propertyDetailsSlice";
+import { createRentProcess } from "../../../store/properties/rentalsSlice";
+import PricePrediction from "./PricePrediction";
+import { useAppDispatch } from "../../../store/hooks";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -76,25 +77,13 @@ const FavouriteContainer = styled.div`
   align-items: center;
 `;
 
-const TooltipCustom = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{
-    popper: className
-  }} />
-))(() => ({
-
-  [`& .${tooltipClasses.tooltip}`]: {
-    fontSize: 14
-  }
-}));
-
-const predictionTooltip = "El precio estimado es una aproximación basada en las características de la propiedad en comparación con otras del mercado.";
-
 const calculateDaysPassed = (created_at: string): string => {
   const createdDate = new Date(created_at);
   const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 3);
 
   const adjustedDate = new Date(createdDate);
-  adjustedDate.setFullYear(adjustedDate.getFullYear() + 3);
+  adjustedDate.setFullYear(adjustedDate.getFullYear());
 
   const timeDifference = currentDate.getTime() - adjustedDate.getTime();
 
@@ -103,15 +92,19 @@ const calculateDaysPassed = (created_at: string): string => {
   const monthsPassed = Math.floor(daysPassed / 30);
   const yearsPassed = Math.floor(daysPassed / 365);
 
-  if (hoursPassed < 24) {
+  if (hoursPassed > 1 && hoursPassed < 24) {
     return `Publicado hace ${hoursPassed} horas.`;
-  } else if (daysPassed < 30) {
-    return `Publicado hace ${daysPassed} días.`;
-  } else if (daysPassed < 365) {
-    return `Publicado hace ${monthsPassed} meses.`;
-  } else {
-    return `Publicado hace ${yearsPassed} años.`;
   }
+  if (hoursPassed < 1) {
+    return "Publicado hace menos de una hora.";
+  }
+  if (daysPassed < 30) {
+    return `Publicado hace ${daysPassed} días.`;
+  }
+  if (daysPassed < 365) {
+    return `Publicado hace ${monthsPassed} meses.`;
+  }
+  return `Publicado hace ${yearsPassed} años.`;
 };
 
 interface PropertyMainDetailsProps {
@@ -126,16 +119,11 @@ interface PropertyMainDetailsProps {
 }
 
 const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
-  const dispatch = useDispatch<AppDispatch>();
-
-  const pricePrediction = useSelector(selectPricePrediction);
-  const pricePredictionStatus = useSelector(selectPricePredictionStatus);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (pricePredictionStatus === "NOT_INITIALIZED") {
-      dispatch(fetchPropertyPricePrediction(propertyId));
-    }
-  }, [dispatch, propertyId, pricePredictionStatus]);
+    dispatch(fetchPropertyPricePrediction(propertyId));
+  }, [dispatch, propertyId]);
 
   const publication_details = calculateDaysPassed(created_at);
   const bathroomsText = `${bathrooms} ${bathrooms > 1 ? "baños" : "baño"}`;
@@ -144,7 +132,12 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const formattedPrice = formatNumberToCurrency({
     number: price
   });
-  const pricePredictionText = getPriceClassificationByName(pricePrediction.classification);
+
+  const handleRent = () => {
+    dispatch(createRentProcess({
+      propertyId
+    }));
+  };
 
   return (
     <ContentContainer>
@@ -169,11 +162,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         </PropertySpecs>
       </PropertySpecsContainer>
 
-      <TooltipCustom title={predictionTooltip} placement="right" arrow>
-        {pricePredictionText}
-      </TooltipCustom>
+      <PricePrediction />
 
-      <AlquilarButton>Alquilar</AlquilarButton>
+      <AlquilarButton onClick={handleRent}>Alquilar</AlquilarButton>
     </ContentContainer>
   );
 };

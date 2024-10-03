@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
-import { Alert, useMediaQuery } from "@mui/material";
+import { Alert, useMediaQuery, Pagination } from "@mui/material";
 import { isMobileMediaQuery } from "../../../helpers";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import MyPropertyCard from "./MyPropertyCard";
-import { fetchMyProperties, selectMyProperties, selectMyPropertiesStatus, selectTogglePropertyActiveStatus, togglePropertyActiveStatus } from "../../../store/properties/myPropertiesSlice";
+import {
+  fetchMyProperties,
+  selectMyProperties,
+  selectMyPropertiesStatus,
+  selectTogglePropertyActiveStatus,
+  togglePropertyActiveStatus,
+  selectTotalMyPropertiesPages
+} from "../../../store/properties/myPropertiesSlice";
 import { Property } from "../../../models/property";
 import { deleteProperty } from "../../../store/properties/propertiesSlice";
+import { useSearchParams } from "react-router-dom";
 
 const PropertiesContainer = styled.main`
   padding: 16px;
@@ -18,7 +26,6 @@ const PropertiesContainer = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  height: 300px;
 `;
 
 const LoaderContainer = styled.div`
@@ -41,11 +48,15 @@ const MyPropertiesPageTitle = () => <h1>Mis Publicaciones</h1>;
 
 const Contracts = () => {
   const dispatch = useAppDispatch();
-
   const isMobile = useMediaQuery(isMobileMediaQuery);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const myProperties = useAppSelector(selectMyProperties);
   const myPropertiesStatus = useAppSelector(selectMyPropertiesStatus);
   const togglePropertyActiveState = useAppSelector(selectTogglePropertyActiveStatus);
+  const totalMyPropertiesPages = useAppSelector(selectTotalMyPropertiesPages);
 
   const [propertyIdToBeToggle, setPropertyIdToBeToggle] = useState(-1);
 
@@ -53,27 +64,57 @@ const Contracts = () => {
     const { id } = property;
     setPropertyIdToBeToggle(id);
     const updatedProperty = {
-      ...property
+      ...property,
+      active: newStatus
     };
-    updatedProperty.active = newStatus;
-    await dispatch(togglePropertyActiveStatus({
-      propertyId: id,
-      updatedProperty
-    }));
+    await dispatch(
+      togglePropertyActiveStatus({
+        propertyId: id,
+        updatedProperty
+      })
+    );
     setPropertyIdToBeToggle(-1);
   };
 
-  const handleDeleteProperty = async (propertyId: number) => {
+  const handleDeleteProperty = async (propertyId: number, page: number) => {
     await dispatch(deleteProperty({
       propertyId
     }));
 
-    dispatch(fetchMyProperties());
+    const strPage = page.toString();
+
+    setSearchParams((prev) => {
+      prev.set("page", strPage);
+      return prev;
+    });
+
+    dispatch(fetchMyProperties({
+      page: strPage
+    }));
+  };
+
+  const handlePageChange = (page: number) => {
+    const strPage = page.toString();
+
+    setSearchParams((prev) => {
+      prev.set("page", strPage);
+      return prev;
+    });
+
+    dispatch(
+      fetchMyProperties({
+        page: strPage
+      })
+    );
   };
 
   useEffect(() => {
-    dispatch(fetchMyProperties());
-  }, [dispatch]);
+    dispatch(
+      fetchMyProperties({
+        page: currentPage.toString()
+      })
+    );
+  }, [dispatch, currentPage]);
 
   if (myPropertiesStatus === "LOADING") {
     return (
@@ -90,9 +131,16 @@ const Contracts = () => {
     return (
       <PropertiesContainer>
         <MyPropertiesPageTitle />
-        <Alert severity="error">
-          Ocurrió un error al mostrar sus propiedades.
-        </Alert>
+        <Alert severity="error">Ocurrió un error al mostrar sus propiedades.</Alert>
+      </PropertiesContainer>
+    );
+  }
+
+  if (myProperties.length === 0) {
+    return (
+      <PropertiesContainer>
+        <MyPropertiesPageTitle />
+        <Alert severity="info">No se encontraron propiedades.</Alert>
       </PropertiesContainer>
     );
   }
@@ -101,23 +149,29 @@ const Contracts = () => {
     <PropertiesContainer>
       <MyPropertiesPageTitle />
       <PropertiesSection>
-        {
-          myProperties.map(property => {
-            const isToggleLoading = togglePropertyActiveState === "LOADING" && propertyIdToBeToggle === property.id;
+        {myProperties.map((property) => {
+          const isToggleLoading =
+            togglePropertyActiveState === "LOADING" && propertyIdToBeToggle === property.id;
 
-            return (
-              <MyPropertyCard
-                orientation={isMobile ? "vertical" : "horizontal"}
-                key={property.id}
-                property={property}
-                isToggleLoading={isToggleLoading}
-                handlePropertyStatusChange={handlePropertyStatusChange}
-                handleDeleteProperty={handleDeleteProperty}
-              />
-            );
-          })
-        }
+          return (
+            <MyPropertyCard
+              orientation={isMobile ? "vertical" : "horizontal"}
+              key={property.id}
+              property={property}
+              isToggleLoading={isToggleLoading}
+              handlePropertyStatusChange={handlePropertyStatusChange}
+              handleDeleteProperty={handleDeleteProperty}
+              page={currentPage}
+            />
+          );
+        })}
       </PropertiesSection>
+      <Pagination
+        count={totalMyPropertiesPages}
+        color="primary"
+        onChange={(_, page) => handlePageChange(page)}
+        defaultPage={currentPage}
+      />
     </PropertiesContainer>
   );
 };

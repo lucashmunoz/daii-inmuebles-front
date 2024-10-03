@@ -303,13 +303,13 @@ export const propertiesSlice = createSlice({
       .addCase(editProperty.rejected, (state) => {
         state.editPropertyState = "ERROR";
       })
-      .addCase(editProperty.pending, (state) => {
+      .addCase(deleteProperty.pending, (state) => {
         state.deletePropertyState = "LOADING";
       })
-      .addCase(editProperty.fulfilled, (state) => {
+      .addCase(deleteProperty.fulfilled, (state) => {
         state.deletePropertyState = "SUCCESS";
       })
-      .addCase(editProperty.rejected, (state) => {
+      .addCase(deleteProperty.rejected, (state) => {
         state.deletePropertyState = "ERROR";
       });
   }
@@ -328,6 +328,8 @@ export const selectCreatedPropertyId = (state: RootState) => state.properties.cr
 export const selectCreatePropertyState = (state: RootState) => state.properties.createPropertyState;
 
 export const selectEditPropertyState = (state: RootState) => state.properties.editPropertyState;
+
+export const selectDeletePropertyState = (state: RootState) => state.properties.deletePropertyState;
 
 export const { resetCreateNewPropertyState, resetEdiNewPropertyState } =
 propertiesSlice.actions;

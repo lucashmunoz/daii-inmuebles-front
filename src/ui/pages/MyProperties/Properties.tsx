@@ -7,6 +7,7 @@ import LoadingSkeleton from "../../components/LoadingSkeleton";
 import MyPropertyCard from "./MyPropertyCard";
 import { fetchMyProperties, selectMyProperties, selectMyPropertiesStatus, selectTogglePropertyActiveStatus, togglePropertyActiveStatus } from "../../../store/properties/myPropertiesSlice";
 import { Property } from "../../../models/property";
+import { deleteProperty } from "../../../store/properties/propertiesSlice";
 
 const PropertiesContainer = styled.main`
   padding: 16px;
@@ -62,6 +63,14 @@ const Contracts = () => {
     setPropertyIdToBeToggle(-1);
   };
 
+  const handleDeleteProperty = async (propertyId: number) => {
+    await dispatch(deleteProperty({
+      propertyId
+    }));
+
+    dispatch(fetchMyProperties());
+  };
+
   useEffect(() => {
     dispatch(fetchMyProperties());
   }, [dispatch]);
@@ -103,6 +112,7 @@ const Contracts = () => {
                 property={property}
                 isToggleLoading={isToggleLoading}
                 handlePropertyStatusChange={handlePropertyStatusChange}
+                handleDeleteProperty={handleDeleteProperty}
               />
             );
           })

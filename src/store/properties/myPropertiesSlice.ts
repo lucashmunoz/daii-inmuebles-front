@@ -45,7 +45,7 @@ export const togglePropertyActiveStatus = createAsyncThunk(
   "users/togglePropertyActiveStatus",
   async ({ propertyId, updatedProperty }: TogglePropertyActiveStatusPayload, { rejectWithValue }) => {
     try{
-      await api.put(
+      await api.patch(
         `${API_HOST}${endpoints.properties}/${propertyId}`,
         {
           ...updatedProperty

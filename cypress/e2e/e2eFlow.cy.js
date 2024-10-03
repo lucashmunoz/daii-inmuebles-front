@@ -375,7 +375,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("input[name=\"rooms\"]").type("4");
       cy.get("input[name=\"beds\"]").type("3");
       cy.get("input[name=\"bathrooms\"]").type("2");
-      cy.get("input[name=\"garages\"]").type("1");
       cy.get("div[role=\"combobox\"]").contains("Barrio").click();
       cy.get("li[data-value=\"Palermo\"]").click();
       cy.get("input[name=\"zipcode\"]").type("1000");

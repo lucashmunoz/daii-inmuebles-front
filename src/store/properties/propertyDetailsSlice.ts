@@ -36,7 +36,6 @@ const initialState: PropertyDetailsState = {
     images: [""],
     address: "",
     price: 0,
-    garages: 0,
     type: "APARTMENT",
     surface_covered: 0,
     surface_total: 0,
@@ -114,7 +113,6 @@ export const propertyDetailsSlice = createSlice({
           images: [""],
           address: "",
           price: 0,
-          garages: 0,
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
@@ -146,7 +144,6 @@ export const propertyDetailsSlice = createSlice({
           images: [""],
           address: "",
           price: 0,
-          garages: 0,
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
@@ -185,4 +182,5 @@ export const selectPricePredictionStatus = (state: RootState) =>
 
 export const { bookmarkProperty, unbookmarkProperty } =
   propertyDetailsSlice.actions;
+
 export default propertyDetailsSlice.reducer;

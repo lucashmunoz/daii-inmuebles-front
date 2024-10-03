@@ -19,7 +19,6 @@ export const isPropertyFormValid = (formData: FormPropertyData): boolean => {
     images,
     address,
     price,
-    garages,
     type,
     surface_covered,
     surface_total
@@ -40,7 +39,6 @@ export const isPropertyFormValid = (formData: FormPropertyData): boolean => {
   images.length !== 0 &&
   address.length !== 0 &&
   price.length !== 0 &&
-  garages.length !== 0 &&
   type.length !== 0 &&
   surface_covered.length !== 0 &&
   surface_total.length !== 0;

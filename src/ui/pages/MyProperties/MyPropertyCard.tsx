@@ -147,10 +147,11 @@ interface PropertyCardProps {
   property: Property
   isToggleLoading: boolean
   handlePropertyStatusChange: (property: Property, newStatus: boolean) => void
-  handleDeleteProperty: (propertyId: number) => void
+  handleDeleteProperty: (propertyId: number, page: number) => void
+  page: number
 }
 
-const MyPropertyCard = ({ orientation, property, isToggleLoading, handlePropertyStatusChange, handleDeleteProperty }: PropertyCardProps) => {
+const MyPropertyCard = ({ orientation, property, isToggleLoading, handlePropertyStatusChange, handleDeleteProperty, page }: PropertyCardProps) => {
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
@@ -275,7 +276,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
         <DeleteModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          handleDelete={() => handleDeleteProperty(id)}
+          handleDelete={() => handleDeleteProperty(id, page)}
         />
       </>
 
@@ -354,7 +355,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
       <DeleteModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        handleDelete={() => handleDeleteProperty(id)}
+        handleDelete={() => handleDeleteProperty(id, page)}
       />
     </>
 

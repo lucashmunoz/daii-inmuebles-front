@@ -6,30 +6,47 @@ import { Property } from "../../models/property";
 
 interface MyPropertiesState {
   myProperties: Property[],
-  myPropertiesStatus: "SUCCESS" | "ERROR" | "LOADING"
-  togglePropertyActiveStatus: "NOT_INITIALIZED" | "ERROR" | "LOADING"
+  myPropertiesStatus: "SUCCESS" | "ERROR" | "LOADING",
+  togglePropertyActiveStatus: "NOT_INITIALIZED" | "ERROR" | "LOADING",
+  totalMyPropertiesPages: number
 }
 
 const initialState: MyPropertiesState = {
   myProperties: [],
   myPropertiesStatus: "LOADING",
-  togglePropertyActiveStatus: "NOT_INITIALIZED"
+  togglePropertyActiveStatus: "NOT_INITIALIZED",
+  totalMyPropertiesPages: 0
 };
+
+interface FetchMyPropertiesParams {
+  page: string
+}
 
 export const fetchMyProperties = createAsyncThunk(
   "users/fetchMyProperties",
-  async (_, { rejectWithValue }) => {
+  async ({ page }:FetchMyPropertiesParams, { rejectWithValue }) => {
     const params = new URLSearchParams();
     params.append("propertyOwnerId", "1");
 
+    const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
+    const sizeQuery = "size=4";
+
+    const queries = [
+      pageQuery,
+      sizeQuery
+    ].filter(query => query !== "").join("&");
+
     try{
       const response = await api.get(
-        `${API_HOST}${endpoints.properties}`,
+        `${API_HOST}${endpoints.properties}?${queries}`,
         {
           params
         }
       );
-      return response.data.content as Property[];
+      return {
+        myProperties: response.data.content as Property[],
+        totalPages: response.data.totalPages
+      };
     }catch(error) {
       return rejectWithValue(error);
     }
@@ -70,14 +87,17 @@ export const myPropertiesSlice = createSlice({
       .addCase(fetchMyProperties.pending, (state) => {
         state.myPropertiesStatus = "LOADING";
         state.myProperties = [];
+        state.totalMyPropertiesPages = 0;
       })
       .addCase(fetchMyProperties.fulfilled, (state, action) => {
         state.myPropertiesStatus = "SUCCESS";
-        state.myProperties = action.payload;
+        state.myProperties = action.payload.myProperties;
+        state.totalMyPropertiesPages = action.payload.totalPages;
       })
       .addCase(fetchMyProperties.rejected, (state) => {
         state.myPropertiesStatus = "ERROR";
         state.myProperties = [];
+        state.totalMyPropertiesPages = 0;
       })
       .addCase(togglePropertyActiveStatus.pending, (state) => {
         state.togglePropertyActiveStatus = "LOADING";
@@ -102,5 +122,6 @@ export const myPropertiesSlice = createSlice({
 export const selectMyProperties = (state: RootState) => state.myProperties.myProperties;
 export const selectMyPropertiesStatus = (state: RootState) => state.myProperties.myPropertiesStatus;
 export const selectTogglePropertyActiveStatus = (state: RootState) => state.myProperties.togglePropertyActiveStatus;
+export const selectTotalMyPropertiesPages = (state: RootState) => state.myProperties.totalMyPropertiesPages;
 
 export default myPropertiesSlice.reducer;

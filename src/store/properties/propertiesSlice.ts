@@ -39,6 +39,8 @@ interface PropertyState {
   createdPropertyId: number
 
   editPropertyState: "LOADING" | "SUCCESS" | "ERROR" | "NOT_INITIALIZED";
+
+  deletePropertyState: "LOADING" | "SUCCESS" | "ERROR" | "NOT_INITIALIZED";
 }
 
 const initialState: PropertyState = {
@@ -54,7 +56,9 @@ const initialState: PropertyState = {
   createPropertyState: "NOT_INITIALIZED",
   createdPropertyId: 0,
 
-  editPropertyState: "NOT_INITIALIZED"
+  editPropertyState: "NOT_INITIALIZED",
+
+  deletePropertyState: "NOT_INITIALIZED"
 };
 
 interface FetchPropertiesParams {
@@ -218,6 +222,22 @@ export const editProperty = createAsyncThunk(
   }
 );
 
+interface DeletePropertyParams {
+  propertyId: number
+}
+
+export const deleteProperty = createAsyncThunk(
+  "users/deleteProperty",
+  async ({ propertyId }: DeletePropertyParams, { rejectWithValue }) => {
+    const deletePropertyUrl = `${API_HOST}${endpoints.properties}`;
+    try{
+      return await api.delete(`${deletePropertyUrl}/${propertyId}`);
+    }catch(error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
@@ -282,6 +302,15 @@ export const propertiesSlice = createSlice({
       })
       .addCase(editProperty.rejected, (state) => {
         state.editPropertyState = "ERROR";
+      })
+      .addCase(editProperty.pending, (state) => {
+        state.deletePropertyState = "LOADING";
+      })
+      .addCase(editProperty.fulfilled, (state) => {
+        state.deletePropertyState = "SUCCESS";
+      })
+      .addCase(editProperty.rejected, (state) => {
+        state.deletePropertyState = "ERROR";
       });
   }
 });

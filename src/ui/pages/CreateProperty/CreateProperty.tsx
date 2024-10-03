@@ -7,7 +7,7 @@ import ImageDescription from "../../../assets/property-create-image.svg";
 import { useEffect, useState } from "react";
 import { fetchDistricts } from "../../../store/properties/districtsSlice";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { createNewProperty, selectCreatedPropertyId, selectCreatePropertyState } from "../../../store/properties/propertiesSlice";
+import { createNewProperty, resetCreateNewPropertyState, selectCreatedPropertyId, selectCreatePropertyState } from "../../../store/properties/propertiesSlice";
 import PropertyForm from "../../components/PropertyForm";
 import type { FormPropertyData } from "../../components/PropertyForm/PropertyForm";
 import { isPropertyFormValid } from "../../components/PropertyForm/helpers";
@@ -75,7 +75,6 @@ const CreateProperty = () => {
     images: [],
     address: "",
     price: "",
-    garages: "",
     type: "",
     surface_covered: "",
     surface_total: ""
@@ -99,7 +98,6 @@ const CreateProperty = () => {
         images: formData.images,
         address: formData.address,
         price: parseInt(formData.price),
-        garages: parseInt(formData.garages),
         type: formData.type as PropertyType,
         surface_covered: parseInt(formData.surface_covered),
         surface_total: parseInt(formData.surface_total)
@@ -115,7 +113,8 @@ const CreateProperty = () => {
     if(createPropertyState === "CREATED") {
       navigate(`${paths.properties}/${createdPropertyId}`);
     }
-  }, [createPropertyState, createdPropertyId, navigate]);
+    dispatch(resetCreateNewPropertyState());
+  }, [createPropertyState, createdPropertyId, dispatch, navigate]);
 
   return (
     <PageWrapper>

@@ -9,7 +9,7 @@ const PageWrapper = styled.div`
 
   background-image: 
     linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), 
-    url("src/assets/background.jpg");
+    url("/src/assets/background.jpg");
   background-size: auto; /* Ajusta para que el fondo se repita sin estirarse */
   background-position: top left;
   background-repeat: repeat;

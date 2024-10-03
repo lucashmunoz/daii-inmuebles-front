@@ -1,13 +1,13 @@
-import { Button, Card, CardMedia, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Button, Card, CardMedia, Grid, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Close";
 import styled from "styled-components";
 import SMSelect from "../SMSelect";
 import { useDropzone } from "react-dropzone";
 import { propertiesTypes } from "./helpers";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
-import { isNumber } from "../../../helpers";
+import { isMobileMediaQuery, isNumber } from "../../../helpers";
 import MapAddress from "./MapAddress";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { Coordinates } from "../../../models/address";
 import { useDebounce } from "use-debounce";
 import { PropertyType } from "../../../models/property";
@@ -49,6 +49,12 @@ const DeleteButton = styled(IconButton)`
   position: absolute;
   top: -5px;
   right: -5px;
+  background-color: #ffffffD0;
+  transition: background-color 0.3s ease-out;
+
+  &:hover {
+  background-color: #ffffff;
+  }
 `;
 
 const CABA_CENTER_LAT = -34.6144806;
@@ -70,7 +76,6 @@ export interface FormPropertyData {
   images: string[];
   address: string;
   price: string;
-  garages: string;
   type: string;
   surface_covered: string;
   surface_total: string;
@@ -83,13 +88,12 @@ interface PropertyFormProps {
 
 const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
   const districts = useAppSelector(selectDistricts);
+  const isMobile = useMediaQuery(isMobileMediaQuery);
 
-  const districtsOptions = useMemo(() => {
-    return districts.map(district => ({
-      value: district,
-      label: district
-    }));
-  }, [districts]);
+  const districtsOptions = districts.map(district => ({
+    value: district,
+    label: district
+  }));
 
   const [addressCoordinates, setAddressCoordinates] = useState<Coordinates>({
     lat: CABA_CENTER_LAT,
@@ -176,8 +180,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
       "surface_covered",
       "rooms",
       "beds",
-      "bathrooms",
-      "garages"
+      "bathrooms"
     ];
 
     if(numericInputs.includes(name) && !isNumber(value)) {
@@ -196,7 +199,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
     <StyledForm>
       {/* Contenedor 3: Todos los textfields en 2 columnas */}
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid item xs={isMobile ? 12 : 6}>
           <Typography variant="body1" gutterBottom style={{
             marginBottom: "1px"
           }}>
@@ -209,7 +212,9 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
             setSelectedOption={setSelectedPropertyType}
             placeholder="Tipo de Propiedad"
           />
+
         </Grid>
+        {!isMobile && <Grid item xs={6}></Grid>}
 
         <Grid item xs={6}>
           <Typography variant="body1" gutterBottom style={{
@@ -311,21 +316,6 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
             onChange={handleInputChange}
             value={formData.bathrooms}
             fullWidth
-          />
-        </Grid>
-
-        <Grid item xs={6}>
-          <Typography variant="body1" gutterBottom style={{
-            marginBottom: "1px"
-          }}>
-          Cocheras <span>*</span>
-          </Typography>
-          <StyledTextField
-            name="garages"
-            onChange={handleInputChange}
-            value={formData.garages}
-            fullWidth
-            placeholder="Si no tiene cocheras, indica 0."
           />
         </Grid>
 

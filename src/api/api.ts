@@ -8,12 +8,14 @@ export interface ErrorResponse {
   error: string
 }
 
+export const currentUserId = "1";
+
 axios.defaults.baseURL = API_HOST;
 axios.defaults.timeout = 600000;
 axios.defaults.headers.common = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  "userId": "1"
+  userId: currentUserId
 };
 
 export default axios;

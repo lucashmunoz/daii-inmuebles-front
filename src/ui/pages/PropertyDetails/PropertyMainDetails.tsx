@@ -10,6 +10,9 @@ import { fetchPropertyPricePrediction } from "../../../store/properties/property
 import { createRentProcess } from "../../../store/properties/rentalsSlice";
 import PricePrediction from "./PricePrediction";
 import { useAppDispatch } from "../../../store/hooks";
+import { useSelector } from "react-redux";
+import { selectPropertyDetails } from "../../../store/properties/propertyDetailsSlice";
+import { currentUserId } from "../../../api/api";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -64,10 +67,19 @@ const PropertySpecs = styled.div`
 `;
 
 const AlquilarButton = styled(Button)`
-  background-color: #1890ff;
+  background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#1890ff")};
   color: #fff;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   font-weight: bold;
+  &:hover {
+    background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#40a9ff")};
+  }
+`;
+
+const DisabledMessage = styled.p`
+  color: red;
+  font-size: 14px;
+  margin-bottom: 8px;
 `;
 
 const FavouriteContainer = styled.div`
@@ -120,6 +132,10 @@ interface PropertyMainDetailsProps {
 
 const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
   const dispatch = useAppDispatch();
+  const propertyDetails = useSelector(selectPropertyDetails);
+  const { owner_id } = propertyDetails;
+
+  const isOwner = owner_id === parseInt(currentUserId);
 
   useEffect(() => {
     dispatch(fetchPropertyPricePrediction(propertyId));
@@ -164,7 +180,15 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
       <PricePrediction />
 
-      <AlquilarButton onClick={handleRent}>Alquilar</AlquilarButton>
+      <AlquilarButton
+        onClick={handleRent}
+        disabled={isOwner}
+      >
+        Alquilar
+      </AlquilarButton>
+
+      {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
+
     </ContentContainer>
   );
 };

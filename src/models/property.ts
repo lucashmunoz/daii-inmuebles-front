@@ -28,5 +28,6 @@ export interface Property {
   surface_total: number,
   created_at: string,
   favorite: boolean,
-  zipcode: string
+  zipcode: string,
+  owner_id: number
 }

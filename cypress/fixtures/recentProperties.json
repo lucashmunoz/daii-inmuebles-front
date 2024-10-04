@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "images": ["image1.jpg"],
+    "price": 100000,
+    "district": "Palermo",
+    "rooms": 3,
+    "surface_total": 80,
+    "beds": 2,
+    "bathrooms": 1,
+    "type": "apartment"
+  }
+]

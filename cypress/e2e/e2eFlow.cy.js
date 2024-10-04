@@ -341,7 +341,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("input[name=\"address\"]").type("Vallejos 3840");
       cy.get("textarea[name=\"title\"]").type("Casa remodelada con jardín, cercana al subte.");
       cy.get("textarea[name=\"description\"]").type("Hermosa casa remodelada recientemente.");
-      cy.wait(1500)
+      cy.wait(1500);
       cy.get(".MuiButtonBase-root")
         .contains("Seleccionar imágenes")
         .click();

@@ -39,7 +39,8 @@ const initialState: PropertyDetailsState = {
     type: "APARTMENT",
     surface_covered: 0,
     surface_total: 0,
-    zipcode: ""
+    zipcode: "",
+    owner_id: 0
   },
   propertyDetailsStatus: "LOADING",
   pricePrediction: {
@@ -116,7 +117,8 @@ export const propertyDetailsSlice = createSlice({
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
-          zipcode: ""
+          zipcode: "",
+          owner_id: 0
         };
       })
       .addCase(fetchPropertyDetails.fulfilled, (state, action) => {
@@ -147,7 +149,8 @@ export const propertyDetailsSlice = createSlice({
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
-          zipcode: ""
+          zipcode: "",
+          owner_id: 0
         };
       })
       .addCase(fetchPropertyPricePrediction.pending, (state) => {

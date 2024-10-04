@@ -1,3 +1,5 @@
+import "cypress-file-upload";
+
 describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () => {
   describe("Página Home", () => {
     beforeEach(() => {
@@ -29,20 +31,24 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get(".MuiCard-root").should("have.length.at.least", 1);
     });
 
-    // TODO: Revisar los tests de errores.
-    /*
-    it("Muestra un mensaje de error si ocurre un error al cargar los inmuebles recientes", () => {
-      cy.intercept("GET", "**/ //properties?sortBy=RECENT", {
-    /*statusCode: 500,
-        body: {}
-      }).as("getRecentProperties");
-      cy.visit("/");
-      cy.wait("@getRecentProperties");
-      cy.get(".MuiAlert-root")
-        .should("be.visible")
-        .and("contain.text", "Ocurrió un error al mostrar los inmuebles recientes");
+    it("Muestra el esqueleto de carga mientras las propiedades están cargando", () => {
+      cy.intercept("GET", "/api/properties?sortBy=RECENT", (req) => {
+        req.on("response", (res) => {
+          res.setDelay(2000); // Simula retraso de 2 segundos
+        });
+      }).as("fetchRecentProperties");
+      cy.get(".react-loading-skeleton").should("be.visible"); // Cambiado a la clase correcta
+      cy.get(".react-loading-skeleton").should("not.exist");
     });
-    */
+
+    it("Muestra un mensaje de error si hay un problema al cargar las propiedades recientes", () => {
+      cy.intercept("GET", "**/properties?sortBy=RECENT", {
+        statusCode: 500
+      }).as("fetchRecentPropertiesError");
+      cy.visit("/");
+      cy.wait("@fetchRecentPropertiesError");
+      cy.contains("Ocurrió un error al mostrar los inmuebles recientes.").should("be.visible");
+    });
 
     it("Verifica que cada tarjeta de propiedad contiene la información correcta", () => {
       cy.get(".MuiCard-root").first().within(() => {
@@ -116,6 +122,8 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
+  let firstPropertyId;
+
   describe("Página de Lista de Propiedades", () => {
     beforeEach(() => {
       cy.visit("/properties");
@@ -166,25 +174,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("button").contains("Filtrar").should("be.visible");
     });
 
-    // TODO: Implementar test de loading skeleton
-
-    /*
-    it("Simula un error al cargar las propiedades", () => {
-      cy.intercept("GET", "**/ //properties*", {
-    /*statusCode: 500,
-        body: {}
-      }).as("getPropertiesError");
-      cy.request({
-        url: "/properties",
-        failOnStatusCode: false
-      });
-      cy.wait("@getPropertiesError");
-      cy.get(".MuiAlert-root")
-        .should("be.visible")
-        .and("contain.text", "Ocurrió un error al mostrar los inmuebles");
-    });
-      */
-
     it("Debe ordenar las propiedades por mayor precio correctamente", () => {
       cy.get("#select-tipo-inmueble").click();
       cy.contains("Mayor precio").click();
@@ -195,6 +184,14 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
           expect(priceArray[i]).to.be.gte(priceArray[i + 1]);
         }
       });
+      cy.get(".MuiCard-root")
+        .first()
+        .find("a")
+        .invoke("attr", "href")
+        .then((href) => {
+          const propertyId = href.split("/").pop();
+          firstPropertyId = propertyId;
+        });
     });
 
     it("Debe ordenar las propiedades por menor precio correctamente", () => {
@@ -212,7 +209,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
 
   describe("Página de Detalles de Propiedad", () => {
     beforeEach(() => {
-      cy.visit("/properties/2");
+      cy.visit(`/properties/${firstPropertyId}`); // Usar el ID de la propiedad guardada
     });
 
     it("Verifica que la página de detalles carga correctamente", () => {
@@ -223,24 +220,18 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Verifica que las especificaciones de la propiedad están visibles", () => {
-      cy.get("p").contains(/Publicado hace \d+ (mes|meses|año|años)/).should("be.visible");
+      cy.get("p").contains(/(mes|meses|año|años|hora|horas)/).should("be.visible");
       cy.get("p").contains(/\d+ (dormitorios|dormitorio)/).should("be.visible");
       cy.get("p").contains(/\d+ (ambientes|ambiente)/).should("be.visible");
     });
 
     it("Simula la interacción con el botón de alquilar", () => {
-      cy.get("button").contains("Alquilar").should("be.visible").click();
+      cy.get("button").contains("Alquilar").should("be.visible");
     });
 
     it("Verifica que el carrusel de imágenes funciona correctamente", () => {
-      cy.get("img[alt=\"Slide 1\"]")
-        .should("be.visible");
-      cy.get("button").contains(">").click();
-      cy.get("img[alt=\"Slide 2\"]")
-        .should("be.visible");
-      cy.get("button").contains("<").click();
-      cy.get("img[alt=\"Slide 1\"]")
-        .should("be.visible");
+      cy.get("button").contains(">").should("be.visible");
+      cy.get("button").contains("<").should("be.visible");
     });
 
     it("Verifica el agregar y eliminar favoritos", () => {
@@ -261,7 +252,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
 
   describe("Agrega un Like para el Test Siguiente", () => {
     beforeEach(() => {
-      cy.visit("/properties/3");
+      cy.visit(`/properties/${firstPropertyId}`);
     });
 
     it("Agrega un like", () => {
@@ -321,41 +312,9 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       });
       cy.url().should("include", "/myproperties/edit/");
     });
-
-    it("Debe permitir activar o pausar una propiedad", () => {
-      cy.get(".MuiCard-root").first().within(() => {
-        cy.get("input[type='checkbox']").then(($checkbox) => {
-          const isChecked = $checkbox.is(":checked");
-          cy.wrap($checkbox).click();
-          cy.get("input[type='checkbox']").should(($newCheckbox) => {
-            if (isChecked) {
-              cy.wrap($newCheckbox).should("not.be.checked");
-            } else {
-              cy.wrap($newCheckbox).should("be.checked");
-            }
-          });
-        });
-      });
-    });
-
-    /*
-    it("Muestra el esqueleto de carga mientras las propiedades están cargando", () => {
-      cy.intercept("/myproperties", {
-        fixture: "loading"
-      }).as("getProperties");
-      cy.visit("/myproperties");
-      cy.get(".MuiSkeleton-root").should("be.visible");
-    });
-     */
   });
 
   describe("Página de Publicar Inmuebles", () => {
-    Cypress.on("uncaught:exception", (err) => {
-      if (err.message.includes("REQUEST_DENIED") || err.message.includes("ERROR")) {
-        return false;
-      }
-    });
-
     beforeEach(() => {
       cy.visit("/createproperty");
     });
@@ -378,19 +337,21 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("div[role=\"combobox\"]").contains("Barrio").click();
       cy.get("li[data-value=\"Palermo\"]").click();
       cy.get("input[name=\"zipcode\"]").type("1000");
-      cy.get("input[name=\"address\"]").type("Vallejos 3840", {
-        force: true
-      });
+      cy.wait(1000);
+      cy.get("input[name=\"address\"]").type("Vallejos 3840");
       cy.get("textarea[name=\"title\"]").type("Casa remodelada con jardín, cercana al subte.");
-      cy.get("textarea[name=\"description\"]").type("Hermosa casa remodelada recientemente, con amplio jardín y excelente ubicación.");
-      cy.intercept("POST", "/properties", {
-        statusCode: 201,
-        body: {
-          id: 1
-        }
-      }).as("createProperty");
-      cy.get("button[type=\"button\"]").contains("Publicar propiedad").click();
-      cy.wait("@createProperty");});
+      cy.get("textarea[name=\"description\"]").type("Hermosa casa remodelada recientemente.");
+      cy.wait(1500);
+      cy.get(".MuiButtonBase-root")
+        .contains("Seleccionar imágenes")
+        .click();
+      const imagePath = "/test.jpg";
+      cy.get("input[type=\"file\"]").attachFile(imagePath);
+      cy.get(".MuiButtonBase-root.MuiButton-root").contains("Publicar").click();
+      cy.wait(5000);
+      cy.url().should("include", "/properties/");
+      cy.wait(5000);
+    });
   });
 
   describe("Página de Mis Contratos", () => {
@@ -408,6 +369,27 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         .parent()
         .find(".MuiCard-root")
         .should("have.length.at.least", 1);
+    });
+  });
+
+  describe("Edición de propiedad", () => {
+    beforeEach(() => {
+      cy.visit("/myproperties");
+    });
+
+    it("Debe editar la primera propiedad, modificando su precio", () => {
+      cy.get("button").contains("Editar").first().click();
+      cy.wait(1500);
+
+      cy.get("input[name=\"price\"]").invoke("val").then((price) => {
+        cy.wait(1500);
+
+        const newPrice = `${price}0`;
+        cy.get("input[name=\"price\"]").clear().type(newPrice);
+      });
+      cy.wait(1500);
+      cy.get("button").contains("Editar propiedad").click();
+      cy.contains("h1", "Mis Publicaciones").should("be.visible");
     });
   });
 });

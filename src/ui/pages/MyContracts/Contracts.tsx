@@ -15,7 +15,8 @@ const ContractsContainer = styled.main`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: 24px;  
+  min-height: 100vh;
 `;
 
 const ContractsSection = styled.section`

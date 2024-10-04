@@ -37,6 +37,7 @@ const LoaderContainer = styled.div`
   justify-content: center;
   width: 100%;
   padding: 28px 20px;
+  min-height: 100vh;
 `;
 
 const PropertyDetails = (): ReactElement => {

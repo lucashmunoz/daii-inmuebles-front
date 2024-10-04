@@ -1,11 +1,19 @@
 import { useEffect, useState } from "react";
-import { Alert, useMediaQuery } from "@mui/material";
+import { Alert, useMediaQuery, Pagination } from "@mui/material";
 import { formatNumberToCurrency, isMobileMediaQuery } from "../../../helpers";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import BookmarkCard from "./BookmarkCard";
-import { deleteBookmark, fetchBookmarkedProperties, selectBookmarkedProperties, selectBookmarksStatus, selectDeleteBookmarkStatus } from "../../../store/properties/bookmarksSlice";
+import {
+  deleteBookmark,
+  fetchBookmarkedProperties,
+  selectBookmarkedProperties,
+  selectBookmarksStatus,
+  selectDeleteBookmarkStatus,
+  selectTotalBookmarksPages
+} from "../../../store/properties/bookmarksSlice";
+import { useSearchParams } from "react-router-dom";
 
 const BookmarksContainer = styled.main`
   padding: 16px;
@@ -16,8 +24,6 @@ const BookmarksContainer = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 24px;
-  min-height: 100vh;
-  height: 100%;
 `;
 
 const LoaderContainer = styled.div`
@@ -38,27 +44,44 @@ const BookmarksSection = styled.section`
 
 const BookmarksPageTitle = () => <h1>Mis Favoritos</h1>;
 
-const Contracts = () => {
+const Bookmarks = () => {
   const dispatch = useAppDispatch();
 
   const isMobile = useMediaQuery(isMobileMediaQuery);
   const bookmarkedProperties = useAppSelector(selectBookmarkedProperties);
   const bookmarksStatus = useAppSelector(selectBookmarksStatus);
   const deleteBookmarksStatus = useAppSelector(selectDeleteBookmarkStatus);
+  const totalBookmarksPages = useAppSelector(selectTotalBookmarksPages); // Get total pages
 
   const [propertyIdToBeDeleted, setPropertyIdToBeDeleted] = useState(-1);
 
+  const [searchParams, setSearchParams] = useSearchParams(); // Use useSearchParams
+  const currentPage = Number(searchParams.get("page")) || 1;
+
   const onDelete = async (id: number) => {
     setPropertyIdToBeDeleted(id);
-    await dispatch(deleteBookmark({
-      propertyId: id
-    }));
+    await dispatch(
+      deleteBookmark({
+        propertyId: id
+      })
+    );
     setPropertyIdToBeDeleted(-1);
   };
 
   useEffect(() => {
-    dispatch(fetchBookmarkedProperties());
-  }, [dispatch]);
+    dispatch(fetchBookmarkedProperties({
+      page: currentPage.toString()
+    }));
+  }, [dispatch, currentPage]);
+
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    const strPage = page.toString();
+
+    setSearchParams((prev) => {
+      prev.set("page", strPage);
+      return prev;
+    });
+  };
 
   if (bookmarksStatus === "LOADING") {
     return (
@@ -75,9 +98,7 @@ const Contracts = () => {
     return (
       <BookmarksContainer>
         <BookmarksPageTitle />
-        <Alert severity="error">
-          Ocurrió un error al mostrar sus favoritos.
-        </Alert>
+        <Alert severity="error">Ocurrió un error al mostrar sus favoritos.</Alert>
       </BookmarksContainer>
     );
   }
@@ -86,33 +107,38 @@ const Contracts = () => {
     <BookmarksContainer>
       <BookmarksPageTitle />
       <BookmarksSection>
-        {
-          bookmarkedProperties.map(bookmark => {
-            const { id, images, price, district, type } = bookmark;
-            const image = images[0];
-            const formattedPrice = formatNumberToCurrency({
-              number: price
-            });
-            const isLoading = deleteBookmarksStatus === "LOADING" && propertyIdToBeDeleted === id;
+        {bookmarkedProperties.map((bookmark) => {
+          const { id, images, price, district, type } = bookmark;
+          const image = images[0];
+          const formattedPrice = formatNumberToCurrency({
+            number: price
+          });
+          const isLoading =
+            deleteBookmarksStatus === "LOADING" && propertyIdToBeDeleted === id;
 
-            return (
-              <BookmarkCard
-                orientation={isMobile ? "vertical" : "horizontal"}
-                key={id}
-                id={id}
-                district={district}
-                image={image}
-                price={formattedPrice}
-                type={type}
-                onDelete={onDelete}
-                loading={isLoading}
-              />
-            );
-          })
-        }
+          return (
+            <BookmarkCard
+              orientation={isMobile ? "vertical" : "horizontal"}
+              key={id}
+              id={id}
+              district={district}
+              image={image}
+              price={formattedPrice}
+              type={type}
+              onDelete={onDelete}
+              loading={isLoading}
+            />
+          );
+        })}
       </BookmarksSection>
+      <Pagination
+        count={totalBookmarksPages}
+        color="primary"
+        onChange={handlePageChange}
+        page={currentPage}
+      />
     </BookmarksContainer>
   );
 };
 
-export default Contracts;
+export default Bookmarks;

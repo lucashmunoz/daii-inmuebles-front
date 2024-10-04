@@ -20,7 +20,7 @@ const FiltersContainer = styled.form`
   gap: 16px;
   height: 100%;
   width: 100%;
-  background-image: url("src/assets/background-mudanza.jpg");
+  background-image: url("/src/assets/background-mudanza.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

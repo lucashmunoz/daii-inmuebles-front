@@ -37,6 +37,10 @@ interface PropertyState {
 
   createPropertyState: "LOADING" | "CREATED" | "ERROR" | "NOT_INITIALIZED";
   createdPropertyId: number
+
+  editPropertyState: "LOADING" | "SUCCESS" | "ERROR" | "NOT_INITIALIZED";
+
+  deletePropertyState: "LOADING" | "SUCCESS" | "ERROR" | "NOT_INITIALIZED";
 }
 
 const initialState: PropertyState = {
@@ -50,7 +54,11 @@ const initialState: PropertyState = {
   isRecentPropertiesError: false,
 
   createPropertyState: "NOT_INITIALIZED",
-  createdPropertyId: 0
+  createdPropertyId: 0,
+
+  editPropertyState: "NOT_INITIALIZED",
+
+  deletePropertyState: "NOT_INITIALIZED"
 };
 
 interface FetchPropertiesParams {
@@ -173,7 +181,6 @@ interface CreateNewPropertyParams {
   "images" |
   "address" |
   "price" |
-  "garages" |
   "type" |
   "surface_covered" |
   "surface_total"
@@ -193,10 +200,55 @@ export const createNewProperty = createAsyncThunk(
   }
 );
 
+interface EditPropertyParams {
+  propertyId: number
+  updatedProperty: Partial<Property>
+}
+
+export const editProperty = createAsyncThunk(
+  "users/editProperty",
+  async ({ propertyId, updatedProperty }: EditPropertyParams, { rejectWithValue }) => {
+    const updatedPropertyUrl = `${API_HOST}${endpoints.properties}`;
+    try{
+      return await api.patch(
+        `${updatedPropertyUrl}/${propertyId}`,
+        {
+          ...updatedProperty
+        }
+      );
+    }catch(error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+interface DeletePropertyParams {
+  propertyId: number
+}
+
+export const deleteProperty = createAsyncThunk(
+  "users/deleteProperty",
+  async ({ propertyId }: DeletePropertyParams, { rejectWithValue }) => {
+    const deletePropertyUrl = `${API_HOST}${endpoints.properties}`;
+    try{
+      return await api.delete(`${deletePropertyUrl}/${propertyId}`);
+    }catch(error) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
 export const propertiesSlice = createSlice({
   name: "properties",
   initialState,
-  reducers: {},
+  reducers: {
+    resetCreateNewPropertyState: (state) => {
+      state.createPropertyState = "NOT_INITIALIZED";
+    },
+    resetEdiNewPropertyState: (state) => {
+      state.editPropertyState = "NOT_INITIALIZED";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProperties.pending, (state) => {
@@ -241,6 +293,24 @@ export const propertiesSlice = createSlice({
       })
       .addCase(createNewProperty.rejected, (state) => {
         state.createPropertyState = "ERROR";
+      })
+      .addCase(editProperty.pending, (state) => {
+        state.editPropertyState = "LOADING";
+      })
+      .addCase(editProperty.fulfilled, (state) => {
+        state.editPropertyState = "SUCCESS";
+      })
+      .addCase(editProperty.rejected, (state) => {
+        state.editPropertyState = "ERROR";
+      })
+      .addCase(deleteProperty.pending, (state) => {
+        state.deletePropertyState = "LOADING";
+      })
+      .addCase(deleteProperty.fulfilled, (state) => {
+        state.deletePropertyState = "SUCCESS";
+      })
+      .addCase(deleteProperty.rejected, (state) => {
+        state.deletePropertyState = "ERROR";
       });
   }
 });
@@ -256,5 +326,12 @@ export const selectIsRecentPropertiesError = (state: RootState) => state.propert
 
 export const selectCreatedPropertyId = (state: RootState) => state.properties.createdPropertyId;
 export const selectCreatePropertyState = (state: RootState) => state.properties.createPropertyState;
+
+export const selectEditPropertyState = (state: RootState) => state.properties.editPropertyState;
+
+export const selectDeletePropertyState = (state: RootState) => state.properties.deletePropertyState;
+
+export const { resetCreateNewPropertyState, resetEdiNewPropertyState } =
+propertiesSlice.actions;
 
 export default propertiesSlice.reducer;

@@ -36,11 +36,11 @@ const initialState: PropertyDetailsState = {
     images: [""],
     address: "",
     price: 0,
-    garages: 0,
     type: "APARTMENT",
     surface_covered: 0,
     surface_total: 0,
-    zipcode: ""
+    zipcode: "",
+    owner_id: 0
   },
   propertyDetailsStatus: "LOADING",
   pricePrediction: {
@@ -114,11 +114,11 @@ export const propertyDetailsSlice = createSlice({
           images: [""],
           address: "",
           price: 0,
-          garages: 0,
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
-          zipcode: ""
+          zipcode: "",
+          owner_id: 0
         };
       })
       .addCase(fetchPropertyDetails.fulfilled, (state, action) => {
@@ -146,11 +146,11 @@ export const propertyDetailsSlice = createSlice({
           images: [""],
           address: "",
           price: 0,
-          garages: 0,
           type: "APARTMENT",
           surface_covered: 0,
           surface_total: 0,
-          zipcode: ""
+          zipcode: "",
+          owner_id: 0
         };
       })
       .addCase(fetchPropertyPricePrediction.pending, (state) => {
@@ -185,4 +185,5 @@ export const selectPricePredictionStatus = (state: RootState) =>
 
 export const { bookmarkProperty, unbookmarkProperty } =
   propertyDetailsSlice.actions;
+
 export default propertyDetailsSlice.reducer;

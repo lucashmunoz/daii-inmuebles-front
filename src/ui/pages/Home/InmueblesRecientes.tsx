@@ -16,6 +16,7 @@ const Wrapper = styled.section`
   justify-content: center;
   width: 100%;
   padding: 28px 20px;
+  min-height: 50vh;
 `;
 
 const Title = styled.h2`

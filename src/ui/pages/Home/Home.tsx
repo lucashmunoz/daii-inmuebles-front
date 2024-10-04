@@ -4,6 +4,7 @@ import styled from "styled-components";
 import MainFilters from "./MainFilters";
 import InmueblesRecientes from "./InmueblesRecientes";
 import PageWrapper from "../../components/PageWrapper";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const EncontraTuHogarContainer = styled.div`
   background-color: #1890ff;
@@ -46,6 +47,7 @@ const Home = (): ReactElement => {
         <MainFilters />
         <InmueblesRecientes />
       </Main>
+      <Footer />
     </PageWrapper>
   );
 };

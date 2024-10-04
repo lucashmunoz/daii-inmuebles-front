@@ -24,6 +24,7 @@ const BookmarksContainer = styled.main`
   flex-direction: column;
   align-items: center;
   gap: 24px;
+  min-height: 100vh;
 `;
 
 const LoaderContainer = styled.div`

@@ -13,6 +13,7 @@ import FiltersDrawer from "./Filters/FiltersDrawer";
 import { useSearchParams } from "react-router-dom";
 import { PropertyType, SortBy, SurfaceType } from "../../../models/property";
 import { Bouds } from "../../components/PropertiesMap";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const Main = styled.main`
   display: flex;
@@ -211,6 +212,7 @@ const PropertiesList = (): ReactElement => {
           <Properties handlePageChange={handlePageChange}/>
         </PropertiesContainer>
       </Main>
+      <Footer/>
     </PageWrapper>
   );
 };

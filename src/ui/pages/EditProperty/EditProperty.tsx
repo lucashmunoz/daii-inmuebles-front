@@ -14,6 +14,7 @@ import { isEqual } from "lodash";
 import { fetchDistricts } from "../../../store/properties/districtsSlice";
 import { editProperty, resetEdiNewPropertyState, selectEditPropertyState } from "../../../store/properties/propertiesSlice";
 import { PropertyType } from "../../../models/property";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const Main = styled.main`
   padding: 16px;
@@ -227,7 +228,7 @@ const EditProperty = () => {
         </ButtonContainer>
 
       </Main>
-
+      <Footer />
     </PageWrapper>
   );
 };

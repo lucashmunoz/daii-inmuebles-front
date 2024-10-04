@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import PropertySecondaryDetails from "./PropertySecondaryDetails";
+import Footer from "../../components/Footer/Footer.tsx";
 
 const SectionWrapper = styled.section`
   display: flex;
@@ -36,6 +37,7 @@ const LoaderContainer = styled.div`
   justify-content: center;
   width: 100%;
   padding: 28px 20px;
+  min-height: 100vh;
 `;
 
 const PropertyDetails = (): ReactElement => {
@@ -60,6 +62,7 @@ const PropertyDetails = (): ReactElement => {
         <LoaderContainer>
           <LoadingSkeleton />
         </LoaderContainer>
+        <Footer/>
       </PageWrapper>
     );
   }
@@ -71,6 +74,7 @@ const PropertyDetails = (): ReactElement => {
         <Alert severity="error">
           Ocurrió un error al mostrar la propiedad.
         </Alert>
+        <Footer />
       </PageWrapper>
     );
   }
@@ -118,6 +122,7 @@ const PropertyDetails = (): ReactElement => {
         />
 
       </main>
+      <Footer />
     </PageWrapper>
   );
 };

@@ -3,7 +3,7 @@ import { Grid2 } from "@mui/material";
 import SocialMedia from "./SocialMedia.tsx";
 
 const FooterContainer = styled.footer`
-  height: 338px;
+  height: 270px;
   background-color: #2A7CC7;
   color: #fff;
   font-size: 16px;
@@ -27,7 +27,7 @@ const Footer = () => {
       <Grid2 container gap={5} alignItems="center" height="100%">
         <Grid2 size="grow" textAlign="center">
           <div>
-            <FooterColumnTittle>Get In Touch</FooterColumnTittle>
+            <FooterColumnTittle>Contactanos</FooterColumnTittle>
             <SocialMedia />
           </div>
         </Grid2>

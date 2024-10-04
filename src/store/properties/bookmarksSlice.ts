@@ -11,29 +11,41 @@ interface BookmarksState {
   bookmarksStatus: "SUCCESS" | "ERROR" | "LOADING"
   deleteBookmarkStatus: "NOT_INITIALIZED" | "ERROR" | "LOADING"
   toggleBookmarkStatus: ToggleBookmarkStatus
+  totalBookmarksPages: number
 };
 
 const initialState: BookmarksState = {
   bookmarkedProperties: [],
   bookmarksStatus: "LOADING",
   deleteBookmarkStatus: "NOT_INITIALIZED",
-  toggleBookmarkStatus: "NOT_INITIALIZED"
+  toggleBookmarkStatus: "NOT_INITIALIZED",
+  totalBookmarksPages: 0
 };
 
-export const fetchBookmarkedProperties = createAsyncThunk(
-  "users/fetchBookmarkedProperties",
-  async (_, { rejectWithValue }) => {
-    const params = new URLSearchParams();
-    params.append("page", "0");
+interface FetchBookmarkedPropertiesParams {
+  page: string;
+}
 
-    try{
+export const fetchBookmarkedProperties = createAsyncThunk(
+  "bookmarks/fetchBookmarkedProperties",
+  async ({ page }: FetchBookmarkedPropertiesParams, { rejectWithValue }) => {
+    const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
+    const sizeQuery = "size=4";
+
+    const queries = [
+      pageQuery,
+      sizeQuery
+    ].filter(query => query !== "").join("&");
+
+    try {
       const response = await api.get(
-        `${API_HOST}${endpoints.bookmark}`, {
-          params
-        }
+        `${API_HOST}${endpoints.bookmark}?${queries}`
       );
-      return response.data.content as Property[];
-    }catch(error) {
+      return {
+        bookmarkedProperties: response.data.content as Property[],
+        totalPages: response.data.totalPages
+      };
+    } catch (error) {
       return rejectWithValue(error);
     }
   }
@@ -104,14 +116,17 @@ export const bookmarksSlice = createSlice({
       .addCase(fetchBookmarkedProperties.pending, (state) => {
         state.bookmarksStatus = "LOADING";
         state.bookmarkedProperties = [];
+        state.totalBookmarksPages = 0;
       })
       .addCase(fetchBookmarkedProperties.fulfilled, (state, action) => {
         state.bookmarksStatus = "SUCCESS";
-        state.bookmarkedProperties = action.payload;
+        state.bookmarkedProperties = action.payload.bookmarkedProperties;
+        state.totalBookmarksPages = action.payload.totalPages;
       })
       .addCase(fetchBookmarkedProperties.rejected, (state) => {
         state.bookmarksStatus = "ERROR";
         state.bookmarkedProperties = [];
+        state.totalBookmarksPages = 0;
       })
       .addCase(deleteBookmark.pending, (state) => {
         state.deleteBookmarkStatus = "LOADING";
@@ -140,6 +155,7 @@ export const selectBookmarkedProperties = (state: RootState) => state.bookmarks.
 export const selectBookmarksStatus = (state: RootState) => state.bookmarks.bookmarksStatus;
 export const selectDeleteBookmarkStatus = (state: RootState) => state.bookmarks.deleteBookmarkStatus;
 export const selectToggleBookmarkStatus = (state: RootState) => state.bookmarks.toggleBookmarkStatus;
+export const selectTotalBookmarksPages = (state: RootState) => state.bookmarks.totalBookmarksPages;
 
 export const { finishToggleBookmarkUpdates } = bookmarksSlice.actions;
 export default bookmarksSlice.reducer;

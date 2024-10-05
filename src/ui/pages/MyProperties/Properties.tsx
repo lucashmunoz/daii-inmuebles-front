@@ -138,7 +138,7 @@ const Contracts = () => {
     );
   }
 
-  if (myProperties.length === 0) {
+  if (myPropertiesStatus === "SUCCESS" && myProperties.length === 0) {
     return (
       <PropertiesContainer>
         <MyPropertiesPageTitle />

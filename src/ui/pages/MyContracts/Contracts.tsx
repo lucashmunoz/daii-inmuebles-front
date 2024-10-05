@@ -4,7 +4,7 @@ import { formatNumberToCurrency, getRentProcessStatusNameByStatus, getRentStatus
 import ContractCard from "./ContractCard";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { fetchRentals, selectRentals, selectRentalsStatus, selectRentalProcesses } from "../../../store/properties/rentalsSlice";
+import { fetchRentals, selectRentals, selectRentalStatus, selectRentalProcesses } from "../../../store/properties/rentalsSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 
 const ContractsContainer = styled.main`
@@ -36,7 +36,7 @@ const Contracts = () => {
   const dispatch = useAppDispatch();
 
   const isMobile = useMediaQuery(isMobileMediaQuery);
-  const rentalsStatus = useAppSelector(selectRentalsStatus);
+  const rentalsStatus = useAppSelector(selectRentalStatus);
   const rentals = useAppSelector(selectRentals);
   const rentProcesses = useAppSelector(selectRentalProcesses);
 

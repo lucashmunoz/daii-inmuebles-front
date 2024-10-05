@@ -29,7 +29,7 @@ export const fetchMyProperties = createAsyncThunk(
     params.append("propertyOwnerId", "1");
 
     const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
-    const sizeQuery = "size=4";
+    const sizeQuery = "size=10";
 
     const queries = [
       pageQuery,

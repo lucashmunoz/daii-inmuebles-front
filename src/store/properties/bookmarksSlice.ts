@@ -30,7 +30,7 @@ export const fetchBookmarkedProperties = createAsyncThunk(
   "bookmarks/fetchBookmarkedProperties",
   async ({ page }: FetchBookmarkedPropertiesParams, { rejectWithValue }) => {
     const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
-    const sizeQuery = "size=4";
+    const sizeQuery = "size=10";
 
     const queries = [
       pageQuery,

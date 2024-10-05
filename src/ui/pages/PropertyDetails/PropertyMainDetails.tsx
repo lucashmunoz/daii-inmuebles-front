@@ -7,9 +7,11 @@ import { PropertyType } from "../../../models/property";
 import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../helpers";
 import FavouriteButton from "./FavouriteButton";
 import { fetchPropertyPricePrediction } from "../../../store/properties/propertyDetailsSlice";
-import { createRentProcess } from "../../../store/properties/rentalsSlice";
+import { createRentProcess, fetchRentals, resetRentalsState, selectRentalStatus } from "../../../store/properties/rentalsSlice";
 import PricePrediction from "./PricePrediction";
 import { useAppDispatch } from "../../../store/hooks";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../../navigation/paths";
 import { useSelector } from "react-redux";
 import { selectPropertyDetails } from "../../../store/properties/propertyDetailsSlice";
 import { currentUserId } from "../../../api/api";
@@ -76,6 +78,35 @@ const AlquilarButton = styled(Button)`
   }
 `;
 
+const SpinnerContainer = styled.div`
+  height: 100%;
+  width: 107px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+`;
+
+const Spinner = styled.span`
+  width: 24px;
+  height: 24px;
+  border: 5px solid black;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+
+  @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+  }
+`;
+
 const DisabledMessage = styled.p`
   color: red;
   font-size: 14px;
@@ -132,10 +163,13 @@ interface PropertyMainDetailsProps {
 
 const PropertyMainDetails = ({ type, title, created_at, price, surface_total, bathrooms, propertyId, favorite }: PropertyMainDetailsProps) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const propertyDetails = useSelector(selectPropertyDetails);
+  const rentalStatus = useSelector(selectRentalStatus);
   const { owner_id } = propertyDetails;
 
   const isOwner = owner_id === parseInt(currentUserId);
+  const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || !propertyDetails.active;
 
   useEffect(() => {
     dispatch(fetchPropertyPricePrediction(propertyId));
@@ -149,10 +183,15 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
     number: price
   });
 
-  const handleRent = () => {
-    dispatch(createRentProcess({
+  const handleRent = async () => {
+    await dispatch(createRentProcess({
       propertyId
     }));
+    await dispatch(fetchRentals({
+      role: "TENANT"
+    }));
+    dispatch(resetRentalsState());
+    navigate(paths.myContracts);
   };
 
   return (
@@ -180,12 +219,18 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
       <PricePrediction />
 
-      <AlquilarButton
-        onClick={handleRent}
-        disabled={isOwner}
-      >
-        Alquilar
-      </AlquilarButton>
+      {
+        rentalStatus === "LOADING"
+          ? <SpinnerContainer>
+            <Spinner />
+          </SpinnerContainer>
+          : <AlquilarButton
+            onClick={handleRent}
+            disabled={isRentButtonDisabled}
+          >
+              Alquilar
+          </AlquilarButton>
+      }
 
       {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
 

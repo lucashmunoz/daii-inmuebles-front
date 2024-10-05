@@ -101,9 +101,10 @@ const PropertyDetails = (): ReactElement => {
             propertyId={Number(id)}
             favorite={favorite}
           />
-
         </SectionWrapper>
+
         <Divider />
+
         <PropertySecondaryDetails
           description={description}
           beds={beds}

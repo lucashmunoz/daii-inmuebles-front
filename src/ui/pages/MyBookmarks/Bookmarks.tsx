@@ -104,6 +104,15 @@ const Bookmarks = () => {
     );
   }
 
+  if (bookmarksStatus === "SUCCESS" && bookmarkedProperties.length === 0) {
+    return (
+      <BookmarksContainer>
+        <BookmarksPageTitle />
+        <Alert severity="info">Todavia no has agregado ninguna propiedad a tus favoritos</Alert>
+      </BookmarksContainer>
+    );
+  }
+
   return (
     <BookmarksContainer>
       <BookmarksPageTitle />

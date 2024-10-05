@@ -64,6 +64,14 @@ const Contracts = () => {
     );
   }
 
+  if (rentalsStatus === "SUCCESS" && rentals.length === 0) {
+    return (
+      <ContractsContainer>
+        <Alert severity="info">No tienes contratos activos</Alert>
+      </ContractsContainer>
+    );
+  }
+
   return (
     <ContractsContainer>
       <h1>Mis contratos</h1>

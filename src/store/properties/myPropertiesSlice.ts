@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 import { endpoints } from "../../api/endpoints";
-import api, { API_HOST } from "../../api/api";
+import api, { API_HOST, currentUserId } from "../../api/api";
 import { Property } from "../../models/property";
 
 interface MyPropertiesState {
@@ -26,7 +26,7 @@ export const fetchMyProperties = createAsyncThunk(
   "users/fetchMyProperties",
   async ({ page }:FetchMyPropertiesParams, { rejectWithValue }) => {
     const params = new URLSearchParams();
-    params.append("propertyOwnerId", "1");
+    params.append("propertyOwnerId", currentUserId);
 
     const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
     const sizeQuery = "size=4";

@@ -34,7 +34,7 @@ const CarrouselContainer = styled.div`
 const LoaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   padding: 28px 20px;
   min-height: 100vh;
@@ -71,9 +71,11 @@ const PropertyDetails = (): ReactElement => {
     return (
       <PageWrapper>
         <Header />
-        <Alert severity="error">
-          Ocurrió un error al mostrar la propiedad.
-        </Alert>
+        <LoaderContainer>
+          <Alert severity="error">
+            Ocurrió un error al mostrar la propiedad.
+          </Alert>
+        </LoaderContainer>
         <Footer />
       </PageWrapper>
     );

@@ -13,7 +13,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 const Wrapper = styled.section`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
   padding: 28px 20px;
   min-height: 50vh;

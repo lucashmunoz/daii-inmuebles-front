@@ -155,7 +155,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
   const navigate = useNavigate();
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const { id, images, price, district, type, active } = property;
+  const { id, images, price, district, type, active, rented } = property;
 
   const image = images[0];
   const formattedPrice = formatNumberToCurrency({
@@ -221,51 +221,60 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
                   </PropertyDetails>
 
                   <ActionsContainer>
-                    <Button
-                      onMouseDown={e => e.stopPropagation()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handleEditClick();
-                      }}
-                    >
-                    Editar
-                    </Button>
-
-                    {
-                      isToggleLoading
-                        ? <SpinnerContainer>
-                          <Spinner />
-                        </SpinnerContainer>
-                        : <FormControlLabel
-                          control={<Switch defaultChecked={active} />}
-                          label={active ? "Pausar" : "Activar"}
-                          checked={active}
+                    {rented
+                      ? <Typography variant="body1" sx={{
+                        fontWeight: "bold"
+                      }}>
+                      Propiedad alquilada
+                      </Typography>
+                      : <>
+                        <Button
                           onMouseDown={e => e.stopPropagation()}
                           onClick={(e) => {
                             e.stopPropagation();
                             e.preventDefault();
-                            handlePropertyStatusChange(property, !active);
+                            handleEditClick();
                           }}
-                        />
-                    }
+                        >
+                       Editar
+                        </Button>
 
-                    <Button
-                      onMouseDown={e => e.stopPropagation()}
-                      sx={{
-                        color: "error.main",
-                        "&:hover": {
-                          color: "error.darker"
+                        {
+                          isToggleLoading
+                            ? <SpinnerContainer>
+                              <Spinner />
+                            </SpinnerContainer>
+                            : <FormControlLabel
+                              control={<Switch defaultChecked={active} />}
+                              label={active ? "Pausar" : "Activar"}
+                              checked={active}
+                              onMouseDown={e => e.stopPropagation()}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handlePropertyStatusChange(property, !active);
+                              }}
+                            />
                         }
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        openDeleteModal();
-                      }}
-                    >
-                    Eliminar
-                    </Button>
+
+                        <Button
+                          onMouseDown={e => e.stopPropagation()}
+                          sx={{
+                            color: "error.main",
+                            "&:hover": {
+                              color: "error.darker"
+                            }
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            openDeleteModal();
+                          }}
+                        >
+                          Eliminar
+                        </Button>
+                      </>}
+
                   </ActionsContainer>
 
                 </CardDetailsContainer>
@@ -320,32 +329,42 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
               </Typography>
 
               <ActionsContainer>
-                <Button
-                  onMouseDown={e => e.stopPropagation()}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    handleEditClick();
-                  }}
-                >
-                Editar
-                </Button>
-
                 {
-                  isToggleLoading
-                    ? <SpinnerContainer><Spinner /></SpinnerContainer>
-                    : <FormControlLabel
-                      control={<Switch defaultChecked={active} />}
-                      label={active ? "Pausar" : "Activar"}
-                      checked={active}
-                      onMouseDown={e => e.stopPropagation()}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        handlePropertyStatusChange(property, !active);
-                      }}
-                    />
+                  rented
+                    ? <Typography variant="body1" sx={{
+                      fontWeight: "bold"
+                    }}>
+                      Propiedad alquilada
+                    </Typography>
+                    : <>
+                      <Button
+                        onMouseDown={e => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          handleEditClick();
+                        }}
+                      >
+                      Editar
+                      </Button>
+
+                      {
+                        isToggleLoading
+                          ? <SpinnerContainer><Spinner /></SpinnerContainer>
+                          : <FormControlLabel
+                            control={<Switch defaultChecked={active} />}
+                            label={active ? "Pausar" : "Activar"}
+                            checked={active}
+                            onMouseDown={e => e.stopPropagation()}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              handlePropertyStatusChange(property, !active);
+                            }}
+                          />
+                      }</>
                 }
+
               </ActionsContainer>
 
             </CardDataRow>

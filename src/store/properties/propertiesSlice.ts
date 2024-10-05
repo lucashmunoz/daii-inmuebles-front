@@ -92,7 +92,7 @@ export const fetchProperties = createAsyncThunk(
       maxLon
     } = filters;
 
-    const propertyTypeQuery = type ? `propertyType=${type}` : "";
+    const propertyTypeQuery = type && type !== "ALL" ? `propertyType=${type}` : "";
     const minPriceQuery = minPrice ? `minPrice=${minPrice}` : "";
     const maxPriceQuery = maxPrice ? `maxPrice=${maxPrice}` : "";
     const minRoomsQuery = minRooms ? `minRooms=${minRooms}` : "";

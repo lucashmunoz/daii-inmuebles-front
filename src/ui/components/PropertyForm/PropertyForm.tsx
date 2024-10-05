@@ -198,7 +198,6 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
             setSelectedOption={setSelectedPropertyType}
             placeholder="Tipo de Propiedad"
           />
-
         </Grid>
         {!isMobile && <Grid item xs={6}></Grid>}
 

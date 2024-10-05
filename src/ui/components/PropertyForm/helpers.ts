@@ -65,3 +65,4 @@ export const propertiesTypes: PropertiesTypes = [
     label: getPropertyTypeNameByType("PH")
   }
 ];
+

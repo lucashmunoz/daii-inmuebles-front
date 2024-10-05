@@ -1,11 +1,13 @@
-import { useEffect } from "react";
-import { Alert, useMediaQuery } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Alert, Box, useMediaQuery } from "@mui/material";
 import { formatNumberToCurrency, getRentProcessStatusNameByStatus, getRentStatusNameByStatus, isMobileMediaQuery } from "../../../helpers";
 import ContractCard from "./ContractCard";
 import styled from "styled-components";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { fetchRentals, selectRentals, selectRentalStatus, selectRentalProcesses } from "../../../store/properties/rentalsSlice";
 import LoadingSkeleton from "../../components/LoadingSkeleton";
+import SMSelect from "../../components/SMSelect";
+import { UserRoleType } from "../../../models/rentals";
 
 const ContractsContainer = styled.main`
   padding: 16px;
@@ -32,6 +34,23 @@ const SectionTitle = styled.h2`
   text-align: left;
 `;
 
+type UserRoleTypes = Array<
+  {
+    value: UserRoleType,
+    label: string
+  }
+>
+const userRoleTypes: UserRoleTypes = [
+  {
+    value: "TENANT",
+    label: "Inquilino"
+  },
+  {
+    value: "OWNER",
+    label: "Propietario"
+  }
+];
+
 const Contracts = () => {
   const dispatch = useAppDispatch();
 
@@ -40,11 +59,27 @@ const Contracts = () => {
   const rentals = useAppSelector(selectRentals);
   const rentProcesses = useAppSelector(selectRentalProcesses);
 
+  const [userRole, setUserRole] = useState<UserRoleType>("TENANT");
+
   useEffect(() => {
     dispatch(fetchRentals({
-      role: "TENANT"
+      role: userRole
     }));
-  }, [dispatch]);
+  }, [dispatch, userRole]);
+
+  const UserRoleSelect = () => {
+    return(
+      <Box sx={{}}>
+        <SMSelect
+          id="select-user-rol"
+          options={userRoleTypes}
+          selectedOption={userRole}
+          setSelectedOption={(value) => setUserRole(value as UserRoleType)}
+        />
+      </Box>
+
+    );
+  };
 
   if (rentalsStatus === "LOADING") {
     return (
@@ -57,6 +92,8 @@ const Contracts = () => {
   if (rentalsStatus === "ERROR") {
     return (
       <ContractsContainer>
+        <h1>Mis contratos</h1>
+        <UserRoleSelect />
         <Alert severity="error">
           Ocurrió un error al mostrar sus contratos.
         </Alert>
@@ -64,9 +101,11 @@ const Contracts = () => {
     );
   }
 
-  if (rentalsStatus === "SUCCESS" && rentals.length === 0) {
+  if (rentalsStatus === "SUCCESS" && rentals.length === 0 && rentProcesses.length === 0) {
     return (
       <ContractsContainer>
+        <h1>Mis contratos</h1>
+        <UserRoleSelect />
         <Alert severity="info">No tienes contratos activos</Alert>
       </ContractsContainer>
     );
@@ -74,7 +113,17 @@ const Contracts = () => {
 
   return (
     <ContractsContainer>
-      <h1>Mis contratos</h1>
+      <Box sx={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        <h1>Mis contratos</h1>
+        <UserRoleSelect />
+      </Box>
+
       <ContractsSection>
         <SectionTitle>Mis contratos en proceso</SectionTitle>
         {

@@ -20,13 +20,13 @@ interface RentProcess {
 interface RentalsState {
   rentals: Rental[]
   rentalProcesses: RentProcess[]
-  rentalsStatus: "SUCCESS" | "ERROR" | "LOADING"
+  rentalStatus: "SUCCESS" | "ERROR" | "LOADING" | "NOT_INITIALIZED"
 }
 
 const initialState: RentalsState = {
   rentals: [],
   rentalProcesses: [],
-  rentalsStatus: "LOADING"
+  rentalStatus: "NOT_INITIALIZED"
 };
 
 interface FetchRentalsParams {
@@ -59,8 +59,7 @@ export const createRentProcess = createAsyncThunk(
   async ({ propertyId }: CreateRentProcessParams, { rejectWithValue }) => {
     const createRentProcessUrl = `${API_HOST}${endpoints.rentProcess}/${propertyId}`;
     try {
-      const response = await api.post(createRentProcessUrl);
-      return response.data;
+      return await api.post(createRentProcessUrl);
     } catch (error) {
       return rejectWithValue(error);
     }
@@ -70,39 +69,44 @@ export const createRentProcess = createAsyncThunk(
 export const rentalsSlice = createSlice({
   name: "rentals",
   initialState,
-  reducers: {},
+  reducers: {
+    resetRentalsState: (state) => {
+      state.rentalStatus = "NOT_INITIALIZED";
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRentals.pending, (state) => {
-        state.rentalsStatus = "LOADING";
+        state.rentalStatus = "LOADING";
         state.rentals = [];
         state.rentalProcesses = [];
       })
       .addCase(fetchRentals.fulfilled, (state, action) => {
-        state.rentalsStatus = "SUCCESS";
+        state.rentalStatus = "SUCCESS";
         state.rentals = action.payload.rentals;
         state.rentalProcesses = action.payload.rentalProcesses;
       })
       .addCase(fetchRentals.rejected, (state) => {
-        state.rentalsStatus = "ERROR";
+        state.rentalStatus = "ERROR";
         state.rentals = [];
         state.rentalProcesses = [];
       })
       .addCase(createRentProcess.pending, (state) => {
-        state.rentalsStatus = "LOADING";
+        state.rentalStatus = "LOADING";
       })
-      .addCase(createRentProcess.fulfilled, (state, action) => {
-        state.rentalsStatus = "SUCCESS";
-        state.rentalProcesses.push(action.payload);
+      .addCase(createRentProcess.fulfilled, (state) => {
+        state.rentalStatus = "SUCCESS";
       })
       .addCase(createRentProcess.rejected, (state) => {
-        state.rentalsStatus = "ERROR";
+        state.rentalStatus = "ERROR";
       });
   }
 });
 
+export const { resetRentalsState } = rentalsSlice.actions;
+
 export const selectRentals = (state: RootState) => state.rentals.rentals || [];
 export const selectRentalProcesses = (state: RootState) => state.rentals.rentalProcesses || [];
-export const selectRentalsStatus = (state: RootState) => state.rentals.rentalsStatus;
+export const selectRentalStatus = (state: RootState) => state.rentals.rentalStatus;
 
 export default rentalsSlice.reducer;

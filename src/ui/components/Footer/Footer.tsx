@@ -27,14 +27,14 @@ const Footer = () => {
       <Grid2 container gap={5} alignItems="center" height="100%">
         <Grid2 size="grow" textAlign="center">
           <div>
-            <FooterColumnTittle>Contactanos</FooterColumnTittle>
+            <FooterColumnTittle>Contáctanos</FooterColumnTittle>
             <SocialMedia />
           </div>
         </Grid2>
         <Grid2 size="grow">
           <FooterColumn>
             <div>
-              <FooterColumnTittle>Compañia</FooterColumnTittle>
+              <FooterColumnTittle>Compañía</FooterColumnTittle>
               <p>Sobre nosotros</p>
               <p>Trabaja con nosotros</p>
               <p>Blog</p>
@@ -46,7 +46,7 @@ const Footer = () => {
             <div>
               <FooterColumnTittle>Legales</FooterColumnTittle>
               <p>Términos y condiciones</p>
-              <p>Cómo cuidamos tu privacidad</p>
+              <p>¿Cómo cuidamos tu privacidad?</p>
               <p>Defensa del Consumidor</p>
             </div>
           </FooterColumn>

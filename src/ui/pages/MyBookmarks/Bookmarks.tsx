@@ -75,7 +75,7 @@ const Bookmarks = () => {
     }));
   }, [dispatch, currentPage]);
 
-  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+  const handlePageChange = (page: number) => {
     const strPage = page.toString();
 
     setSearchParams((prev) => {
@@ -144,7 +144,7 @@ const Bookmarks = () => {
       <Pagination
         count={totalBookmarksPages}
         color="primary"
-        onChange={handlePageChange}
+        onChange={(_, page) => handlePageChange(page)}
         page={currentPage}
       />
     </BookmarksContainer>

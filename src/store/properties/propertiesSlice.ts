@@ -64,7 +64,7 @@ const initialState: PropertyState = {
 interface FetchPropertiesParams {
   sortBy?: SortBy,
   filters?: Partial<Filters>
-  page: string
+  page?: string
 }
 
 export const fetchProperties = createAsyncThunk(

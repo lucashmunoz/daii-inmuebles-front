@@ -7,9 +7,7 @@ import { propertiesTypes } from "./helpers";
 import { getGeocode, getLatLng } from "use-places-autocomplete";
 import { isMobileMediaQuery, isNumber } from "../../../helpers";
 import MapAddress from "./MapAddress";
-import { useState } from "react";
-import { Coordinates } from "../../../models/address";
-import { useDebounce } from "use-debounce";
+import { useDebouncedCallback } from "use-debounce";
 import { PropertyType } from "../../../models/property";
 import { useAppSelector } from "../../../store/hooks";
 import { selectDistricts } from "../../../store/properties/districtsSlice";
@@ -57,9 +55,6 @@ const DeleteButton = styled(IconButton)`
   }
 `;
 
-const CABA_CENTER_LAT = -34.6144806;
-const CABA_CENTER_LNG = -58.4464348;
-
 export interface FormPropertyData {
   beds: string;
   zipcode: string;
@@ -95,13 +90,23 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
     label: district
   }));
 
-  const [addressCoordinates, setAddressCoordinates] = useState<Coordinates>({
-    lat: CABA_CENTER_LAT,
-    lng: CABA_CENTER_LNG
-  });
-  const [debouncedAddressCoordinates] = useDebounce(addressCoordinates, 1500, {
-    maxWait: 2000
-  });
+  const debouncedAddress = useDebouncedCallback(
+    // function
+    async (value: string) => {
+      const result = await getGeocode({
+        address: value + ", CABA Argentina"
+      }); //get geocoding object
+      const { lat, lng } = await getLatLng(result[0]);
+
+      setFormData({
+        ...formData,
+        latitude: lat,
+        longitude: lng
+      });
+    },
+    // delay in ms
+    1500
+  );
 
   const setSelectedDistrict = (selectedDistrict: string) => {
     setFormData({
@@ -153,25 +158,6 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
     });
   };
 
-  const handleAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
-    const result = await getGeocode({
-      address: value + ", CABA Argentina"
-    }); //get geocoding object
-    const { lat, lng } = await getLatLng(result[0]);
-    setAddressCoordinates({
-      lat, lng
-    });
-
-    setFormData({
-      ...formData,
-      address: value,
-      latitude: lat,
-      longitude: lng
-    });
-  };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const numericInputs = [
@@ -193,7 +179,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
     });
   };
 
-  const showMapMarker = formData.address.length !== 0 && addressCoordinates.lat === debouncedAddressCoordinates.lat && addressCoordinates.lng === debouncedAddressCoordinates.lng;
+  const showMapMarker = formData.address.length !== 0;
 
   return (
     <StyledForm>
@@ -358,7 +344,10 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
           </Typography>
           <StyledTextField
             name="address"
-            onChange={handleAddressChange}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              handleInputChange(e);
+              debouncedAddress(e.target.value);
+            }}
             value={formData.address}
             fullWidth
             placeholder="Ej.: Reconquista 123"
@@ -366,7 +355,10 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
         </Grid>
 
         <Grid item xs={12}>
-          <MapAddress addressCoordinates={debouncedAddressCoordinates} showMarker={showMapMarker}/>
+          <MapAddress addressCoordinates={{
+            lat: formData.latitude,
+            lng: formData.longitude
+          }} showMarker={showMapMarker}/>
         </Grid>
 
         <Grid item xs={12}>

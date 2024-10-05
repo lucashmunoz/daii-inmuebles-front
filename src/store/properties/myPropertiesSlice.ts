@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 import { endpoints } from "../../api/endpoints";
-import api, {API_HOST, currentUserId} from "../../api/api";
+import api, { API_HOST, currentUserId } from "../../api/api";
 import { Property } from "../../models/property";
 
 interface MyPropertiesState {

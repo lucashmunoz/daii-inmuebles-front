@@ -79,7 +79,6 @@ const AlquilarButton = styled(Button)`
 `;
 
 const SpinnerContainer = styled.div`
-  height: 100%;
   width: 107px;
   display: flex;
   justify-content: center;

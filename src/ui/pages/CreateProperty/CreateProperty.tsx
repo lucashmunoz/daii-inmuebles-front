@@ -53,6 +53,9 @@ const ButtonContainer = styled.div`
   text-align: center;
 `;
 
+const CABA_CENTER_LAT = -34.6144806;
+const CABA_CENTER_LNG = -58.4464348;
+
 const CreateProperty = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -71,8 +74,8 @@ const CreateProperty = () => {
     rooms: "",
     title: "",
     description: "",
-    latitude: 0,
-    longitude: 0,
+    latitude: CABA_CENTER_LAT,
+    longitude: CABA_CENTER_LNG,
     images: [],
     address: "",
     price: "",

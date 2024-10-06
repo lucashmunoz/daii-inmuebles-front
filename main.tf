@@ -8,19 +8,19 @@ terraform {
 }
 
 provider "aws" {
-  region                   = "us-east-1"
-  shared_credentials_file  = "~/.aws/credentials"
-  profile                 = "default"  # Cambia esto si usas un perfil diferente
+  region                  = "us-east-1"
+  shared_credentials_files = ["~/.aws/credentials"]  # Corrige aquí
+}
+
+# Variables para las credenciales de AWS
+variable "key_name" {
+  description = "El nombre de la clave"
+  default     = "smartmove"
 }
 
 resource "tls_private_key" "rsa_4096" {
   algorithm = "RSA"
   rsa_bits  = 4096
-}
-
-variable "key_name" {
-  description = "El nombre de la clave"
-  default     = "smartmove"
 }
 
 resource "aws_key_pair" "key_pair" {
@@ -34,7 +34,7 @@ resource "local_file" "private_key" {
 }
 
 resource "aws_instance" "Frontend" {
-  ami           = "ami-0866a3c8686eaeeba"  # Asegúrate de que esta AMI esté disponible en us-east-1
+  ami           = "ami-0866a3c8686eaeeba" 
   instance_type = "t2.micro"
   key_name      = aws_key_pair.key_pair.key_name
 

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
@@ -168,7 +168,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const { owner_id } = propertyDetails;
 
   const isOwner = owner_id === parseInt(currentUserId);
-  const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || !propertyDetails.active;
+  const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || propertyDetails.active === false || propertyDetails.disable === true;
+
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
     dispatch(fetchPropertyPricePrediction(propertyId));
@@ -183,6 +185,8 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   });
 
   const handleRent = async () => {
+    setIsRedirecting(true);
+
     await dispatch(createRentProcess({
       propertyId
     }));
@@ -232,6 +236,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
       }
 
       {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
+      {!isRedirecting && isOwner === false && isRentButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para alquilar.</DisabledMessage>}
 
     </ContentContainer>
   );

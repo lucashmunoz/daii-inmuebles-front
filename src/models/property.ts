@@ -30,5 +30,6 @@ export interface Property {
   favorite: boolean,
   zipcode: string,
   owner_id: number,
-  rented?: boolean
+  rented?: boolean,
+  disable: boolean
 }

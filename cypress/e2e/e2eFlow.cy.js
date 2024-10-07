@@ -141,7 +141,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         });
     });
 
-
     it("Simula el uso de filtros (Precio, Dormitorios, Superficie)", () => {
       cy.get("input[name='minSurface']").type("1");
       cy.get("input[name='maxSurface']").type("2000");

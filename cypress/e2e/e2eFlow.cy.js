@@ -332,8 +332,8 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("input[name=\"zipcode\"]").type("1000");
       cy.wait(1000);
       cy.get("input[name=\"address\"]").type("Vallejos 3840");
-      cy.get("textarea[name=\"title\"]").type("Casa remodelada con jardín, cercana al subte.");
-      cy.get("textarea[name=\"description\"]").type("Hermosa casa remodelada recientemente.");
+      cy.get("textarea[name=\"title\"]").type("test");
+      cy.get("textarea[name=\"description\"]").type("test");
       cy.wait(1500);
       cy.get(".MuiButtonBase-root")
         .contains("Seleccionar imágenes")
@@ -399,13 +399,19 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.wait(1500);
       cy.get("input[name=\"price\"]").invoke("val").then((price) => {
         cy.wait(1500);
-
-        const newPrice = `${price}0`;
-        cy.get("input[name=\"price\"]").clear().type(newPrice);
+        const currentPrice = parseFloat(price.replace(/,/g, ""));
+        let newPrice;
+        if (currentPrice <= 900000) {
+          newPrice = currentPrice * 10;
+        }
+        else {
+          newPrice = currentPrice / 10;
+        }
+        cy.get("input[name=\"price\"]").clear().type(newPrice.toString());
+        cy.wait(1500);
+        cy.get("button").contains("Editar propiedad").click();
+        cy.contains("h1", "Mis Publicaciones").should("be.visible");
       });
-      cy.wait(1500);
-      cy.get("button").contains("Editar propiedad").click();
-      cy.contains("h1", "Mis Publicaciones").should("be.visible");
     });
   });
 });

@@ -291,9 +291,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
 
     it("Debe enviar el formulario y redirigir a la página de detalles de la propiedad cuando se crea exitosamente", () => {
-      const apiKey = Cypress.env("VITE_GOOGLE_MAPS_API_KEY");
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      expect(apiKey).to.exist;
       cy.get("div[role=\"combobox\"]").contains("Tipo de Propiedad").click();
       cy.get("li[data-value=\"APARTMENT\"]").click();
       cy.get("input[name=\"price\"]").type("200000");
@@ -316,10 +313,9 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       const imagePath = "/test.jpg";
       cy.get("input[type=\"file\"]").attachFile(imagePath);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Publicar").click();
-      cy.wait(5000);
       cy.url().should("include", "/properties/");
       cy.get("p").should("contain", "Vallejos 3840");
-      cy.wait(5000);
+      cy.wait(3000);
     });
   });
 

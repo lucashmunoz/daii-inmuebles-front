@@ -2,33 +2,37 @@ name: CICD
 on:
   push:
     branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
         uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '21.7.1'
-      
+
       - name: Install dependencies using npm ci
         run: npm ci
-      
+
       - name: Run Cypress tests and Lint tests
         run: npm run lint-and-test
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: ${{secrets.VITE_GOOGLE_MAPS_API_KEY}}
+          VITE_MAP_ID: ${{secrets.VITE_MAP_ID}}
 
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-      
+
       - name: Build Docker image
         run: docker build -t joubina/smartmovefront . --progress=plain
         env:
           VITE_GOOGLE_MAPS_API_KEY: ${{secrets.VITE_GOOGLE_MAPS_API_KEY}}
           VITE_MAP_ID: ${{secrets.VITE_MAP_ID}}
-      
+
       - name: Publish image to Docker Hub
         run: docker push joubina/smartmovefront:latest
 
@@ -38,20 +42,20 @@ jobs:
     steps:
       - name: Delete old container
         run: sudo docker rm -f smartmovecontainerfront
-      
+
       - name: Remove old image
         run: sudo docker system prune -a -f --volumes
-      
+
       - name: Pull Image from Docker Hub
         run: sudo docker pull joubina/smartmovefront:latest
-      
+
       - name: Run Docker Container
         run: |
           sudo docker run -d -p 5173:5173 --name smartmovecontainerfront \
           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
           -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
           joubina/smartmovefront
-          
+
       - name: Verify environment variables
         run: |
           sudo docker exec smartmovecontainerfront printenv VITE_GOOGLE_MAPS_API_KEY

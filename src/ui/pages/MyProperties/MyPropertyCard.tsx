@@ -42,7 +42,6 @@ const CardDataRow = styled.div`
 
 const ActionsContainer = styled.div`
   display: flex;
-  flex-direction: row-reverse;
   gap: 8px;
 
   @media only screen and (min-width: 600px) {
@@ -362,7 +361,26 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
                               handlePropertyStatusChange(property, !active);
                             }}
                           />
-                      }</>
+                      }
+
+                      <Button
+                        onMouseDown={e => e.stopPropagation()}
+                        sx={{
+                          color: "error.main",
+                          "&:hover": {
+                            color: "error.darker"
+                          }
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          e.preventDefault();
+                          openDeleteModal();
+                        }}
+                      >
+                          Eliminar
+                      </Button>
+
+                    </>
                 }
 
               </ActionsContainer>

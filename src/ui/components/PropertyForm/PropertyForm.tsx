@@ -189,7 +189,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
           <Typography variant="body1" gutterBottom style={{
             marginBottom: "1px"
           }}>
-            Tipo de propiedad
+            Tipo de propiedad <span>*</span>
           </Typography>
           <Select
             id="select-property-type"
@@ -372,6 +372,9 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
             value={formData.title}
             multiline
             fullWidth
+            inputProps={{
+              maxLength: 75
+            }}
             placeholder="Ej.: Casa remolada con jardín, cercana al subte."
           />
         </Grid>
@@ -380,7 +383,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
           <Typography variant="body1" gutterBottom style={{
             marginBottom: "1px"
           }}>
-            Descripción
+            Descripción <span>*</span>
           </Typography>
           <StyledTextField
             name="description"
@@ -399,7 +402,7 @@ const PropertyForm = ({ formData, setFormData }: PropertyFormProps) => {
       <Typography variant="h6" gutterBottom style={{
         marginTop: "20px"
       }}>
-      Subir imágenes
+      Subir imágenes <span>*</span>
       </Typography>
       <div {...getRootProps()}>
         <input {...getInputProps()} />

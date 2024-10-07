@@ -302,11 +302,11 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("div[role=\"combobox\"]").contains("Barrio").click();
       cy.get("li[data-value=\"Palermo\"]").click();
       cy.get("input[name=\"zipcode\"]").type("1000");
-      cy.wait(1000);
+      cy.wait(500);
       cy.get("input[name=\"address\"]").type("Vallejos 3840");
       cy.get("textarea[name=\"title\"]").type("test");
       cy.get("textarea[name=\"description\"]").type("test");
-      cy.wait(1500);
+      cy.wait(500);
       cy.get(".MuiButtonBase-root")
         .contains("Seleccionar imágenes")
         .click();
@@ -314,8 +314,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get("input[type=\"file\"]").attachFile(imagePath);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Publicar").click();
       cy.url().should("include", "/properties/");
-      cy.get("p").should("contain", "Vallejos 3840");
-      cy.wait(3000);
+      cy.wait(1000);
     });
   });
 

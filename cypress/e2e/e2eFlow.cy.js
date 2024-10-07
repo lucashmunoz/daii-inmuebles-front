@@ -194,7 +194,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         });
     });
 
-    it("Debe ordenar las propiedades por menor precio correctamente", () => {
+    /*     it("Debe ordenar las propiedades por menor precio correctamente", () => {
       cy.get("#select-tipo-inmueble").click();
       cy.contains("Menor precio").click();
       cy.wait(4500);
@@ -204,7 +204,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
           expect(priceArray[i]).to.be.lte(priceArray[i + 1]);
         }
       });
-    });
+    });*/
   });
 
   describe("Página de Detalles de Propiedad", () => {

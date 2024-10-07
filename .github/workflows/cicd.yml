@@ -17,8 +17,8 @@ jobs:
       - name: Install dependencies using npm ci
         run: npm ci
 
-      #- name: Run Cypress tests and Lint tests
-      #  run: npm run lint-and-test
+      - name: Run Cypress tests and Lint tests
+        run: npm run lint-and-test
       
       - name: Login to Docker Hub
         run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
@@ -40,7 +40,7 @@ jobs:
         run: sudo docker rm -f smartmovecontainerfront
       
       - name: Remove old image
-        run: sudo docker image prune -f
+        run: sudo docker system prune -a -f --volumes
       
       - name: Pull Image from Docker Hub
         run: sudo docker pull joubina/smartmovefront:latest

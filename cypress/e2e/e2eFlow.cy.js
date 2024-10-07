@@ -307,29 +307,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
-  describe("Página de mis propiedades", () => {
-    beforeEach(() => {
-      cy.visit("/myproperties");
-    });
-
-    it("Verifica que las propiedades se muestran correctamente", () => {
-      cy.get("h1").contains("Mis Publicaciones").should("be.visible");
-      cy.get(".MuiCard-root").should("have.length.at.least", 1);
-    });
-
-    it("Debe redirigir a la página de edición cuando se hace clic en \"Editar\" si está disponible", () => {
-      cy.get(".MuiCard-root").first().within(() => {
-        cy.get("button:contains(\"Editar\")").then(($editButton) => {
-          if ($editButton.length > 0) {
-            cy.wrap($editButton).click();
-            cy.url().should("include", "/myproperties/edit/");
-          } else {
-            cy.log("La opción 'Editar' no está disponible para esta propiedad.");
-          }
-        });
-      });
-    });
-  });
 
   describe("Página de Publicar Inmuebles", () => {
     beforeEach(() => {
@@ -368,6 +345,30 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.wait(5000);
       cy.url().should("include", "/properties/");
       cy.wait(5000);
+    });
+  });
+
+  describe("Página de mis propiedades", () => {
+    beforeEach(() => {
+      cy.visit("/myproperties");
+    });
+
+    it("Verifica que las propiedades se muestran correctamente", () => {
+      cy.get("h1").contains("Mis Publicaciones").should("be.visible");
+      cy.get(".MuiCard-root").should("have.length.at.least", 1);
+    });
+
+    it("Debe redirigir a la página de edición cuando se hace clic en \"Editar\" si está disponible", () => {
+      cy.get(".MuiCard-root").first().within(() => {
+        cy.get("button:contains(\"Editar\")").then(($editButton) => {
+          if ($editButton.length > 0) {
+            cy.wrap($editButton).click();
+            cy.url().should("include", "/myproperties/edit/");
+          } else {
+            cy.log("La opción 'Editar' no está disponible para esta propiedad.");
+          }
+        });
+      });
     });
   });
 

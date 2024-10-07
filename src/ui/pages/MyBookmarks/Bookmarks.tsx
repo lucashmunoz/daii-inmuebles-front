@@ -52,11 +52,11 @@ const Bookmarks = () => {
   const bookmarkedProperties = useAppSelector(selectBookmarkedProperties);
   const bookmarksStatus = useAppSelector(selectBookmarksStatus);
   const deleteBookmarksStatus = useAppSelector(selectDeleteBookmarkStatus);
-  const totalBookmarksPages = useAppSelector(selectTotalBookmarksPages); // Get total pages
+  const totalBookmarksPages = useAppSelector(selectTotalBookmarksPages);
 
   const [propertyIdToBeDeleted, setPropertyIdToBeDeleted] = useState(-1);
 
-  const [searchParams, setSearchParams] = useSearchParams(); // Use useSearchParams
+  const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
 
   const onDelete = async (id: number) => {
@@ -66,6 +66,9 @@ const Bookmarks = () => {
         propertyId: id
       })
     );
+    dispatch(fetchBookmarkedProperties({
+      page: currentPage.toString()
+    }));
     setPropertyIdToBeDeleted(-1);
   };
 

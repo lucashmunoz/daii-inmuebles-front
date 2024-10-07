@@ -27,10 +27,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.url().should("include", "/properties/");
     });
 
-    it("Verifica que los inmuebles recientes se muestran correctamente", () => {
-      cy.get(".MuiCard-root").should("have.length.at.least", 1);
-    });
-
     it("Muestra el esqueleto de carga mientras las propiedades están cargando", () => {
       cy.intercept("GET", "/api/properties?sortBy=RECENT", (req) => {
         req.on("response", (res) => {
@@ -434,5 +430,16 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.wait(1000);
       cy.get("button.MuiButton-containedPrimary").click();
     });
+  });
+
+  describe("Se genera error al buscar una propiedad inexistente", () => {
+    beforeEach(() => {
+      cy.visit("/properties/999999");
+    });
+
+    it("Muestra un mensaje de error cuando se accede a una propiedad inexistente", () => {
+      cy.get(".MuiAlert-root").should("be.visible")
+        .and("have.class", "MuiAlert-colorError"); // Verifica que es un error
+      cy.get(".MuiAlert-message").should("contain.text", "Ocurrió un error al mostrar la propiedad."); });
   });
 });

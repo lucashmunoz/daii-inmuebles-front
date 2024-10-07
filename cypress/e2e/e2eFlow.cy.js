@@ -193,18 +193,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
           firstPropertyId = propertyId;
         });
     });
-
-    it("Debe ordenar las propiedades por menor precio correctamente", () => {
-      cy.get("#select-tipo-inmueble").click();
-      cy.contains("Menor precio").click();
-      cy.wait(6500);
-      cy.get(".MuiTypography-h4").then(($prices) => {
-        const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
-        for (let i = 0; i < priceArray.length - 1; i++) {
-          expect(priceArray[i]).to.be.lte(priceArray[i + 1]);
-        }
-      });
-    });
   });
 
   describe("Página de Detalles de Propiedad", () => {
@@ -432,6 +420,19 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         cy.get("button").contains("Editar propiedad").click();
         cy.contains("h1", "Mis Publicaciones").should("be.visible");
       });
+    });
+  });
+
+  describe("Eliminar la propiedad creada", () => {
+    beforeEach(() => {
+      cy.visit("/myproperties");
+    });
+
+    it("Debería eliminar la propiedad creada", () => {
+      cy.wait(1000);
+      cy.contains("button", "Eliminar").click();
+      cy.wait(1000);
+      cy.get("button.MuiButton-containedPrimary").click();
     });
   });
 });

@@ -177,7 +177,7 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     it("Debe ordenar las propiedades por mayor precio correctamente", () => {
       cy.get("#select-tipo-inmueble").click();
       cy.contains("Mayor precio").click();
-      cy.wait(4500);
+      cy.wait(5500);
       cy.get(".MuiTypography-h4").then(($prices) => {
         const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
         for (let i = 0; i < priceArray.length - 1; i++) {
@@ -194,17 +194,17 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
         });
     });
 
-    /*     it("Debe ordenar las propiedades por menor precio correctamente", () => {
+    it("Debe ordenar las propiedades por menor precio correctamente", () => {
       cy.get("#select-tipo-inmueble").click();
       cy.contains("Menor precio").click();
-      cy.wait(4500);
+      cy.wait(6500);
       cy.get(".MuiTypography-h4").then(($prices) => {
         const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
         for (let i = 0; i < priceArray.length - 1; i++) {
           expect(priceArray[i]).to.be.lte(priceArray[i + 1]);
         }
       });
-    });*/
+    });
   });
 
   describe("Página de Detalles de Propiedad", () => {
@@ -343,7 +343,27 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Publicar").click();
       cy.wait(5000);
       cy.url().should("include", "/properties/");
+      cy.get("p").should("contain", "Vallejos 3840");
       cy.wait(5000);
+    });
+  });
+
+  describe("Test del mapa para buscar propiedad", () => {
+    beforeEach(() => {
+      cy.visit("/properties");
+    });
+
+    it("Debería abrir el mapa y seleccionar una propiedad", () => {
+      cy.get("button.MuiButtonBase-root")
+        .contains("mapa")
+        .click();
+      cy.get("div[role=\"region\"][aria-roledescription=\"map\"]").should("be.visible");
+      cy.wait(2000);
+      cy.get("area[title=\"Departamento - Palermo\"]").click({
+        multiple: true,
+        force: true
+      });
+      cy.get("h3").should("contain", "Departamento - Palermo");
     });
   });
 

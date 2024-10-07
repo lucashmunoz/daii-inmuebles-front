@@ -328,30 +328,16 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.visit("/properties");
     });
 
-    it("Debería abrir el mapa y seleccionar una propiedad (API real)", () => {
-      // Verifica que las credenciales de Google Maps están disponibles
-      const apiKey = Cypress.env("VITE_GOOGLE_MAPS_API_KEY");
-      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-      expect(apiKey).to.exist;
-
-      // Abre el mapa en la página
+    it("Debería abrir el mapa y seleccionar una propiedad", () => {
       cy.get("button.MuiButtonBase-root")
         .contains("mapa")
         .click();
-
-      // Espera a que el mapa sea visible y cargue la API de Google Maps
       cy.get("div[role=\"region\"][aria-roledescription=\"map\"]").should("be.visible");
-
-      // Espera un momento para asegurarse de que todo cargó bien
       cy.wait(2000);
-
-      // Simula la selección de una propiedad en el mapa
       cy.get("area[title=\"Departamento - Palermo\"]").click({
         multiple: true,
         force: true
       });
-
-      // Verifica que la propiedad fue seleccionada
       cy.get("h3").should("contain", "Departamento - Palermo");
     });
   });

@@ -307,7 +307,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
     });
   });
 
-
   describe("Página de Publicar Inmuebles", () => {
     beforeEach(() => {
       cy.visit("/createproperty");

@@ -1,6 +1,10 @@
 import { defineConfig } from "cypress";
 
 export default defineConfig({
+  env: {
+    VITE_GOOGLE_MAPS_API_KEY: process.env.VITE_GOOGLE_MAPS_API_KEY,
+    VITE_MAP_ID: process.env.VITE_MAP_ID
+  },
   e2e: {
     baseUrl: "http://localhost:5173/",
     specPattern: "cypress/e2e/**/*.cy.{js,ts}",

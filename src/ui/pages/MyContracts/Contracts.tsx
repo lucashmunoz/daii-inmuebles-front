@@ -101,16 +101,6 @@ const Contracts = () => {
     );
   }
 
-  if (rentalsStatus === "SUCCESS" && rentals.length === 0 && rentProcesses.length === 0) {
-    return (
-      <ContractsContainer>
-        <h1>Mis contratos</h1>
-        <UserRoleSelect />
-        <Alert severity="info">No tienes contratos activos</Alert>
-      </ContractsContainer>
-    );
-  }
-
   return (
     <ContractsContainer>
       <Box sx={{
@@ -127,54 +117,61 @@ const Contracts = () => {
       <ContractsSection>
         <SectionTitle>Mis contratos en proceso</SectionTitle>
         {
-          rentProcesses.map(contract => {
-            const { id, property, status } = contract;
-            const { images, price, district, type } = property;
-            const image = images[0];
-            const formattedPrice = formatNumberToCurrency({
-              number: price
-            });
+          rentProcesses.length === 0
+            ? <Alert severity="info">No tienes contratos en proceso.</Alert>
+            : rentProcesses.map(contract => {
+              const { id, property, status } = contract;
+              const { images, price, district, type } = property;
+              const image = images[0];
+              const formattedPrice = formatNumberToCurrency({
+                number: price
+              });
 
-            return (
-              <ContractCard
-                orientation={isMobile ? "vertical" : "horizontal"}
-                id={id}
-                key={id}
-                district={district}
-                image={image}
-                price={formattedPrice}
-                type={type}
-                currentStatus={getRentProcessStatusNameByStatus(status)}
-              />
-            );
-          })
+              return (
+                <ContractCard
+                  orientation={isMobile ? "vertical" : "horizontal"}
+                  id={id}
+                  key={id}
+                  district={district}
+                  image={image}
+                  price={formattedPrice}
+                  type={type}
+                  currentStatus={getRentProcessStatusNameByStatus(status)}
+                />
+              );
+            })
         }
+
       </ContractsSection>
 
       <ContractsSection>
         <SectionTitle>Mis contratos activos</SectionTitle>
         {
-          rentals.map(contract => {
-            const { id, property, status } = contract;
-            const { images, price, district, type } = property;
-            const image = images[0];
-            const formattedPrice = formatNumberToCurrency({
-              number: price
-            });
 
-            return (
-              <ContractCard
-                orientation={isMobile ? "vertical" : "horizontal"}
-                id={id}
-                district={district}
-                image={image}
-                price={formattedPrice}
-                type={type}
-                currentStatus={getRentStatusNameByStatus(status)}
-              />
-            );
-          })
+          rentals.length === 0
+            ? <Alert severity="info">No tienes contratos activos.</Alert>
+            : rentals.map(contract => {
+              const { id, property, status } = contract;
+              const { images, price, district, type } = property;
+              const image = images[0];
+              const formattedPrice = formatNumberToCurrency({
+                number: price
+              });
+
+              return (
+                <ContractCard
+                  orientation={isMobile ? "vertical" : "horizontal"}
+                  id={id}
+                  district={district}
+                  image={image}
+                  price={formattedPrice}
+                  type={type}
+                  currentStatus={getRentStatusNameByStatus(status)}
+                />
+              );
+            })
         }
+
       </ContractsSection>
 
     </ContractsContainer>

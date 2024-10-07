@@ -313,10 +313,9 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       const imagePath = "/test.jpg";
       cy.get("input[type=\"file\"]").attachFile(imagePath);
       cy.get(".MuiButtonBase-root.MuiButton-root").contains("Publicar").click();
-      cy.wait(5000);
       cy.url().should("include", "/properties/");
       cy.get("p").should("contain", "Vallejos 3840");
-      cy.wait(5000);
+      cy.wait(3000);
     });
   });
 

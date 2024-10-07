@@ -40,11 +40,7 @@ jobs:
         run: sudo docker rm -f smartmovecontainerfront
       
       - name: Remove old image
-<<<<<<< Updated upstream
-        run: sudo docker image prune -f
-=======
         run: sudo docker system prune -a -f --volumes
->>>>>>> Stashed changes
       
       - name: Pull Image from Docker Hub
         run: sudo docker pull joubina/smartmovefront:latest

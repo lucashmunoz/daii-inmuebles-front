@@ -3,13 +3,29 @@ import { Grid2 } from "@mui/material";
 import SocialMedia from "./SocialMedia.tsx";
 
 const FooterContainer = styled.footer`
-  height: 270px;
+  min-height: 250px;
   background-color: #2A7CC7;
   color: #fff;
   font-size: 16px;
   font-weight: bold;
-  bottom: 0;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+`;
+
+const ContentContainer = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 24px;
+  @media only screen and (min-width: 600px) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const FooterColumn = styled.div`
@@ -24,7 +40,7 @@ const FooterColumnTittle = styled.p`
 const Footer = () => {
   return (
     <FooterContainer>
-      <Grid2 container gap={5} alignItems="center" height="100%">
+      <ContentContainer>
         <Grid2 size="grow" textAlign="center">
           <div>
             <FooterColumnTittle>Contáctanos</FooterColumnTittle>
@@ -51,7 +67,7 @@ const Footer = () => {
             </div>
           </FooterColumn>
         </Grid2>
-      </Grid2>
+      </ContentContainer>
     </FooterContainer>
   );
 };

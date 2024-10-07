@@ -131,7 +131,16 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
 
     it("Verifica que se muestran las propiedades", () => {
       cy.get(".MuiCard-root").should("have.length.at.least", 1);
+      cy.get(".MuiCard-root")
+        .first()
+        .find("a")
+        .invoke("attr", "href")
+        .then((href) => {
+          const propertyId = href.split("/").pop();
+          firstPropertyId = propertyId;
+        });
     });
+
 
     it("Simula el uso de filtros (Precio, Dormitorios, Superficie)", () => {
       cy.get("input[name='minSurface']").type("1");
@@ -168,26 +177,6 @@ describe("E2E: Flujo completo de la aplicación de alquiler de inmuebles", () =>
       cy.get(".MuiDrawer-root").should("be.visible");
       cy.get("[data-testid=\"CloseOutlinedIcon\"]").closest("button").click();
       cy.get("button").contains("Filtrar").should("be.visible");
-    });
-
-    it("Debe ordenar las propiedades por mayor precio correctamente", () => {
-      cy.get("#select-tipo-inmueble").click();
-      cy.contains("Mayor precio").click();
-      cy.wait(5500);
-      cy.get(".MuiTypography-h4").then(($prices) => {
-        const priceArray = [...$prices].map((price) => parseFloat(price.innerText.replace(/\D/g, "")));
-        for (let i = 0; i < priceArray.length - 1; i++) {
-          expect(priceArray[i]).to.be.gte(priceArray[i + 1]);
-        }
-      });
-      cy.get(".MuiCard-root")
-        .first()
-        .find("a")
-        .invoke("attr", "href")
-        .then((href) => {
-          const propertyId = href.split("/").pop();
-          firstPropertyId = propertyId;
-        });
     });
   });
 

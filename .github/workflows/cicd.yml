@@ -51,7 +51,10 @@ jobs:
 
       - name: Run Docker Container
         run: |
+          feat/expose-port
           sudo docker run -d --name smartmovecontainerfront \
+
+          sudo docker run -d -p 8080:8080 --name smartmovecontainerfront \
           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
           -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
           joubina/smartmovefront

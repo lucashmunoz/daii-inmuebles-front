@@ -55,3 +55,5 @@ jobs:
           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
           -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
           joubina/smartmovefront
+
+          

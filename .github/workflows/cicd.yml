@@ -55,8 +55,3 @@ jobs:
           -e VITE_GOOGLE_MAPS_API_KEY=${{secrets.VITE_GOOGLE_MAPS_API_KEY}} \
           -e VITE_MAP_ID=${{secrets.VITE_MAP_ID}} \
           joubina/smartmovefront
-      
-      - name: Verify environment variables
-        run: |
-          sudo docker exec smartmovecontainerfront printenv VITE_GOOGLE_MAPS_API_KEY
-          sudo docker exec smartmovecontainerfront printenv VITE_MAP_ID

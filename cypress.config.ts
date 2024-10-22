@@ -6,7 +6,7 @@ export default defineConfig({
     VITE_MAP_ID: process.env.VITE_MAP_ID || "default-map-id"
   },
   e2e: {
-    baseUrl: "http://localhost:8080/",
+    baseUrl: "http://localhost:80/",
     specPattern: "cypress/e2e/**/*.cy.{js,ts}",
     defaultCommandTimeout: 20000,
     pageLoadTimeout: 70000,

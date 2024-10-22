@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_HOST = "http://98.82.106.250:8080/";
+export const API_HOST = "http://98.82.106.250:80/";
 
 export interface ErrorResponse {
   message: string

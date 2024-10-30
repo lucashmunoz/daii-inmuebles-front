@@ -32,4 +32,5 @@ export interface Property {
   owner_id: number,
   rented?: boolean,
   disable: boolean
+  delete?: boolean
 }

@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
 import { useSelector } from "react-redux";
 import { selectPropertyDetails } from "../../../store/properties/propertyDetailsSlice";
-import { currentUserId } from "../../../api/api";
+import { fetchUserDetails, selectUserId } from "../../../store/userSlice";
 
 const ContentContainer = styled.div`
   display: flex;
@@ -165,14 +165,17 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
   const navigate = useNavigate();
   const propertyDetails = useSelector(selectPropertyDetails);
   const rentalStatus = useSelector(selectRentalStatus);
+  const loggedUserId = useSelector(selectUserId);
+
   const { owner_id } = propertyDetails;
 
-  const isOwner = owner_id === parseInt(currentUserId);
+  const isOwner = owner_id === parseInt(loggedUserId);
   const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || propertyDetails.active === false || propertyDetails.disable === true;
 
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
+    dispatch(fetchUserDetails());
     dispatch(fetchPropertyPricePrediction(propertyId));
   }, [dispatch, propertyId]);
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_HOST = "http://98.82.106.250:80/";
+export const API_HOST = "http://3.217.122.117:8080";
 
 export interface ErrorResponse {
   message: string
@@ -8,14 +8,15 @@ export interface ErrorResponse {
   error: string
 }
 
-export const currentUserId = "1";
+export const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwicm9sZSI6IkFETUlOIn0.aAJvWi9vEjqzH7q2yxDL6MaqMHH8b6pw-R_faMJJIvg";
+export const accessTokenUserId2 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIn0.yL2k9bh2YuSZGC1hScCCfCuDoLfrCimCPbZ4okeY_Zw";
 
 axios.defaults.baseURL = API_HOST;
 axios.defaults.timeout = 600000;
 axios.defaults.headers.common = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  userId: currentUserId
+  Authorization: "Bearer " + accessToken
 };
 
 export default axios;

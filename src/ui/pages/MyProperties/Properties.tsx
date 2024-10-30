@@ -16,6 +16,7 @@ import {
 import { Property } from "../../../models/property";
 import { deleteProperty } from "../../../store/properties/propertiesSlice";
 import { useSearchParams } from "react-router-dom";
+import { fetchUserDetails } from "../../../store/userSlice";
 
 const PropertiesContainer = styled.main`
   padding: 16px;
@@ -111,11 +112,19 @@ const Contracts = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      fetchMyProperties({
-        page: currentPage.toString()
-      })
-    );
+    const fetchUserProperties = async () => {
+      await dispatch(
+        fetchUserDetails()
+      );
+
+      dispatch(
+        fetchMyProperties({
+          page: currentPage.toString()
+        })
+      );
+    };
+
+    fetchUserProperties();
   }, [dispatch, currentPage]);
 
   if (myPropertiesStatus === "LOADING") {

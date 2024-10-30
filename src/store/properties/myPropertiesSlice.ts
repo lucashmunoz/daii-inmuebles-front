@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "..";
 import { endpoints } from "../../api/endpoints";
-import api, { API_HOST, currentUserId } from "../../api/api";
+import api, { API_HOST } from "../../api/api";
 import { Property } from "../../models/property";
+import { selectUserId } from "../userSlice";
 
 interface MyPropertiesState {
   myProperties: Property[],
@@ -24,9 +25,11 @@ interface FetchMyPropertiesParams {
 
 export const fetchMyProperties = createAsyncThunk(
   "users/fetchMyProperties",
-  async ({ page }:FetchMyPropertiesParams, { rejectWithValue }) => {
+  async ({ page }:FetchMyPropertiesParams, { getState, rejectWithValue }) => {
+    const userId = selectUserId(getState() as unknown as RootState);
+
     const params = new URLSearchParams();
-    params.append("propertyOwnerId", currentUserId);
+    params.append("propertyOwnerId", userId);
 
     const pageQuery = `page=${page ? Number(page) - 1 : "0"}`;
     const sizeQuery = "size=10";
@@ -86,8 +89,6 @@ export const myPropertiesSlice = createSlice({
     builder
       .addCase(fetchMyProperties.pending, (state) => {
         state.myPropertiesStatus = "LOADING";
-        state.myProperties = [];
-        state.totalMyPropertiesPages = 0;
       })
       .addCase(fetchMyProperties.fulfilled, (state, action) => {
         state.myPropertiesStatus = "SUCCESS";

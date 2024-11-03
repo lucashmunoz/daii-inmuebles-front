@@ -2,7 +2,7 @@ import { FormEvent, ReactElement, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import PageWrapper from "../../components/PageWrapper";
 import { useAppDispatch } from "../../../store/hooks";
-import { fetchProperties } from "../../../store/properties/propertiesSlice";
+import { deleteProperty, fetchProperties } from "../../../store/properties/propertiesSlice";
 import Properties from "./Properties";
 import styled from "styled-components";
 import FilterActions from "./Filters/FilterActions";
@@ -178,8 +178,21 @@ const PropertiesList = (): ReactElement => {
       filters,
       page
     }));
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sortBy, dispatch]);
+
+  const handleDeleteProperty = async (propertyId: number) => {
+    await dispatch(deleteProperty({
+      propertyId
+    }));
+
+    dispatch(fetchProperties({
+      sortBy,
+      filters,
+      page
+    }));
+  };
 
   return (
     <PageWrapper>
@@ -209,7 +222,7 @@ const PropertiesList = (): ReactElement => {
             handleFilterButtonClick={() => setIsFiltersDrawerOpen(true)}
             hideMap={hideMap}
           />
-          <Properties handlePageChange={handlePageChange}/>
+          <Properties handlePageChange={handlePageChange} handleDeleteProperty={handleDeleteProperty}/>
         </PropertiesContainer>
       </Main>
       <Footer/>

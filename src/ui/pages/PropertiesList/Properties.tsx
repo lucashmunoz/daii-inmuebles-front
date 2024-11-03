@@ -28,9 +28,10 @@ const PropertiesListWrapper = styled.div`
 
 interface PropertiesProps {
   handlePageChange: (page: number) => void
+  handleDeleteProperty: (propertyId: number) => void
 }
 
-const Properties = ({ handlePageChange }:PropertiesProps) => {
+const Properties = ({ handlePageChange, handleDeleteProperty }:PropertiesProps) => {
   const [filtersParams] = useSearchParams();
 
   const properties = useAppSelector(selectProperties);
@@ -68,7 +69,7 @@ const Properties = ({ handlePageChange }:PropertiesProps) => {
       <PropertiesListWrapper>
         {
           properties.map(property => {
-            const { id, images, price, district, rooms, surface_total, beds, bathrooms, type } = property;
+            const { id, images, price, district, rooms, surface_total, beds, bathrooms, type, deleteEnabled = false } = property;
             const image = images[0];
             const formattedPrice = formatNumberToCurrency({
               number: price
@@ -87,6 +88,8 @@ const Properties = ({ handlePageChange }:PropertiesProps) => {
                 bathrooms={bathrooms}
                 surfaceTotal={surface_total}
                 type={type}
+                showDeleteButton={deleteEnabled}
+                handleDeleteProperty={() => handleDeleteProperty(id)}
               />
             );
           })

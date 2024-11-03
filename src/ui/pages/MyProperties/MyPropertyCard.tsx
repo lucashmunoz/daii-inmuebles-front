@@ -8,8 +8,9 @@ import { formatNumberToCurrency, getPropertyTypeNameByType } from "../../../help
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { paths } from "../../../navigation/paths";
-import { Box, Button, Divider, FormControlLabel, Modal, Switch } from "@mui/material";
+import { Button, FormControlLabel, Switch } from "@mui/material";
 import { useState } from "react";
+import DeletePropertyModal from "../../components/DeletePropertyModal";
 
 const DesktopCardContentWrapper = styled.div`
   height: 100%;
@@ -77,69 +78,6 @@ const Spinner = styled.span`
     }
   }
 `;
-
-const DeleteModal = (
-  {
-    isOpen,
-    onClose,
-    handleDelete
-  }: {
-    isOpen: boolean,
-    onClose: () => void,
-    handleDelete: () => void
-  }) => {
-  return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-    >
-      <Box sx={{
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        width: 400,
-        bgcolor: "background.paper",
-        border: "2px solid #000",
-        boxShadow: 24,
-        borderRadius: "8px"
-      }}>
-        <Typography variant="h6" component="h2" fontWeight={700}
-          sx={{
-            p: 1,
-            backgroundColor: "other.A100",
-            borderRadius: "8px"
-          }}>
-        ¿Eliminar publicación?
-        </Typography>
-        <Divider />
-        <Typography sx={{
-          p: 1
-        }}>
-        Esta acción no puede deshacerse.
-        </Typography>
-        <Divider />
-        <Box sx={{
-          display: "flex",
-          justifyContent: "flex-end",
-          p: 1,
-          gap: 2
-        }}>
-          <Button onClick={onClose} variant="outlined" color="primary">
-            Cancelar
-          </Button>
-          <Button onClick={handleDelete} variant="contained" sx={{
-            color: "white",
-            backgroundColor: "error.darker"
-          }}
-          >
-            Eliminar
-          </Button>
-        </Box>
-      </Box>
-    </Modal>
-  );
-};
 
 interface PropertyCardProps {
   orientation: "vertical" | "horizontal"
@@ -272,7 +210,8 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
                         >
                           Eliminar
                         </Button>
-                      </>}
+                      </>
+                    }
 
                   </ActionsContainer>
 
@@ -281,7 +220,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
             </DesktopCardContentWrapper>
           </CardActionArea>
         </Card>
-        <DeleteModal
+        <DeletePropertyModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           handleDelete={() => handleDeleteProperty(id, page)}
@@ -389,7 +328,7 @@ const MyPropertyCard = ({ orientation, property, isToggleLoading, handleProperty
           </CardContent>
         </CardActionArea>
       </Card>
-      <DeleteModal
+      <DeletePropertyModal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
         handleDelete={() => handleDeleteProperty(id, page)}

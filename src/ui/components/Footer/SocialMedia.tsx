@@ -1,14 +1,15 @@
-import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { FaInstagram, FaTwitter, FaWhatsapp } from "react-icons/fa";
+import { WPP_NUMBER } from "../../../../globals.ts";
 
 function SocialMedia() {
   return (<div style={{
     display: "flex", gap: 24, justifyContent: "center"
   }}>
-    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
+    <a href={`https://api.whatsapp.com/send/?phone=${WPP_NUMBER}&text&type=phone_number&app_absent=0`} target="_blank" rel="noopener noreferrer"
       style={{
         color: "#fff"
       }}>
-      <FaFacebookF size={24}/>
+      <FaWhatsapp size={24}/>
     </a>
     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
       style={{

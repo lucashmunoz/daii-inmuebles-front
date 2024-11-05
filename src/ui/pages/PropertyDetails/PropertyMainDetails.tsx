@@ -78,6 +78,16 @@ const AlquilarButton = styled(Button)`
   }
 `;
 
+const VisitarButton = styled(Button)`
+  background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#1890ff")};
+  color: #fff;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+  font-weight: bold;
+  &:hover {
+    background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#40a9ff")};
+  }
+`;
+
 const SpinnerContainer = styled.div`
   width: 107px;
   display: flex;
@@ -109,7 +119,6 @@ const Spinner = styled.span`
 const DisabledMessage = styled.p`
   color: red;
   font-size: 14px;
-  margin-bottom: 8px;
 `;
 
 const FavouriteContainer = styled.div`
@@ -117,6 +126,12 @@ const FavouriteContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const calculateDaysPassed = (created_at: string): string => {
@@ -171,7 +186,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
   const isOwner = owner_id === parseInt(loggedUserId);
   const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || propertyDetails.active === false || propertyDetails.disable === true;
-
+  const isVisitButtonDisabled = rentalStatus === "LOADING" || isOwner;
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
@@ -200,6 +215,11 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
     navigate(paths.myContracts);
   };
 
+  const handleVisit = async () => {
+    setIsRedirecting(true);
+    navigate(paths.home);
+  };
+
   return (
     <ContentContainer>
       <FavouriteContainer>
@@ -225,22 +245,33 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
       <PricePrediction />
 
-      {
-        rentalStatus === "LOADING"
-          ? <SpinnerContainer>
-            <Spinner />
-          </SpinnerContainer>
-          : <AlquilarButton
-            onClick={handleRent}
-            disabled={isRentButtonDisabled}
-          >
+      <ButtonsContainer>
+        {
+          rentalStatus === "LOADING"
+            ? <SpinnerContainer>
+              <Spinner />
+            </SpinnerContainer>
+            : <AlquilarButton
+              onClick={handleRent}
+              disabled={isRentButtonDisabled}
+            >
               Alquilar
-          </AlquilarButton>
-      }
+            </AlquilarButton>
+        }
 
-      {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
-      {!isRedirecting && isOwner === false && isRentButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para alquilar.</DisabledMessage>}
+        {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
+        {!isRedirecting && isOwner === false && isRentButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para alquilar.</DisabledMessage>}
 
+        <VisitarButton
+          onClick={handleVisit}
+          disabled={isVisitButtonDisabled}
+        >
+            ¡Quiero verlo!
+        </VisitarButton>
+
+        {isOwner && <DisabledMessage>No puedes visitar tu propiedad.</DisabledMessage>}
+        {!isRedirecting && isOwner === false && isVisitButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para ser visitada.</DisabledMessage>}
+      </ButtonsContainer>
     </ContentContainer>
   );
 };

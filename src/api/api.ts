@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getTokenFromCookie } from "../helpers";
 
 export const API_HOST = "http://3.217.122.117:8080";
 
@@ -16,7 +17,7 @@ axios.defaults.timeout = 600000;
 axios.defaults.headers.common = {
   Accept: "application/json",
   "Content-Type": "application/json",
-  Authorization: "Bearer " + accessTokenUserId1Admn
+  Authorization: "Bearer " + getTokenFromCookie()
 };
 
 export default axios;

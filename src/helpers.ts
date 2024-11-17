@@ -1,6 +1,17 @@
 import { PropertyType, SortBy } from "./models/property";
 import { RentProcessStatus, RentStatus } from "./models/rentals";
 
+export const getTokenFromCookie = (): string => {
+  const cookies = document.cookie.split(";");
+  for (const cookie of cookies) {
+    const [cookieName, cookieValue] = cookie.split("=");
+    if (cookieName.trim() === "token") {
+      return cookieValue;
+    }
+  }
+  return "";
+};
+
 export const formatNumberToCurrency = ({ number, truncateDecimals = true }: {number: number, truncateDecimals?: boolean}): string => {
   const strNumber = number.toString();
   const dotIndex = strNumber.indexOf(".");

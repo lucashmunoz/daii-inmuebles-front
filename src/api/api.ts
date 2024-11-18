@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getTokenFromCookie } from "../helpers";
+import { modules } from "../navigation/paths";
 
 export const API_HOST = "http://3.217.122.117:8080";
 
@@ -19,5 +20,16 @@ axios.defaults.headers.common = {
   "Content-Type": "application/json",
   Authorization: "Bearer " + getTokenFromCookie()
 };
+
+axios.interceptors.response.use(
+  response => {
+    return response;
+  },
+  async error => {
+    if (error.response.status === 403) {
+      window.location.replace(modules.usuarios);
+    }
+  }
+);
 
 export default axios;

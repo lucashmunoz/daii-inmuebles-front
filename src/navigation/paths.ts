@@ -8,6 +8,7 @@ export const paths = {
 } as const;
 
 export const modules = {
-  logisticaHome: "logistica.smartmove.com.ar",
+  usuarios: "http://usuarios.smartmove.com.ar/login",
+  logisticaHome: "http://logistica.smartmove.com.ar",
   logisticaAdministrarVisitas: "http://logistica.smartmove.com.ar/administrar-visitas"
 } as const;

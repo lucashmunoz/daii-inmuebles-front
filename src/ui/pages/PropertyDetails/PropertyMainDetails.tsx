@@ -11,7 +11,7 @@ import { createRentProcess, fetchRentals, resetRentalsState, selectRentalStatus 
 import PricePrediction from "./PricePrediction";
 import { useAppDispatch } from "../../../store/hooks";
 import { useNavigate } from "react-router-dom";
-import { paths } from "../../../navigation/paths";
+import { modules, paths } from "../../../navigation/paths";
 import { useSelector } from "react-redux";
 import { selectPropertyDetails } from "../../../store/properties/propertyDetailsSlice";
 import { fetchUserDetails, selectUserId } from "../../../store/userSlice";
@@ -69,16 +69,6 @@ const PropertySpecs = styled.div`
 `;
 
 const AlquilarButton = styled(Button)`
-  background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#1890ff")};
-  color: #fff;
-  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
-  font-weight: bold;
-  &:hover {
-    background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#40a9ff")};
-  }
-`;
-
-const VisitarButton = styled(Button)`
   background-color: ${(props) => (props.disabled ? "#d3d3d3" : "#1890ff")};
   color: #fff;
   cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
@@ -186,7 +176,7 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
 
   const isOwner = owner_id === parseInt(loggedUserId);
   const isRentButtonDisabled = rentalStatus === "LOADING" || isOwner || propertyDetails.active === false || propertyDetails.disable === true;
-  const isVisitButtonDisabled = rentalStatus === "LOADING" || isOwner;
+  const isVisitDisabled = rentalStatus === "LOADING" || isOwner;
   const [isRedirecting, setIsRedirecting] = useState(false);
 
   useEffect(() => {
@@ -213,11 +203,6 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
     }));
     dispatch(resetRentalsState());
     navigate(paths.myContracts);
-  };
-
-  const handleVisit = async () => {
-    setIsRedirecting(true);
-    navigate(paths.home);
   };
 
   return (
@@ -262,15 +247,13 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         {isOwner && <DisabledMessage>No puedes alquilar tu propiedad.</DisabledMessage>}
         {!isRedirecting && isOwner === false && isRentButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para alquilar.</DisabledMessage>}
 
-        <VisitarButton
-          onClick={handleVisit}
-          disabled={isVisitButtonDisabled}
-        >
+        {
+          !isOwner && <Button variant="text" href={`${modules.logisticaAdministrarVisitas}?propertyId=${propertyId}`}>
             ¡Quiero verlo!
-        </VisitarButton>
+          </Button>
+        }
 
-        {isOwner && <DisabledMessage>No puedes visitar tu propiedad.</DisabledMessage>}
-        {!isRedirecting && isOwner === false && isVisitButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para ser visitada.</DisabledMessage>}
+        {!isRedirecting && isOwner === false && isVisitDisabled === true && <DisabledMessage>Esta propiedad no está disponible para ser visitada.</DisabledMessage>}
       </ButtonsContainer>
     </ContentContainer>
   );

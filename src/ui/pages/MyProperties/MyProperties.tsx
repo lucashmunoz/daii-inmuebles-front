@@ -3,7 +3,7 @@ import PageWrapper from "../../components/PageWrapper";
 import Properties from "./Properties";
 import Footer from "../../components/Footer/Footer.tsx";
 import { modules } from "../../../navigation/paths.ts";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 
 const MyProperties = () => {
   const handleNavigateToLegales = () => {

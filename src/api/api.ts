@@ -26,7 +26,7 @@ axios.interceptors.response.use(
     return response;
   },
   async error => {
-    if (error.response.status === 403) {
+    if (error.response.status === 500) { // 403 iria
       window.location.replace(modules.usuarios);
     }
   }

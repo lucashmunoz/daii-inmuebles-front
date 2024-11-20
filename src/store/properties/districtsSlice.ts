@@ -48,5 +48,4 @@ export const districtsSlice = createSlice({
 
 export const selectDistricts = (state: RootState) => state.districts.districts || [];
 export const selectDistrictsStatus = (state: RootState) => state.districts.districtsStatus;
-
 export default districtsSlice.reducer;

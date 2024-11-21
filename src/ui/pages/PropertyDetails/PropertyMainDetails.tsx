@@ -248,7 +248,9 @@ const PropertyMainDetails = ({ type, title, created_at, price, surface_total, ba
         {!isRedirecting && isOwner === false && isRentButtonDisabled === true && <DisabledMessage>Esta propiedad no está disponible para alquilar.</DisabledMessage>}
 
         {
-          !isOwner && <Button variant="text" href={`${modules.logisticaAdministrarVisitas}?propertyId=${propertyId}`}>
+          isOwner ? <Button variant="text" href={`${modules.logisticaAdministrarVisitasPropietario}?propertyId=${propertyId}`}>
+          Administrar visitas
+          </Button> : <Button variant="text" href={`${modules.logisticaReservarVisitasInquilino}?propertyId=${propertyId}`}>
             ¡Quiero verlo!
           </Button>
         }

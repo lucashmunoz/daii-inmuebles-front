@@ -10,5 +10,5 @@ export const paths = {
 export const modules = {
   usuarios: "http://usuarios.smartmove.com.ar/login",
   logisticaHome: "http://logistica.smartmove.com.ar",
-  logisticaAdministrarVisitas: "http://logistica.smartmove.com.ar/administrar-visitas"
+  logisticaAdministrarVisitas: "http://logistica.smartmove.com.ar/reservar-visita"
 } as const;

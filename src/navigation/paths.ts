@@ -9,6 +9,7 @@ export const paths = {
 
 export const modules = {
   usuarios: "http://usuarios.smartmove.com.ar/login",
+  usuariosMiPerfil: "http://usuarios.smartmove.com.ar/userProfile",
   logisticaHome: "http://logistica.smartmove.com.ar",
   logisticaReservarVisitasInquilino: "http://logistica.smartmove.com.ar/reservar-visita",
   logisticaAdministrarVisitasPropietario: "http://logistica.smartmove.com.ar/administrar-visitas"

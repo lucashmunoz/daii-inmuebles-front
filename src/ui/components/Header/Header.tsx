@@ -1,7 +1,7 @@
 import { ReactElement, useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { paths } from "../../../navigation/paths";
+import { modules, paths } from "../../../navigation/paths";
 import { Divider } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 
@@ -91,6 +91,10 @@ const Header = (): ReactElement => {
         <Divider />
         <LinkButton to={paths.bookmarks}>
           Mis Favoritos
+        </LinkButton>
+        <Divider />
+        <LinkButton to={modules.usuariosMiPerfil}>
+          Mi Perfil
         </LinkButton>
       </Actions>
     </Wrapper>

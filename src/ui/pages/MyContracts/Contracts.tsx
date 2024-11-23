@@ -167,7 +167,7 @@ const Contracts = () => {
                   price={formattedPrice}
                   type={type}
                   currentStatus={getRentStatusNameByStatus(status)}
-                  isFurnitureMoveStatus={status === "CANCELLED_PENDING_LOGISTIC"}
+                  isFurnitureMoveStatus={status === "CANCELLED_PENDING_LOGISTIC" && userRole === "TENANT"}
                 />
               );
             })

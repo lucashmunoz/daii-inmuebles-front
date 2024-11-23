@@ -5,6 +5,8 @@ import MainFilters from "./MainFilters";
 import InmueblesRecientes from "./InmueblesRecientes";
 import PageWrapper from "../../components/PageWrapper";
 import Footer from "../../components/Footer/Footer.tsx";
+import { Button } from "@mui/material";
+import { modules } from "../../../navigation/paths.ts";
 
 const EncontraTuHogarContainer = styled.div`
   background-color: #1890ff;
@@ -32,6 +34,10 @@ const Main = styled.main`
   }
 `;
 
+const handleNavigateToLegales = () => {
+  window.location.replace(modules.legales);
+};
+
 const Home = (): ReactElement => {
   return (
     <PageWrapper>
@@ -42,6 +48,11 @@ const Home = (): ReactElement => {
           Encontrá tu próximo hogar en Smart Move
         </EncontraTuHogarText>
       </EncontraTuHogarContainer>
+      <Button onClick={handleNavigateToLegales} style={{
+        margin: "16px", padding: "8px 16px", fontSize: "16px", cursor: "pointer"
+      }}>
+            Ir a Legales
+      </Button>
 
       <Main>
         <MainFilters />

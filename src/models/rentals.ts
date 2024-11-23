@@ -1,3 +1,3 @@
 export type UserRoleType = "OWNER" | "TENANT"
-export type RentStatus = "PENDING_PAYMENT" | "ACTIVE" | "COMPLETED" | "CANCELLED"
+export type RentStatus = "PENDING_PAYMENT" | "ACTIVE" | "COMPLETED" | "CANCELLED" | "CANCELLED_PENDING_LOGISTIC"
 export type RentProcessStatus = "PENDING_APPROVAL" | "ACCEPTED" | "PENDING_CONTRACT" | "CONTRACT_CREATED" | "SUCCESS" | "REJECTED"

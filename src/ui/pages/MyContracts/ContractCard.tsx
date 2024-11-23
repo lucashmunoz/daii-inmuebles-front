@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import { PropertyType } from "../../../models/property";
 import { getPropertyTypeNameByType } from "../../../helpers";
 import styled from "styled-components";
+import { Button } from "@mui/material";
+import { modules } from "../../../navigation/paths";
 
 const DesktopCardContentWrapper = styled.div`
   height: 100%;
@@ -35,6 +37,12 @@ const CardDataRow = styled.div`
   justify-content: space-between;
 `;
 
+const MovingActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
 interface PropertyCardProps {
   orientation: "vertical" | "horizontal"
   id: string | number
@@ -43,9 +51,10 @@ interface PropertyCardProps {
   price: string
   type: PropertyType
   currentStatus: string
+  isFurnitureMoveStatus?: boolean
 }
 
-const ContractCard = ({ orientation, id, district, image, price, type, currentStatus }: PropertyCardProps) => {
+const ContractCard = ({ orientation, district, image, price, type, currentStatus, isFurnitureMoveStatus = false }: PropertyCardProps) => {
   const propertyType = getPropertyTypeNameByType(type).toUpperCase();
 
   const isHorizontal = orientation === "horizontal";
@@ -53,7 +62,6 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
   if(isHorizontal) {
     return (
       <Card
-        key={id}
         sx={{
           maxWidth: 1024,
           width: "100%",
@@ -90,11 +98,28 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
                 </Typography>
               </PropertyDetails>
 
-              <Typography variant="body1" sx={{
-                fontWeight: "bold"
-              }}>
-                {currentStatus}
-              </Typography>
+              <div>
+                <Typography variant="body1" sx={{
+                  fontWeight: "bold"
+                }}>
+                  {currentStatus}
+                </Typography>
+
+                {isFurnitureMoveStatus && (
+                  <MovingActions>
+                    <Typography variant="body1" sx={{
+                      fontWeight: "bold"
+                    }}>
+                    ¿Almacenar muebles?
+                    </Typography>
+
+                    <Button href={modules.logisticaCargarMudanza} variant="contained">Si</Button>
+                    <Button variant="contained">No</Button>
+                  </MovingActions>
+                )}
+
+              </div>
+
             </CardDetailsContainer>
           </CardContent>
         </DesktopCardContentWrapper>
@@ -104,7 +129,6 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
 
   return (
     <Card
-      key={id}
       sx={{
         width: "100%"
       }}
@@ -133,6 +157,21 @@ const ContractCard = ({ orientation, id, district, image, price, type, currentSt
             }}>
               {currentStatus}
             </Typography>
+            {isFurnitureMoveStatus && (
+              <MovingActions>
+                <Typography variant="body1" sx={{
+                  fontWeight: "bold"
+                }}>
+                    ¿Almacenar muebles?
+                </Typography>
+
+                <div>
+                  <Button href={modules.logisticaCargarMudanza} variant="contained">Si</Button>
+                  <Button variant="contained">No</Button>
+                </div>
+              </MovingActions>
+            )}
+
             <Typography variant="body2" sx={{
               color: "text.secondary"
             }}>

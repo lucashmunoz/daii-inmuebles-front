@@ -12,5 +12,6 @@ export const modules = {
   usuariosMiPerfil: "http://usuarios.smartmove.com.ar/userProfile",
   logisticaHome: "http://logistica.smartmove.com.ar",
   logisticaReservarVisitasInquilino: "http://logistica.smartmove.com.ar/reservar-visita",
-  logisticaAdministrarVisitasPropietario: "http://logistica.smartmove.com.ar/administrar-visitas"
+  logisticaAdministrarVisitasPropietario: "http://logistica.smartmove.com.ar/administrar-visitas",
+  logisticaCargarMudanza: "http://logistica.smartmove.com.ar/administrar-mudanza/cargar-mudanza"
 } as const;

@@ -8,6 +8,7 @@ import { getPropertyTypeNameByType } from "../../../helpers";
 import styled from "styled-components";
 import { Button } from "@mui/material";
 import { modules } from "../../../navigation/paths";
+import api, { API_HOST } from "../../../api/api";
 
 const DesktopCardContentWrapper = styled.div`
   height: 100%;
@@ -54,10 +55,16 @@ interface PropertyCardProps {
   isFurnitureMoveStatus?: boolean
 }
 
-const ContractCard = ({ orientation, district, image, price, type, currentStatus, isFurnitureMoveStatus = false }: PropertyCardProps) => {
+const ContractCard = ({ id, orientation, district, image, price, type, currentStatus, isFurnitureMoveStatus = false }: PropertyCardProps) => {
   const propertyType = getPropertyTypeNameByType(type).toUpperCase();
 
   const isHorizontal = orientation === "horizontal";
+
+  const handleMoveSelection = async () => {
+    await api.post(`${API_HOST}/rentals/news`, {
+      rent_id: id, status: "CANCELLED"
+    });
+  };
 
   if(isHorizontal) {
     return (
@@ -113,8 +120,14 @@ const ContractCard = ({ orientation, district, image, price, type, currentStatus
                     ¿Almacenar muebles?
                     </Typography>
 
-                    <Button href={modules.logisticaCargarMudanza} variant="contained">Si</Button>
-                    <Button variant="contained">No</Button>
+                    <Button
+                      onClick={() => {
+                        window.location.replace(modules.logisticaCargarMudanza);
+                        handleMoveSelection();
+                      }}
+                      variant="contained"
+                    >Si</Button>
+                    <Button variant="contained" onClick={handleMoveSelection}>No</Button>
                   </MovingActions>
                 )}
 
@@ -166,8 +179,14 @@ const ContractCard = ({ orientation, district, image, price, type, currentStatus
                 </Typography>
 
                 <div>
-                  <Button href={modules.logisticaCargarMudanza} variant="contained">Si</Button>
-                  <Button variant="contained">No</Button>
+                  <Button
+                    onClick={() => {
+                      window.location.replace(modules.logisticaCargarMudanza);
+                      handleMoveSelection();
+                    }}
+                    variant="contained"
+                  >Si</Button>
+                  <Button variant="contained" onClick={handleMoveSelection}>No</Button>
                 </div>
               </MovingActions>
             )}

@@ -16,7 +16,7 @@ const DesktopCardContentWrapper = styled.div`
 `;
 
 const CardDetailsContainer = styled.div`
- height: 100%;
+  height: 100%;
  width: 100%;
  justify-content: space-between;
  align-content: space-between;

@@ -139,8 +139,8 @@ const calculateDaysPassed = (created_at: string): string => {
   const monthsPassed = Math.floor(daysPassed / 30);
   const yearsPassed = Math.floor(daysPassed / 365);
 
-  if (hoursPassed > 1 && hoursPassed < 24) {
-    return `Publicado hace ${hoursPassed} horas.`;
+  if (hoursPassed >= 1 && hoursPassed < 24) {
+    return `Publicado hace ${hoursPassed} ${hoursPassed > 1 ? "horas" : "hora"}.`;
   }
   if (hoursPassed < 1) {
     return "Publicado hace menos de una hora.";

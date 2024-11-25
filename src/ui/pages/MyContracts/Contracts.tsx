@@ -9,6 +9,7 @@ import LoadingSkeleton from "../../components/LoadingSkeleton";
 import SMSelect from "../../components/SMSelect";
 import { UserRoleType } from "../../../models/rentals";
 import { modules } from "../../../navigation/paths";
+import api, { API_HOST } from "../../../api/api";
 
 const ContractsContainer = styled.main`
   padding: 16px;
@@ -71,6 +72,16 @@ const Contracts = () => {
   const rentProcesses = useAppSelector(selectRentalProcesses);
 
   const [userRole, setUserRole] = useState<UserRoleType>("TENANT");
+
+  const handleMoveSelection = async (id: number | string) => {
+    await api.post(`${API_HOST}/rentals/news`, {
+      rent_id: id, status: "CANCELLED"
+    });
+
+    dispatch(fetchRentals({
+      role: userRole
+    }));
+  };
 
   useEffect(() => {
     dispatch(fetchRentals({
@@ -155,6 +166,7 @@ const Contracts = () => {
                   price={formattedPrice}
                   type={type}
                   currentStatus={getRentProcessStatusNameByStatus(status)}
+                  handleMoveSelection={() => handleMoveSelection(id)}
                 />
               );
             })
@@ -187,6 +199,7 @@ const Contracts = () => {
                   type={type}
                   currentStatus={getRentStatusNameByStatus(status)}
                   isFurnitureMoveStatus={status === "PENDING_CANCELLED" && userRole === "TENANT"}
+                  handleMoveSelection={() => handleMoveSelection(id)}
                 />
               );
             })

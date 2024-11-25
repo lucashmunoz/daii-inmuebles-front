@@ -42,7 +42,7 @@ const LoaderContainer = styled.div`
 
 const PropertyDetails = (): ReactElement => {
   const dispatch = useAppDispatch();
-  const { id } = useParams<{id: string}>();
+  const { id = "0" } = useParams<{id: string}>();
 
   const propertyDetails = useAppSelector(selectPropertyDetails);
   const propertyDetailsStatus = useAppSelector(selectPropertyDetailsStatus);
@@ -115,6 +115,8 @@ const PropertyDetails = (): ReactElement => {
           surface_covered={surface_covered}
           surface_total={surface_total}
           district={district}
+          id={id}
+          showAuditLink
         />
 
         <PropertyMap

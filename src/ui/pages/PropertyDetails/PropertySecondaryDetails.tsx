@@ -4,6 +4,7 @@ import LocalHotelOutlinedIcon from "@mui/icons-material/LocalHotelOutlined";
 import BathtubOutlinedIcon from "@mui/icons-material/BathtubOutlined";
 import OpenInNewOutlinedIcon from "@mui/icons-material/OpenInNewOutlined";
 import HouseSidingOutlinedIcon from "@mui/icons-material/HouseSidingOutlined";
+import Button from "@mui/material/Button";
 
 const SectionWrapper = styled.section`
   display: flex;
@@ -37,12 +38,24 @@ const PropertyCharacContainer = styled.div`
   padding: 10px;
 `;
 
+const LeftActions = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
 const PropertyCharacteristics = styled.div`
   font-size: 18px;
   color: #000;
   display: flex;
   gap: 8px;
   align-items: center;
+`;
+
+const AuditLink = styled(Button)`
+  background-color: #2298f8;
+  color: #fff;
+  font-weight: bold;
 `;
 
 interface PropertySecondaryDetailsProps {
@@ -53,13 +66,15 @@ interface PropertySecondaryDetailsProps {
   surface_covered: number;
   surface_total: number;
   district: string;
+  id: string;
+  showAuditLink: boolean;
 }
 
 function formatDescription(description: string): string {
   return description.replace(/<br\s*\/?>/gi, "\n");
 }
 
-const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_covered, surface_total }: PropertySecondaryDetailsProps): ReactElement => {
+const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_covered, surface_total, id, showAuditLink }: PropertySecondaryDetailsProps): ReactElement => {
   const formattedDescription = formatDescription(description);
   const bathroomsText = `${baths} ${baths > 1 ? "baños." : "baño."}`;
   const roomsText = `${rooms} ${rooms > 1 ? "ambientes." : "ambiente."}`;
@@ -72,32 +87,39 @@ const PropertySecondaryDetails = ({ description, beds, baths, rooms, surface_cov
         <h2> Descripción</h2>
         <p> {formattedDescription} </p>
       </PropertyDescriptionContainer>
+      <LeftActions>
+        <PropertyCharacContainer>
 
-      <PropertyCharacContainer>
+          <h2> Características:</h2>
 
-        <h2> Características:</h2>
+          <PropertyCharacteristics>
+            <LocalHotelOutlinedIcon/>
+            <p>{bedsText}</p>
+          </PropertyCharacteristics>
 
-        <PropertyCharacteristics>
-          <LocalHotelOutlinedIcon/>
-          <p>{bedsText}</p>
-        </PropertyCharacteristics>
+          <PropertyCharacteristics>
+            <BathtubOutlinedIcon/>
+            <p>{bathroomsText}</p>
+          </PropertyCharacteristics>
 
-        <PropertyCharacteristics>
-          <BathtubOutlinedIcon/>
-          <p>{bathroomsText}</p>
-        </PropertyCharacteristics>
+          <PropertyCharacteristics>
+            <OpenInNewOutlinedIcon/>
+            <p>{roomsText}</p>
+          </PropertyCharacteristics>
 
-        <PropertyCharacteristics>
-          <OpenInNewOutlinedIcon/>
-          <p>{roomsText}</p>
-        </PropertyCharacteristics>
+          <PropertyCharacteristics>
+            <HouseSidingOutlinedIcon />
+            <p> {surface_covered}m² cubiertos | {surface_total}m² totales.</p>
+          </PropertyCharacteristics>
 
-        <PropertyCharacteristics>
-          <HouseSidingOutlinedIcon />
-          <p> {surface_covered}m² cubiertos | {surface_total}m² totales.</p>
-        </PropertyCharacteristics>
+        </PropertyCharacContainer>
 
-      </PropertyCharacContainer>
+        {showAuditLink &&
+        <AuditLink href={`https://logistica.smartmove.com.ar/visita-auditor?propertyId=${id}`}>Visitar auditor</AuditLink>
+        }
+
+      </LeftActions>
+
     </SectionWrapper>
   );
 };

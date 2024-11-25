@@ -48,6 +48,7 @@ interface PropertyCardProps {
   orientation: "vertical" | "horizontal"
   id: string | number
   district: string
+  propertyId: number
   image: string
   price: string
   type: PropertyType
@@ -55,7 +56,7 @@ interface PropertyCardProps {
   isFurnitureMoveStatus?: boolean
 }
 
-const ContractCard = ({ id, orientation, district, image, price, type, currentStatus, isFurnitureMoveStatus = false }: PropertyCardProps) => {
+const ContractCard = ({ id, orientation, district, image, price, type, currentStatus, propertyId, isFurnitureMoveStatus = false }: PropertyCardProps) => {
   const propertyType = getPropertyTypeNameByType(type).toUpperCase();
 
   const isHorizontal = orientation === "horizontal";
@@ -122,7 +123,7 @@ const ContractCard = ({ id, orientation, district, image, price, type, currentSt
 
                     <Button
                       onClick={() => {
-                        window.location.replace(modules.logisticaCargarMudanza);
+                        window.location.replace(`${modules.logisticaCargarMudanza}?propertyId=${propertyId}`);
                         handleMoveSelection();
                       }}
                       variant="contained"
@@ -181,7 +182,7 @@ const ContractCard = ({ id, orientation, district, image, price, type, currentSt
                 <div>
                   <Button
                     onClick={() => {
-                      window.location.replace(modules.logisticaCargarMudanza);
+                      window.location.replace(`${modules.logisticaCargarMudanza}?propertyId=${propertyId}`);
                       handleMoveSelection();
                     }}
                     variant="contained"

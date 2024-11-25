@@ -138,7 +138,7 @@ const Contracts = () => {
             ? <Alert severity="info">No tienes contratos en proceso.</Alert>
             : rentProcesses.map(contract => {
               const { id, property, status } = contract;
-              const { images, price, district, type } = property;
+              const { images, price, district, type, id: propertyId } = property;
               const image = images[0];
               const formattedPrice = formatNumberToCurrency({
                 number: price
@@ -149,6 +149,7 @@ const Contracts = () => {
                   orientation={isMobile ? "vertical" : "horizontal"}
                   id={id}
                   key={id}
+                  propertyId={propertyId}
                   district={district}
                   image={image}
                   price={formattedPrice}
@@ -169,7 +170,7 @@ const Contracts = () => {
             ? <Alert severity="info">No tienes contratos activos.</Alert>
             : rentals.map(contract => {
               const { id, property, status } = contract;
-              const { images, price, district, type } = property;
+              const { images, price, district, type, id: propertyId } = property;
               const image = images[0];
               const formattedPrice = formatNumberToCurrency({
                 number: price
@@ -181,6 +182,7 @@ const Contracts = () => {
                   id={id}
                   district={district}
                   image={image}
+                  propertyId={propertyId}
                   price={formattedPrice}
                   type={type}
                   currentStatus={getRentStatusNameByStatus(status)}

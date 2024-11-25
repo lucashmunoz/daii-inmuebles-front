@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Box, useMediaQuery } from "@mui/material";
+import { Alert, Box, Button, useMediaQuery } from "@mui/material";
 import { formatNumberToCurrency, getRentProcessStatusNameByStatus, getRentStatusNameByStatus, isMobileMediaQuery } from "../../../helpers";
 import ContractCard from "./ContractCard";
 import styled from "styled-components";
@@ -8,6 +8,7 @@ import { fetchRentals, selectRentals, selectRentalStatus, selectRentalProcesses 
 import LoadingSkeleton from "../../components/LoadingSkeleton";
 import SMSelect from "../../components/SMSelect";
 import { UserRoleType } from "../../../models/rentals";
+import { modules } from "../../../navigation/paths";
 
 const ContractsContainer = styled.main`
   padding: 16px;
@@ -32,6 +33,16 @@ const ContractsSection = styled.section`
 const SectionTitle = styled.h2`
   width: 100%;
   text-align: left;
+`;
+
+const LegalesButton = styled(Button)`
+  background-color:  #1890ff;
+  color: #fff;
+  cursor: "pointer";
+  font-weight: bold;
+  &:hover {
+    background-color: #40a9ff;
+  }
 `;
 
 type UserRoleTypes = Array<
@@ -67,17 +78,23 @@ const Contracts = () => {
     }));
   }, [dispatch, userRole]);
 
-  const UserRoleSelect = () => {
-    return(
-      <Box sx={{}}>
+  const TopAcctions = () => {
+    return (
+      <Box sx={{
+        display: "flex", gap: "8px", justifyContent: "center"
+      }}>
         <SMSelect
           id="select-user-rol"
           options={userRoleTypes}
           selectedOption={userRole}
           setSelectedOption={(value) => setUserRole(value as UserRoleType)}
         />
+        <LegalesButton
+          onClick={() => {
+            window.location.replace(modules.legales);
+          }}
+        >Legales</LegalesButton>
       </Box>
-
     );
   };
 
@@ -93,7 +110,7 @@ const Contracts = () => {
     return (
       <ContractsContainer>
         <h1>Mis contratos</h1>
-        <UserRoleSelect />
+        <TopAcctions />
         <Alert severity="error">
           Ocurrió un error al mostrar sus contratos.
         </Alert>
@@ -111,7 +128,7 @@ const Contracts = () => {
         alignItems: "center"
       }}>
         <h1>Mis contratos</h1>
-        <UserRoleSelect />
+        <TopAcctions />
       </Box>
 
       <ContractsSection>
